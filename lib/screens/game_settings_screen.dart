@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:audioplayers/audioplayers.dart';
-import '../providers/game_provider.dart';
-import '../models/game_settings.dart';
+import '../utils/app_strings.dart';
+import '../utils/app_styles.dart';
+import '../widgets/menu_button.dart';
+import '../widgets/settings_button.dart';
+import '../widgets/player_count_selector.dart';
 
 class GameSettingsScreen extends StatefulWidget {
   const GameSettingsScreen({super.key});
@@ -12,169 +13,201 @@ class GameSettingsScreen extends StatefulWidget {
 }
 
 class _GameSettingsScreenState extends State<GameSettingsScreen> {
-  // Local state for settings form
-  int _playerCount = 3;
-  int _roundTime = 480; // seconds
-  int _roundCount = 1;
-  int _turnTime = 20; // seconds
-  bool _isLocationRandom = true;
-  bool _isNamesRandom = true;
+  // Variables to hold the selected values (initially null, so they show as "--not selected--")
+  String? _selectedPlayerCount; // Display string
+  int _playerCountValue = 3; // Actual Logic Value (Default min)
 
-  void _handleStartGame(BuildContext context) async {
-    // 1. Save Settings
-    final provider = Provider.of<GameProvider>(context, listen: false);
-    provider.updateSettings(GameSettings(
-      playerCount: _playerCount,
-      roundTimeSeconds: _roundTime,
-      roundCount: _roundCount,
-      turnTimeSeconds: _turnTime,
-      isLocationRandom: _isLocationRandom,
-      isNamesRandom: _isNamesRandom,
-    ));
+  String? _selectedGameTime;
+  String? _selectedLocation;
+  
+  // Track which setting is currently open (expanded)
+  String? _activeSettingId;
 
-    // 2. Notify User ("Игра пошла")
-    // Using a Dialog or SnackBar as requested.
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text(
-          'ИГРА ПОШЛА! (Звук сирены)',
-          style: TextStyle(fontSize: 20),
-        ),
-        duration: Duration(seconds: 3),
-        backgroundColor: Colors.red,
-      ),
-    );
+  void _onSettingPressed(String settingName) {
+    setState(() {
+      // Toggle: if clicking already active, close it; otherwise open it
+      if (_activeSettingId == settingName) {
+        _activeSettingId = null;
+      } else {
+        _activeSettingId = settingName;
+      }
+    });
+  }
 
-    // 3. Play Siren (Simulation)
-    // await AudioPlayer().play(...) 
-    await Future.delayed(const Duration(seconds: 3));
-
-    // 4. Reset & Go to Main Menu
-    if (mounted) {
-      provider.resetGame();
-      Navigator.popUntil(context, (route) => route.isFirst);
+  void _onBackgroundTap() {
+    if (_activeSettingId != null) {
+      setState(() {
+        _activeSettingId = null;
+      });
     }
+  }
+
+  void _updatePlayerCount(int value) {
+    setState(() {
+      _playerCountValue = value;
+      _selectedPlayerCount = value.toString();
+    });
+  }
+
+  // _confirmPlayerCount removed as it's no longer needed
+
+  void _onPlayPressed() {
+    debugPrint('Pressed Play!');
+  }
+
+  void _onBackPressed() {
+    Navigator.of(context).pop();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Настройки игры')),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // 2.1 Players
-            _buildSectionTitle('Количество игроков'),
-            _buildCounterRow(
-              value: _playerCount,
-              min: 3,
-              max: 10,
-              onChanged: (val) => setState(() => _playerCount = val),
+    final double buttonSize = 180.0; 
+
+    return GestureDetector(
+      onTap: _onBackgroundTap, // Close settings when tapping outside
+      behavior: HitTestBehavior.translucent, // Ensure taps pass through empty space
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text(AppStrings.gameSettingsTitle),
+          backgroundColor: Colors.transparent,
+          centerTitle: true,
+          elevation: 0, 
+          automaticallyImplyLeading: false, 
+        ),
+        extendBodyBehindAppBar: true, 
+        backgroundColor: Colors.transparent, // Important for gradient background if provided by Container below
+        body: Container(
+          decoration: AppStyles.mainGradientDecoration,
+          child: SafeArea( 
+            child: Column(
+              children: [
+                const SizedBox(height: 20),
+                
+                // Scrollable area for the large buttons
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Center(
+                      child: Column( // Trigger "Wrap" behavior vertically but use Column for better full-width control (for sliding drawer)
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          // 2.1 Players
+                          _buildSettingItem(
+                            id: AppStrings.playerCount,
+                            title: AppStrings.playerCount,
+                            value: _selectedPlayerCount,
+                            buttonSize: buttonSize,
+                            child: PlayerCountSelector(
+                              initialValue: _playerCountValue, 
+                              onChanged: _updatePlayerCount,
+                            ),
+                          ),
+
+                          const SizedBox(height: 20),
+
+                          // 2.2 Game Time
+                          _buildSettingItem(
+                            id: AppStrings.gameTime,
+                            title: AppStrings.gameTime,
+                            value: _selectedGameTime,
+                            buttonSize: buttonSize,
+                            child: const SizedBox(height: 50, child: Center(child: Text("Заглушка"))), // Placeholder
+                          ),
+
+                          const SizedBox(height: 20),
+
+                          // 2.3 Location
+                          _buildSettingItem(
+                            id: AppStrings.locationSelection,
+                            title: AppStrings.locationSelection,
+                            value: _selectedLocation,
+                            buttonSize: buttonSize,
+                            child: const SizedBox(height: 50, child: Center(child: Text("Заглушка"))), // Placeholder
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 20),
+
+                // Bottom Action Buttons
+                Padding(
+                  padding: const EdgeInsets.all(20.0), 
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      // BACK Button
+                      SizedBox(
+                        width: 120, 
+                        height: 50,
+                        child: OutlinedButton(
+                          onPressed: _onBackPressed,
+                           style: OutlinedButton.styleFrom(
+                               side: const BorderSide(color: Colors.blue, width: 2),
+                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                               backgroundColor: Colors.white.withOpacity(0.5)
+                           ),
+                          child: const Text(AppStrings.backAction, style: TextStyle(fontWeight: FontWeight.bold)),
+                        ),
+                      ),
+                      
+                      const SizedBox(width: 20),
+
+                      // PLAY Button
+                      Expanded(
+                        child: SizedBox(
+                          height: 50,
+                          child: ElevatedButton(
+                            onPressed: _onPlayPressed,
+                            style: ElevatedButton.styleFrom(
+                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                            ),
+                            child: const Text(AppStrings.playAction, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
-            
-            const Divider(),
-
-            // 2.2 Game Time
-            _buildSectionTitle('Время игры (мин)'),
-            Slider(
-              value: _roundTime.toDouble(),
-              min: 60,
-              max: 900,
-              divisions: 14,
-              label: '${(_roundTime / 60).round()} мин',
-              onChanged: (value) => setState(() => _roundTime = value.toInt()),
-            ),
-            Center(child: Text('${(_roundTime / 60).round()} минут')),
-
-            const Divider(),
-
-            // 2.2.1 Round Count (NEW)
-            _buildSectionTitle('Количество раундов'),
-            _buildCounterRow(
-              value: _roundCount,
-              min: 1,
-              max: 10,
-              onChanged: (val) => setState(() => _roundCount = val),
-            ),
-
-            const Divider(),
-
-            // 2.3 Turn Time (NEW)
-            _buildSectionTitle('Время на вопрос (сек)'),
-            Slider(
-              value: _turnTime.toDouble(),
-              min: 20,
-              max: 120,
-              divisions: 5,
-              label: '$_turnTime сек',
-              onChanged: (value) => setState(() => _turnTime = value.toInt()),
-            ),
-            Center(child: Text('$_turnTime секунд')), // Button "Next" implied in logic later
-
-            const Divider(),
-
-            // 2.4 Locations (NEW)
-            _buildSectionTitle('Выбор локаций'),
-            SwitchListTile(
-              title: const Text('Случайные группы'),
-              subtitle: const Text('Система выберет сама'),
-              value: _isLocationRandom,
-              onChanged: (val) => setState(() => _isLocationRandom = val),
-            ),
-            if (!_isLocationRandom)
-               const Padding(
-                 padding: EdgeInsets.symmetric(horizontal: 16),
-                 child: Text('Выбор из списка (Заглушка)', style: TextStyle(color: Colors.grey)),
-               ),
-
-            const Divider(),
-
-            // 2.5 Naming (NEW)
-            _buildSectionTitle('Имена игроков'),
-            SwitchListTile(
-              title: const Text('Рандомные смешные имена'),
-              subtitle: const Text('Панда, Осел, Принцесса...'),
-              value: _isNamesRandom,
-              onChanged: (val) => setState(() => _isNamesRandom = val),
-            ),
-
-            const SizedBox(height: 30),
-
-            // Start Button
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () => _handleStartGame(context),
-                child: const Text('НАЧАТЬ ИГРУ'),
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildSectionTitle(String title) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-    );
-  }
+  // Builder helper to handle the expansion logic
+  Widget _buildSettingItem({
+    required String id, 
+    required String title, 
+    required String? value, 
+    required double buttonSize,
+    required Widget child,
+  }) {
+    final bool isOpen = _activeSettingId == id;
 
-  Widget _buildCounterRow({required int value, required int min, required int max, required Function(int) onChanged}) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+    return Column(
       children: [
-        IconButton(
-          onPressed: value > min ? () => onChanged(value - 1) : null,
-          icon: const Icon(Icons.remove_circle_outline),
+        SettingsButton(
+          title: title,
+          value: value,
+          size: buttonSize,
+          onPressed: () => _onSettingPressed(id),
         ),
-        Text('$value', style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-        IconButton(
-          onPressed: value < max ? () => onChanged(value + 1) : null,
-          icon: const Icon(Icons.add_circle_outline),
+        // Animated Control Panel ("Window")
+        AnimatedSize(
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+          child: isOpen
+              ? Container(
+                  width: buttonSize, // Match button width
+                  // Ensure it looks connected or just below
+                  margin: const EdgeInsets.only(top: 10), 
+                  child: child,
+                )
+              : const SizedBox.shrink(), // Hidden
         ),
       ],
     );
