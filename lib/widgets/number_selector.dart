@@ -1,30 +1,61 @@
 import 'package:flutter/material.dart';
 
-class PlayerCountSelector extends StatefulWidget {
+class NumberSelector extends StatefulWidget {
   final int initialValue;
+  final int minValue;
+  final int maxValue;
   final ValueChanged<int> onChanged;
-  const PlayerCountSelector({
+
+  const NumberSelector({
     super.key,
     required this.initialValue,
+    required this.minValue,
+    required this.maxValue,
     required this.onChanged,
   });
 
   @override
-  State<PlayerCountSelector> createState() => _PlayerCountSelectorState();
+  State<NumberSelector> createState() => _NumberSelectorState();
 }
 
-class _PlayerCountSelectorState extends State<PlayerCountSelector> {
+class _NumberSelectorState extends State<NumberSelector> {
   late int _currentValue;
 
   @override
   void initState() {
     super.initState();
-    // Validate initial value to be within 3-6 range, default to 3 if null/out of range
-    _currentValue = (widget.initialValue < 3 || widget.initialValue > 6) ? 3 : widget.initialValue;
+    _currentValue = widget.initialValue;
+    _validateValue();
+  }
+
+  @override
+  void didUpdateWidget(NumberSelector oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // If the bounds or initial value have changed, we need to re-validate
+    if (widget.initialValue != oldWidget.initialValue ||
+        widget.minValue != oldWidget.minValue ||
+        widget.maxValue != oldWidget.maxValue) {
+      _currentValue = widget.initialValue;
+      _validateValue();
+    }
+  }
+
+  void _validateValue() {
+    bool changed = false;
+    if (_currentValue < widget.minValue) {
+      _currentValue = widget.minValue;
+      changed = true;
+    } else if (_currentValue > widget.maxValue) {
+      _currentValue = widget.maxValue;
+      changed = true;
+    }
+    
+    // We shouldn't call widget.onChanged here during build/init to avoid loops, 
+    // the parent state already handles its bounds validation internally.
   }
 
   void _decrement() {
-    if (_currentValue > 3) {
+    if (_currentValue > widget.minValue) {
       setState(() {
         _currentValue--;
       });
@@ -33,7 +64,7 @@ class _PlayerCountSelectorState extends State<PlayerCountSelector> {
   }
 
   void _increment() {
-    if (_currentValue < 6) {
+    if (_currentValue < widget.maxValue) {
       setState(() {
         _currentValue++;
       });
@@ -64,7 +95,7 @@ class _PlayerCountSelectorState extends State<PlayerCountSelector> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 IconButton(
-                  onPressed: _currentValue > 3 ? _decrement : null,
+                  onPressed: _currentValue > widget.minValue ? _decrement : null,
                   icon: const Icon(Icons.remove_circle_outline, size: 32),
                   color: Colors.blue.shade900,
                 ),
@@ -77,7 +108,7 @@ class _PlayerCountSelectorState extends State<PlayerCountSelector> {
                   ),
                 ),
                 IconButton(
-                  onPressed: _currentValue < 6 ? _increment : null,
+                  onPressed: _currentValue < widget.maxValue ? _increment : null,
                   icon: const Icon(Icons.add_circle_outline, size: 32),
                   color: Colors.blue.shade900,
                 ),

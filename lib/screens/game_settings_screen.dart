@@ -3,7 +3,9 @@ import '../utils/app_strings.dart';
 import '../utils/app_styles.dart';
 import '../widgets/menu_button.dart';
 import '../widgets/settings_button.dart';
-import '../widgets/player_count_selector.dart';
+import '../widgets/number_selector.dart';
+import 'location_selection_screen.dart';
+import 'pre_game_flow_screen.dart';
 
 class GameSettingsScreen extends StatefulWidget {
   const GameSettingsScreen({super.key});
@@ -18,12 +20,44 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
   int _playerCountValue = 3; // Actual Logic Value (Default min)
 
   String? _selectedGameTime;
+  int _gameTimeValue = 3; // Default based on min game time for 3 players
+
+  String? _selectedRoundCount;
+  int _roundCountValue = 1; // Default 1 round
+
   String? _selectedLocation;
+  String? _secretLocation; // Saves the actual randomly chosen location (hidden)
   
   // Track which setting is currently open (expanded)
   String? _activeSettingId;
 
-  void _onSettingPressed(String settingName) {
+  // Dynamic constraints for game time based on player count
+  int get _minGameTime => _playerCountValue; // 1 min per player
+  int get _maxGameTime => (_playerCountValue * 1.5).ceil(); // 1.5 min per player, rounded up
+
+  void _onSettingPressed(String settingName) async {
+    if (settingName == AppStrings.locationSelection) {
+      if (_activeSettingId != null) {
+        setState(() {
+          _activeSettingId = null;
+        });
+      }
+      
+      final result = await Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const LocationSelectionScreen()),
+      );
+
+      if (result != null && result is Map<String, dynamic>) {
+        setState(() {
+          _selectedLocation = result['displayGroupName'];
+          _secretLocation = result['secretLocation'];
+        });
+        debugPrint('Hidden Secret Location selected: $_secretLocation');
+      }
+      return;
+    }
+
     setState(() {
       // Toggle: if clicking already active, close it; otherwise open it
       if (_activeSettingId == settingName) {
@@ -46,13 +80,61 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
     setState(() {
       _playerCountValue = value;
       _selectedPlayerCount = value.toString();
+
+      // Adjust game time bounds based on the new player count
+      if (_gameTimeValue < _minGameTime) {
+        _gameTimeValue = _minGameTime;
+      } else if (_gameTimeValue > _maxGameTime) {
+        _gameTimeValue = _maxGameTime;
+      }
+
+      // Automatically dynamically adjust the displayed game time if it was already selected
+      if (_selectedGameTime != null) {
+        _selectedGameTime = '$_gameTimeValue мин';
+      }
     });
   }
 
-  // _confirmPlayerCount removed as it's no longer needed
+  void _updateGameTime(int value) {
+    setState(() {
+      _gameTimeValue = value;
+      _selectedGameTime = '$value мин';
+    });
+  }
+
+  void _updateRoundCount(int value) {
+    setState(() {
+      _roundCountValue = value;
+      _selectedRoundCount = value.toString();
+    });
+  }
 
   void _onPlayPressed() {
-    debugPrint('Pressed Play!');
+    if (_secretLocation == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            AppStrings.pleaseSelectWarning,
+            textAlign: TextAlign.center,
+          ),
+          backgroundColor: Colors.redAccent,
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return;
+    }
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PreGameFlowScreen(
+          playerCount: _playerCountValue,
+          roundCount: _roundCountValue,
+          gameTime: _gameTimeValue,
+          secretLocation: _secretLocation!,
+        ),
+      ),
+    );
   }
 
   void _onBackPressed() {
@@ -96,8 +178,10 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                             title: AppStrings.playerCount,
                             value: _selectedPlayerCount,
                             buttonSize: buttonSize,
-                            child: PlayerCountSelector(
+                            child: NumberSelector(
                               initialValue: _playerCountValue, 
+                              minValue: 3,
+                              maxValue: 6,
                               onChanged: _updatePlayerCount,
                             ),
                           ),
@@ -110,18 +194,39 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                             title: AppStrings.gameTime,
                             value: _selectedGameTime,
                             buttonSize: buttonSize,
-                            child: const SizedBox(height: 50, child: Center(child: Text("Заглушка"))), // Placeholder
+                            child: NumberSelector(
+                              initialValue: _gameTimeValue,
+                              minValue: _minGameTime,
+                              maxValue: _maxGameTime,
+                              onChanged: _updateGameTime,
+                            ),
                           ),
 
                           const SizedBox(height: 20),
 
-                          // 2.3 Location
+                          // 2.2.1 Round Count
+                          _buildSettingItem(
+                            id: AppStrings.roundCount,
+                            title: AppStrings.roundCount,
+                            value: _selectedRoundCount,
+                            buttonSize: buttonSize,
+                            child: NumberSelector(
+                              initialValue: _roundCountValue,
+                              minValue: 1,
+                              maxValue: 5,
+                              onChanged: _updateRoundCount,
+                            ),
+                          ),
+
+                          const SizedBox(height: 20),
+
+                          // 2.3 Location (Navigates to new screen, doesn't use accordion child)
                           _buildSettingItem(
                             id: AppStrings.locationSelection,
                             title: AppStrings.locationSelection,
                             value: _selectedLocation,
                             buttonSize: buttonSize,
-                            child: const SizedBox(height: 50, child: Center(child: Text("Заглушка"))), // Placeholder
+                            child: const SizedBox.shrink(), // Not used for this item type
                           ),
                         ],
                       ),
