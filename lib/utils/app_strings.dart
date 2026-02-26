@@ -29,6 +29,14 @@ class AppStrings {
   static const String playAction = 'ПОГНАЛИ!';
   static const String backAction = 'НАЗАД';
 
+  // Game Round Strings
+  static const String timeIsUp = 'ВРЕМЯ ВЫШЛО!';
+  static const String nextPlayer = 'ДАЛЬШЕ!';
+  static const String endRound = 'Завершить раунд';
+  static const String lastQuestionToast = 'Это последний вопрос в этом раунде!';
+  static const String hintButton = 'Подсказка';
+  static const String transitionText = 'переход к следующему игроку';
+
   // Placeholders
   static const String notSelected = '--не выбрано--';
 }

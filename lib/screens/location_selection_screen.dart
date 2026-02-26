@@ -56,7 +56,8 @@ class _LocationSelectionScreenState extends State<LocationSelectionScreen> {
       // Flatten all locations into one list
       List<String> allLocations = [];
       for (var group in LocationsData.groups) {
-        allLocations.addAll(List<String>.from(group['locations']));
+        final locs = group['locations'] as List<dynamic>;
+        allLocations.addAll(locs.map((e) => e['name'] as String));
       }
       
       secretLocation = allLocations[random.nextInt(allLocations.length)];
@@ -65,7 +66,8 @@ class _LocationSelectionScreenState extends State<LocationSelectionScreen> {
       final group = LocationsData.groups[_selectedIndex!];
       displayGroupName = group['groupName'];
       
-      List<String> locations = List<String>.from(group['locations']);
+      final locs = group['locations'] as List<dynamic>;
+      List<String> locations = locs.map((e) => e['name'] as String).toList();
       secretLocation = locations[random.nextInt(locations.length)];
     }
 

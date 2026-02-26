@@ -5,6 +5,7 @@ import '../utils/app_strings.dart';
 import '../utils/app_styles.dart';
 import '../widgets/game_card.dart';
 import '../widgets/menu_button.dart';
+import 'game_round_screen.dart';
 
 enum FlowStep { nameSelection, cardReveal, roundReady }
 
@@ -112,11 +113,14 @@ class _PreGameFlowScreenState extends State<PreGameFlowScreen> {
   }
 
   void _onStartRound() {
-    debugPrint('ЗАГЛУШКА - Старт раунда. Игроки: $_playerNames, Шпион-индекс: $_spyIndex');
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('ЗАГЛУШКА: Таймер пошел!'),
-        backgroundColor: Colors.green,
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => GameRoundScreen(
+          playerNames: _playerNames,
+          gameTime: widget.gameTime,
+          secretLocation: widget.secretLocation,
+        ),
       ),
     );
   }
