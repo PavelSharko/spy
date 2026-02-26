@@ -5,18 +5,16 @@ import 'package:flutter/material.dart';
 import '../utils/app_strings.dart';
 import '../utils/app_styles.dart';
 import '../data/locations_data.dart';
+import '../models/game_session.dart';
 import 'voting_screen.dart';
+import 'round_score_screen.dart'; // we will create this next
 
 class GameRoundScreen extends StatefulWidget {
-  final List<String> playerNames;
-  final int gameTime; // in minutes
-  final String secretLocation;
+  final GameSession session;
 
   const GameRoundScreen({
     super.key,
-    required this.playerNames,
-    required this.gameTime,
-    required this.secretLocation,
+    required this.session,
   });
 
   @override
@@ -45,11 +43,11 @@ class _GameRoundScreenState extends State<GameRoundScreen> {
   @override
   void initState() {
     super.initState();
-    _mainTimerRemaining = widget.gameTime * 60;
+    _mainTimerRemaining = widget.session.gameTime * 60;
     
     // Setup initial players
-    _currentAskerIndex = Random().nextInt(widget.playerNames.length);
-    _currentTargetIndex = (_currentAskerIndex + 1) % widget.playerNames.length;
+    _currentAskerIndex = Random().nextInt(widget.session.players.length);
+    _currentTargetIndex = (_currentAskerIndex + 1) % widget.session.players.length;
 
     // Load available hints for the location
     _loadLocationHints();
@@ -60,7 +58,7 @@ class _GameRoundScreenState extends State<GameRoundScreen> {
   void _loadLocationHints() {
     for (var group in LocationsData.groups) {
       for (var loc in group['locations']) {
-        if (loc['name'] == widget.secretLocation) {
+        if (loc['name'] == widget.session.currentSecretLocation) {
           _locationHints = List<String>.from(loc['hints']);
           break;
         }
@@ -122,7 +120,76 @@ class _GameRoundScreenState extends State<GameRoundScreen> {
     _questionTimer?.cancel();
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => const VotingScreen()),
+      MaterialPageRoute(builder: (context) => VotingScreen(session: widget.session)),
+    );
+  }
+
+  void _showStopRoundDialog() {
+    // Pause timers
+    _mainTimer?.cancel();
+    _questionTimer?.cancel();
+
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (ctx) {
+        return AlertDialog(
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          title: Text(
+            AppStrings.whatHappened,
+            textAlign: TextAlign.center,
+            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blue.shade900),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(ctx);
+                  // Шпион уже отгадал локацию -> Шпион +3 очка, мирные 0
+                  widget.session.addScoreToSpy(3);
+                  _navigateToScores();
+                },
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
+                child: const Text(AppStrings.spyGuessedLoc, textAlign: TextAlign.center, style: TextStyle(color: Colors.white)),
+              ),
+              const SizedBox(height: 10),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(ctx);
+                  // Провал шпиона -> Мирные +2, Шпион -2
+                  widget.session.addScoreToCivilians(2);
+                  widget.session.addScoreToSpy(-2);
+                  _navigateToScores();
+                },
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent),
+                child: const Text(AppStrings.spyFailed, textAlign: TextAlign.center, style: TextStyle(color: Colors.white)),
+              ),
+              const SizedBox(height: 10),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(ctx);
+                  // Ничего, играем дальше -> resume timers
+                  _startTimers();
+                },
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.amber),
+                child: const Text(AppStrings.continueGame, textAlign: TextAlign.center, style: TextStyle(color: Colors.black87)),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void _navigateToScores() {
+    _mainTimer?.cancel();
+    _questionTimer?.cancel();
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => RoundScoreScreen(session: widget.session)),
     );
   }
 
@@ -139,7 +206,7 @@ class _GameRoundScreenState extends State<GameRoundScreen> {
 
     setState(() {
       _currentAskerIndex = _currentTargetIndex;
-      _currentTargetIndex = (_currentTargetIndex + 1) % widget.playerNames.length;
+      _currentTargetIndex = (_currentTargetIndex + 1) % widget.session.players.length;
 
       _hintsUsed = 0;
       _currentHintsText.clear();
@@ -219,23 +286,36 @@ class _GameRoundScreenState extends State<GameRoundScreen> {
             children: [
               const SizedBox(height: 10),
               
-              // 1. Main Timer
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.3),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Text(
-                  _formatTime(_mainTimerRemaining),
-                  style: const TextStyle(
-                    fontSize: 32,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                    letterSpacing: 2,
+                // 1. Main Timer
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  decoration: BoxDecoration(
+                    color: Colors.black.withOpacity(0.3),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Column(
+                    children: [
+                      Text(
+                        '${AppStrings.roundPrefix}${widget.session.currentRound}',
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.redAccent,
+                          letterSpacing: 1.5,
+                        ),
+                      ),
+                      Text(
+                        _formatTime(_mainTimerRemaining),
+                        style: const TextStyle(
+                          fontSize: 32,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          letterSpacing: 2,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ),
 
               const SizedBox(height: 30),
 
@@ -310,7 +390,7 @@ class _GameRoundScreenState extends State<GameRoundScreen> {
             child: Column(
               children: [
                 Text(
-                  widget.playerNames[_currentAskerIndex],
+                  widget.session.players[_currentAskerIndex].name,
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
@@ -322,7 +402,7 @@ class _GameRoundScreenState extends State<GameRoundScreen> {
                   child: Icon(Icons.arrow_downward, size: 30, color: Colors.blueAccent),
                 ),
                 Text(
-                  widget.playerNames[_currentTargetIndex],
+                  widget.session.players[_currentTargetIndex].name,
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
@@ -426,7 +506,7 @@ class _GameRoundScreenState extends State<GameRoundScreen> {
 
         // 6. Action Button ("ДАЛЬШЕ!" / "Завершить раунд")
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20).copyWith(bottom: 30),
+          padding: const EdgeInsets.symmetric(horizontal: 20),
           child: ElevatedButton(
             onPressed: _isTimeUp ? null : _onNextPressed,
             style: ElevatedButton.styleFrom(
@@ -444,6 +524,32 @@ class _GameRoundScreenState extends State<GameRoundScreen> {
                 fontSize: 22,
                 fontWeight: FontWeight.bold,
                 letterSpacing: 1.5,
+              ),
+            ),
+          ),
+        ),
+
+        const SizedBox(height: 10),
+
+        // 7. Stop Round Button
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20).copyWith(bottom: 20),
+          child: OutlinedButton(
+            onPressed: _showStopRoundDialog,
+            style: OutlinedButton.styleFrom(
+              side: const BorderSide(color: Colors.redAccent, width: 2),
+              padding: const EdgeInsets.symmetric(vertical: 15),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15),
+              ),
+              backgroundColor: Colors.white.withOpacity(0.9),
+            ),
+            child: const Text(
+              AppStrings.stopRound,
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.redAccent,
               ),
             ),
           ),

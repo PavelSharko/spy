@@ -4,6 +4,7 @@ import '../utils/app_styles.dart';
 import '../widgets/menu_button.dart';
 import '../widgets/settings_button.dart';
 import '../widgets/number_selector.dart';
+import '../models/game_session.dart';
 import 'location_selection_screen.dart';
 import 'pre_game_flow_screen.dart';
 
@@ -124,15 +125,19 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
       return;
     }
 
+    final session = GameSession(
+      players: [],
+      totalRounds: _roundCountValue,
+      gameTime: _gameTimeValue,
+      locationGroupName: _selectedLocation,
+      currentSecretLocation: _secretLocation!,
+      currentSpyIndex: 0, 
+    );
+
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => PreGameFlowScreen(
-          playerCount: _playerCountValue,
-          roundCount: _roundCountValue,
-          gameTime: _gameTimeValue,
-          secretLocation: _secretLocation!,
-        ),
+        builder: (context) => PreGameFlowScreen(session: session, playerCount: _playerCountValue),
       ),
     );
   }

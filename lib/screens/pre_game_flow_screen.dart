@@ -1,6 +1,8 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import '../data/names_data.dart';
+import '../models/game_session.dart';
+import '../models/player.dart';
 import '../utils/app_strings.dart';
 import '../utils/app_styles.dart';
 import '../widgets/game_card.dart';
@@ -10,17 +12,13 @@ import 'game_round_screen.dart';
 enum FlowStep { nameSelection, cardReveal, roundReady }
 
 class PreGameFlowScreen extends StatefulWidget {
+  final GameSession session;
   final int playerCount;
-  final int roundCount;
-  final int gameTime; // in minutes
-  final String secretLocation;
 
   const PreGameFlowScreen({
     super.key,
+    required this.session,
     required this.playerCount,
-    required this.roundCount,
-    required this.gameTime,
-    required this.secretLocation,
   });
 
   @override
@@ -30,9 +28,6 @@ class PreGameFlowScreen extends StatefulWidget {
 class _PreGameFlowScreenState extends State<PreGameFlowScreen> {
   FlowStep _currentStep = FlowStep.nameSelection;
   int _currentPlayerIndex = 0;
-  late int _spyIndex;
-  
-  final List<String> _playerNames = [];
   
   // Name Selection State
   final TextEditingController _nameController = TextEditingController();
@@ -42,9 +37,13 @@ class _PreGameFlowScreenState extends State<PreGameFlowScreen> {
   @override
   void initState() {
     super.initState();
-    // 1 Spy per game
-    _spyIndex = Random().nextInt(widget.playerCount);
-    _generateRandomNames();
+    if (widget.session.currentRound == 1) {
+      widget.session.currentSpyIndex = Random().nextInt(widget.playerCount);
+      _generateRandomNames();
+      _currentStep = FlowStep.nameSelection;
+    } else {
+      _currentStep = FlowStep.cardReveal;
+    }
   }
 
   @override
@@ -74,7 +73,7 @@ class _PreGameFlowScreenState extends State<PreGameFlowScreen> {
 
   void _onConfirmName() {
     String finalName = _nameController.text.trim();
-    if (finalName.length < 3 || finalName.length > 20) {
+    if (finalName.length < 3 || finalName.length > 30) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text(AppStrings.chooseNameWarning, textAlign: TextAlign.center),
@@ -85,7 +84,7 @@ class _PreGameFlowScreenState extends State<PreGameFlowScreen> {
       return;
     }
 
-    _playerNames.add(finalName);
+    widget.session.players.add(Player(name: finalName));
     
     // Move to card reveal for this player
     setState(() {
@@ -98,11 +97,15 @@ class _PreGameFlowScreenState extends State<PreGameFlowScreen> {
       // Next player
       setState(() {
         _currentPlayerIndex++;
-        _currentStep = FlowStep.nameSelection;
-        // Reset name selection state
-        _nameController.clear();
-        _selectedRandomName = null;
-        _generateRandomNames();
+        if (widget.session.currentRound == 1) {
+          _currentStep = FlowStep.nameSelection;
+          // Reset name selection state
+          _nameController.clear();
+          _selectedRandomName = null;
+          _generateRandomNames();
+        } else {
+          _currentStep = FlowStep.cardReveal;
+        }
       });
     } else {
       // All players done, ready to start round
@@ -116,11 +119,7 @@ class _PreGameFlowScreenState extends State<PreGameFlowScreen> {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-        builder: (context) => GameRoundScreen(
-          playerNames: _playerNames,
-          gameTime: widget.gameTime,
-          secretLocation: widget.secretLocation,
-        ),
+        builder: (context) => GameRoundScreen(session: widget.session),
       ),
     );
   }
@@ -276,14 +275,14 @@ class _PreGameFlowScreenState extends State<PreGameFlowScreen> {
   }
 
   Widget _buildCardReveal() {
-    bool isSpy = _currentPlayerIndex == _spyIndex;
+    bool isSpy = _currentPlayerIndex == widget.session.currentSpyIndex;
     
     return Column(
       key: ValueKey('cardReveal_$_currentPlayerIndex'),
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          _playerNames[_currentPlayerIndex],
+          widget.session.players[_currentPlayerIndex].name,
           style: const TextStyle(
             fontSize: 28,
             fontWeight: FontWeight.w900,
@@ -294,7 +293,7 @@ class _PreGameFlowScreenState extends State<PreGameFlowScreen> {
         const SizedBox(height: 40),
         GameCard(
           isSpy: isSpy,
-          secretLocation: widget.secretLocation,
+          secretLocation: widget.session.currentSecretLocation,
           onCardTapped: _onCardTappedToNext,
         ),
       ],
@@ -309,7 +308,7 @@ class _PreGameFlowScreenState extends State<PreGameFlowScreen> {
         const Icon(Icons.timer, size: 100, color: Colors.white),
         const SizedBox(height: 20),
         Text(
-          '${widget.gameTime}:00',
+          '${widget.session.gameTime}:00',
           style: const TextStyle(
             fontSize: 60,
             fontWeight: FontWeight.bold,

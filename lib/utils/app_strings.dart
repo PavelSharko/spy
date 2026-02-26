@@ -36,6 +36,33 @@ class AppStrings {
   static const String lastQuestionToast = 'Это последний вопрос в этом раунде!';
   static const String hintButton = 'Подсказка';
   static const String transitionText = 'переход к следующему игроку';
+  static const String stopRound = 'Стоп-раунд';
+  static const String whatHappened = 'Че случилось?';
+  static const String spyGuessedLoc = 'Шпион уже отгадал локацию';
+  static const String spyFailed = 'Провал шпиона';
+  static const String continueGame = 'Ничего, играем дальше!';
+
+  // Voting Strings
+  static const String votingTitle = 'ГОЛОСОВАНИЕ';
+  static const String votingPlayerPrefix = 'ГОЛОСУЕТ ';
+  static const String votePrompt = 'ПРОГОЛОСУЙТЕ КТО БЫЛ ШПИОНОМ?';
+  static const String confirmVote = 'ПОДТВЕРДИТЬ';
+  static const String spyFound = 'ШПИОН НАЙДЕН!';
+  static const String spyNotFound = 'ШПИОН НЕ НАЙДЕН!';
+  static const String spyLastWordTitle = 'ПОСЛЕДНЕЕ СЛОВО ШПИОНА';
+  static const String spyMustGuess = 'ШПИОН ДОЛЖЕН ПРЕДПОЛОЖИТЬ ЛОКАЦИЮ\nГДЕ ОН НАХОДИЛСЯ';
+  static const String spyGuessedQuestion = 'ШПИОН УГАДАЛ ЛОКАЦИЮ?';
+  static const String guessedYes = 'Угадал';
+  static const String guessedNo = 'Не угадал';
+  static const String endRoundVotes = 'ЗАКОНЧИТЬ РАУНД';
+  
+  // Score / Rating Screen
+  static const String roundScoreTitle = 'РЕЗУЛЬТАТЫ';
+  static const String nextRound = 'СЛЕДУЮЩИЙ РАУНД';
+  static const String finalRatingTitle = 'РЕЙТИНГ (ИТОГ)';
+  static const String winnerPrefix = 'ПОБЕДИЛ: ';
+  static const String toMainMenu = 'В ГЛАВНОЕ МЕНЮ';
+  static const String roundPrefix = 'РАУНД ';
 
   // Placeholders
   static const String notSelected = '--не выбрано--';
