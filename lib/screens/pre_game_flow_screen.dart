@@ -75,14 +75,19 @@ class _PreGameFlowScreenState extends State<PreGameFlowScreen> {
 
   void _onConfirmName() {
     String finalName = _nameController.text.trim();
-    if (finalName.length < 3 || finalName.length > 30) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(AppStrings.chooseNameWarning, textAlign: TextAlign.center),
-          backgroundColor: Colors.redAccent,
-          duration: Duration(seconds: 2),
-        ),
-      );
+    
+    if (_selectedRandomName == null) {
+      if (finalName.isEmpty || finalName.length > 20) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Имя должно быть от 1 до 20 символов!', textAlign: TextAlign.center),
+            backgroundColor: Colors.redAccent,
+            duration: Duration(seconds: 2),
+          ),
+        );
+        return;
+      }
+    } else if (finalName.isEmpty) {
       return;
     }
 

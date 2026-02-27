@@ -244,6 +244,7 @@ class _GameRoundScreenState extends State<GameRoundScreen> {
     setState(() {
       _isHintCooldown = true;
       String newHint = _locationHints[Random().nextInt(_locationHints.length)];
+      _currentHintsText.clear();
       _currentHintsText.add(newHint);
       _hintsUsed++;
     });
@@ -487,7 +488,7 @@ class _GameRoundScreenState extends State<GameRoundScreen> {
                     hint,
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontSize: 16,
+                      fontSize: 32,
                       color: Colors.grey.shade800,
                       fontWeight: FontWeight.w500,
                     ),

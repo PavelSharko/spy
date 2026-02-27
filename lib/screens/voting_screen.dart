@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:audioplayers/audioplayers.dart';
 import '../models/game_session.dart';
 import '../utils/app_strings.dart';
 import '../utils/app_styles.dart';
@@ -26,11 +27,20 @@ class _VotingScreenState extends State<VotingScreen> {
   
   // If there is a tie, this list will contain the indices of the tied players
   List<int> _tieCandidates = [];
+  
+  bool _showTieNotification = false;
+  final AudioPlayer _audioPlayer = AudioPlayer();
 
   @override
   void initState() {
     super.initState();
     _startVotingRound();
+  }
+
+  @override
+  void dispose() {
+    _audioPlayer.dispose();
+    super.dispose();
   }
 
   void _startVotingRound() {
@@ -72,7 +82,17 @@ class _VotingScreenState extends State<VotingScreen> {
       // Tie breaker
       setState(() {
         _tieCandidates = tiedIndices;
-        _startVotingRound();
+        _showTieNotification = true;
+      });
+      _playTieSound();
+      
+      Future.delayed(const Duration(seconds: 1), () {
+        if (mounted && _showTieNotification) {
+          setState(() {
+            _showTieNotification = false;
+            _startVotingRound();
+          });
+        }
       });
     } else {
       // Winner decided
@@ -97,8 +117,50 @@ class _VotingScreenState extends State<VotingScreen> {
     }
   }
 
+  void _playTieSound() async {
+    try {
+      await _audioPlayer.play(AssetSource('audio/pig.wav'));
+    } catch (e) {
+      debugPrint('Error playing sound: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (_showTieNotification) {
+      return Scaffold(
+        body: GestureDetector(
+          onTap: () {
+            if (_showTieNotification) {
+              setState(() {
+                _showTieNotification = false;
+                _startVotingRound();
+              });
+            }
+          },
+          child: Container(
+            color: Colors.blue.shade800,
+            width: double.infinity,
+            height: double.infinity,
+            child: const Center(
+              child: Padding(
+                padding: EdgeInsets.all(20.0),
+                child: Text(
+                  'Одинаковое количество голосов\nнадо переголосовать !!',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 32,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+
     if (_currentVoterIndexInQueue >= _votingQueue.length) {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
