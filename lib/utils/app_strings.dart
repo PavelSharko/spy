@@ -12,6 +12,9 @@ class AppStrings {
   static const String randomSelection = 'ВЫБРАТЬ СЛУЧАЙНО';
   static const String confirmAction = 'ПОДТВЕРДИТЬ';
   static const String pleaseSelectWarning = 'Сначала выберете локацию!';
+  static const String pleaseSelectPlayerCount = 'Выберите количество игроков!';
+  static const String pleaseSelectGameTime = 'Выберите время игры!';
+  static const String pleaseSelectRoundCount = 'Выберите количество раундов!';
   static const String randomGroupDisplay = 'Случайная группа';
 
   // Pre-Game Flow Strings

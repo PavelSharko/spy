@@ -55,10 +55,10 @@ class _RoundScoreScreenState extends State<RoundScoreScreen> {
       final random = Random();
       String newLocation;
       if (widget.session.locationGroupName == AppStrings.randomGroupDisplay) {
-        List<String> allLocations = [];
+        final List<String> allLocations = [];
         for (var group in LocationsData.groups) {
           final locs = group['locations'] as List<dynamic>;
-          allLocations.addAll(locs.map((e) => e['name'] as String));
+          allLocations.addAll(locs.map((e) => e as String));
         }
         newLocation = allLocations[random.nextInt(allLocations.length)];
       } else {
@@ -66,7 +66,7 @@ class _RoundScoreScreenState extends State<RoundScoreScreen> {
             (g) => g['groupName'] == widget.session.locationGroupName,
             orElse: () => LocationsData.groups.first);
         final locs = group['locations'] as List<dynamic>;
-        List<String> locations = locs.map((e) => e['name'] as String).toList();
+        final List<String> locations = locs.map((e) => e as String).toList();
         newLocation = locations[random.nextInt(locations.length)];
       }
 

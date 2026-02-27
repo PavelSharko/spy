@@ -112,15 +112,14 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
   }
 
   void _onPlayPressed() {
-    if (_secretLocation == null) {
+    // Validate each field in order — show only the FIRST unset field warning
+    final String? validationError = _firstValidationError();
+    if (validationError != null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            AppStrings.pleaseSelectWarning,
-            textAlign: TextAlign.center,
-          ),
+        SnackBar(
+          content: Text(validationError, textAlign: TextAlign.center),
           backgroundColor: Colors.redAccent,
-          duration: Duration(seconds: 2),
+          duration: const Duration(seconds: 2),
         ),
       );
       return;
@@ -132,7 +131,7 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
       gameTime: _gameTimeValue,
       locationGroupName: _selectedLocation,
       currentSecretLocation: _secretLocation!,
-      currentSpyIndex: 0, 
+      currentSpyIndex: 0,
     );
 
     Navigator.push(
@@ -141,6 +140,15 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
         builder: (context) => PreGameFlowScreen(session: session, playerCount: _playerCountValue),
       ),
     );
+  }
+
+  /// Returns the warning message for the first unfilled field, or null if all good.
+  String? _firstValidationError() {
+    if (_selectedPlayerCount == null) return AppStrings.pleaseSelectPlayerCount;
+    if (_selectedGameTime == null) return AppStrings.pleaseSelectGameTime;
+    if (_selectedRoundCount == null) return AppStrings.pleaseSelectRoundCount;
+    if (_secretLocation == null) return AppStrings.pleaseSelectWarning;
+    return null;
   }
 
   void _onBackPressed() {

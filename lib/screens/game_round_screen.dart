@@ -1,11 +1,15 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import '../utils/app_strings.dart';
 import '../utils/app_styles.dart';
+import '../utils/game_rules.dart';
+import '../utils/game_sounds.dart';
 import '../data/locations_data.dart';
 import '../models/game_session.dart';
+import '../services/storage_service.dart';
 import 'voting_screen.dart';
 import 'round_score_screen.dart';
 import '../widgets/exit_game_button.dart';
@@ -29,8 +33,14 @@ class _GameRoundScreenState extends State<GameRoundScreen> with SingleTickerProv
   int _additionalTimerRemaining = 0;
   bool _isAdditionalTime = false;
 
+  // Penalty notification
+  bool _showPenaltyNotification = false;
+  String _penaltyPlayerName = '';
+
   late AnimationController _pulseController;
   late Animation<double> _pulseAnimation;
+
+  final AudioPlayer _sirenPlayer = AudioPlayer();
 
   Timer? _mainTimer;
   Timer? _questionTimer;
@@ -45,7 +55,7 @@ class _GameRoundScreenState extends State<GameRoundScreen> with SingleTickerProv
   int _hintsUsed = 0;
   bool _isHintCooldown = false;
   List<String> _currentHintsText = [];
-  List<String> _locationHints = [];
+  List<Map<String, dynamic>> _locationHints = []; // [{text, hint_choosed_times}]
 
   @override
   void initState() {
@@ -71,13 +81,9 @@ class _GameRoundScreenState extends State<GameRoundScreen> with SingleTickerProv
   }
 
   void _loadLocationHints() {
-    for (var group in LocationsData.groups) {
-      for (var loc in group['locations']) {
-        if (loc['name'] == widget.session.currentSecretLocation) {
-          _locationHints = List<String>.from(loc['hints']);
-          break;
-        }
-      }
+    _locationHints = storageService.getHints(widget.session.currentSecretLocation);
+    if (_locationHints.isEmpty) {
+      debugPrint('WARNING: No hints found in StorageService for ${widget.session.currentSecretLocation}');
     }
   }
 
@@ -99,20 +105,24 @@ class _GameRoundScreenState extends State<GameRoundScreen> with SingleTickerProv
 
           if (_questionTimerRemaining == 0 && !_isAdditionalTime) {
             _isAdditionalTime = true;
-            _additionalTimerRemaining = 3;
+            _additionalTimerRemaining = GameRules.overtimeSeconds;
             _pulseController.forward(from: 0.0);
+            _sirenPlayer.play(AssetSource(GameSounds.overtimeSiren));
           }
         } else if (_isAdditionalTime) {
           if (_additionalTimerRemaining > 0) {
             _additionalTimerRemaining--;
             if (_additionalTimerRemaining > 0) {
               _pulseController.forward(from: 0.0);
+              _sirenPlayer.play(AssetSource(GameSounds.overtimeSiren));
             }
           }
 
           if (_additionalTimerRemaining == 0) {
             _isAdditionalTime = false;
-            widget.session.players[_currentAskerIndex].addScore(-0.1);
+            final penalisedPlayer = widget.session.players[_currentAskerIndex];
+            penalisedPlayer.addScore(GameRules.penaltyOvertime);
+            _showPenalty(penalisedPlayer.name);
             _onQuestionTimeUp();
           }
         }
@@ -269,24 +279,38 @@ class _GameRoundScreenState extends State<GameRoundScreen> with SingleTickerProv
     );
   }
 
+  void _showPenalty(String playerName) {
+    setState(() {
+      _penaltyPlayerName = playerName;
+      _showPenaltyNotification = true;
+    });
+    Future.delayed(const Duration(seconds: 3), () {
+      if (mounted) setState(() => _showPenaltyNotification = false);
+    });
+  }
+
   void _onHintPressed() {
     if (_isHintCooldown || _hintsUsed >= 2 || _locationHints.isEmpty) return;
 
+    // Pick least-used hint
+    final sorted = List<Map<String, dynamic>>.from(_locationHints)
+      ..sort((a, b) => ((a['hint_choosed_times'] as num?)?.toInt() ?? 0)
+          .compareTo((b['hint_choosed_times'] as num?)?.toInt() ?? 0));
+    final chosen = sorted.first;
+    final hintText = chosen['text'] as String;
+
     setState(() {
       _isHintCooldown = true;
-      String newHint = _locationHints[Random().nextInt(_locationHints.length)];
       _currentHintsText.clear();
-      _currentHintsText.add(newHint);
+      _currentHintsText.add(hintText);
       _hintsUsed++;
     });
 
-    // Reset cooldown after 0.5s
+    // Persist increment in background
+    storageService.incrementHintPick(widget.session.currentSecretLocation, hintText);
+
     Future.delayed(const Duration(milliseconds: 500), () {
-      if (mounted) {
-        setState(() {
-          _isHintCooldown = false;
-        });
-      }
+      if (mounted) setState(() => _isHintCooldown = false);
     });
   }
 
@@ -295,6 +319,7 @@ class _GameRoundScreenState extends State<GameRoundScreen> with SingleTickerProv
     _mainTimer?.cancel();
     _questionTimer?.cancel();
     _pulseController.dispose();
+    _sirenPlayer.dispose();
     super.dispose();
   }
 
@@ -321,7 +346,7 @@ class _GameRoundScreenState extends State<GameRoundScreen> with SingleTickerProv
               child: Column(
                 children: [
                   const SizedBox(height: 10),
-              
+
                 // 1. Main Timer
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -399,6 +424,34 @@ class _GameRoundScreenState extends State<GameRoundScreen> with SingleTickerProv
           ),
         ),
       ),
+      // Penalty notification overlay
+      if (_showPenaltyNotification)
+        Positioned.fill(
+          child: IgnorePointer(
+            child: Align(
+              alignment: Alignment.center,
+              child: Container(
+                margin: const EdgeInsets.symmetric(horizontal: 30),
+                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 18),
+                decoration: BoxDecoration(
+                  color: Colors.red.shade800.withOpacity(0.93),
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [BoxShadow(color: Colors.black54, blurRadius: 20)],
+                ),
+                child: Text(
+                  '$_penaltyPlayerName − теряет часть своего очка 😭\n${GameRules.penaltyOvertime}',
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    height: 1.5,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
       ExitGameButton(
         onPause: () {
           _mainTimer?.cancel();
@@ -559,7 +612,10 @@ class _GameRoundScreenState extends State<GameRoundScreen> with SingleTickerProv
             child: ElevatedButton(
               onPressed: _isTimeUp ? null : _onNextPressed,
               style: ElevatedButton.styleFrom(
-                backgroundColor: _isLastQuestion ? Colors.red.shade600 : Colors.blue.shade800,
+                // Red during overtime flash, otherwise normal colour
+                backgroundColor: _isAdditionalTime
+                    ? Colors.red.shade700
+                    : (_isLastQuestion ? Colors.red.shade600 : Colors.blue.shade800),
                 foregroundColor: Colors.white,
                 padding: const EdgeInsets.symmetric(vertical: 20),
                 shape: RoundedRectangleBorder(
@@ -569,7 +625,7 @@ class _GameRoundScreenState extends State<GameRoundScreen> with SingleTickerProv
               ),
               child: Text(
                 _isAdditionalTime
-                    ? "${_isLastQuestion ? AppStrings.endRound : AppStrings.nextPlayer} $_additionalTimerRemaining"
+                    ? "${_isLastQuestion ? AppStrings.endRound : AppStrings.nextPlayer} ⏰ $_additionalTimerRemaining"
                     : (_isLastQuestion ? AppStrings.endRound : AppStrings.nextPlayer),
                 style: const TextStyle(
                   fontSize: 22,

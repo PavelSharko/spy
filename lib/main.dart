@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'providers/game_provider.dart';
+import 'services/storage_service.dart';
 
 // Import screens
 import 'screens/main_menu_screen.dart';
-// import 'screens/game_process_screen.dart'; // Deleted
-// import 'screens/game_settings_screen.dart'; // Not needed here if only home uses MainMenu, but harmless.
 
-
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await storageService.init();
   runApp(const MyApp());
 }
 

@@ -1,0 +1,2653 @@
+{
+  "locations": {
+    "Больница": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про одежду в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про типичных людей в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про звуки в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про эмоции людей в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про правила поведения в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Школа": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про распорядок дня в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про людей",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "которые здесь чему‑то учатся",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про тех",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "кто здесь руководит процессом",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про перерывы в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про шум и тишину в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Метро": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про количество людей в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про скорость передвижения в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про то",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "где люди проводят время в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про объявления и надписи в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про то",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "насколько здесь удобно разговаривать",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Автобусная остановка": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про ожидание в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про то",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "стоят здесь или сидят",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про то",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "как часто сюда приходят",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про влияние погоды на это место",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про то",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "чем люди занимаются",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "пока ждут",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Библиотека": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про отношение к тишине в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про то",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "чем здесь обычно заняты глаза",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про длительность пребывания в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про отношение к разговорам в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про то",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "насколько здесь удобно искать информацию",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Супермаркет": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про передвижение людей в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про то",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "что люди здесь обычно держат в руках",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про очереди в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про разнообразие выбора в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про то",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "что здесь делают перед уходом",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Парк развлечений": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про уровень шума в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про эмоции людей в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про очереди в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про влияние погоды на это место",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про то",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "приходят ли сюда чаще одни или с компанией",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Стадион": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про количество людей в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про то",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "сидят здесь или стоят",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про уровень шума в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про то",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "как люди реагируют на происходящее здесь",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про то",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "приходят ли сюда заранее",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Банк": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про уровень формальности в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про очереди в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про отношение к документам в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про то",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "как люди проводят время ожидания здесь",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про то",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "насколько люди здесь серьёзны",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Аэропорт": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про отношение ко времени в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про количество багажа в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про то",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "насколько здесь много проверок",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про зоны ожидания в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про эмоции людей при расставаниях и встречах в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Офис": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про рабочий график в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про количество времени за столом в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про уровень шума в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про отношение к опозданиям в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про перерывы в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Коворкинг": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про разнообразие людей в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про то",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "работают ли здесь над разными задачами",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про уровень свободы в выборе места в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про использование ноутбуков в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про то",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "насколько легко здесь сменить окружение",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Строительная площадка": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про физическую нагрузку в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про важность безопасности в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про уровень шума в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про влияние погоды на работу в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про количество техники и инструментов в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Завод": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про повторяющиеся действия в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про работу с техникой в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про уровень шума в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про работу по сменам в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про важность точности в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "IT компания": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про количество экранов в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про время за компьютером в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про одежду в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про частоту встреч и созвонов в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про использование мессенджеров в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Кухня ресторана": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про температуру в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про запахи в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про скорость работы в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про уровень шума в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про важность чистоты в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Салон красоты": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про продолжительность услуг в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про отношение к внешнему виду в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про атмосферу в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про запись заранее в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про общение с клиентами в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Отель": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про длительность проживания в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про то",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "кто здесь бывает чаще всего",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про работу в ночное время в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про важность вежливости в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про отношение к чистоте в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Телестудия": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про освещение в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про наличие техники в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про подготовку к выступлениям в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про повторение одних и тех же действий в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про существование закулисья в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Фитнес клуб": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про уровень физической активности в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про одежду в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про музыку в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про посещение до или после работы",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про использование оборудования в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Самолет": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про возможность свободно передвигаться в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про длительность нахождения в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про размещение людей в рядах в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про отношение ко времени в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про влияние этого места на самочувствие людей",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Поезд": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про возможность ходить во время поездки в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про вид из этого места",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про длительные переезды в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про общение с незнакомцами в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про то",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "как проводят время в дороге в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Ночной поезд": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про сон в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про освещение в этом месте ночью",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про совместное пребывание с незнакомцами в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про утро в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про привычки людей перед сном в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Круизный лайнер": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про длительность пребывания в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про сочетание перемещения и отдыха в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про наличие развлечений в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про вид вокруг этого места",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про разные зоны внутри этого места",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Порт": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про связь этого места с водой",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про типы транспорта в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про количество груза в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про уровень шума в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про работу людей на открытом воздухе в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Заправка": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про длительность остановки в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про запахи в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про людей",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "которые сюда заезжают",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про связь этого места с дорогой",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про наличие дополнительных услуг в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Прокат автомобилей": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про документы в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про временное пользование чем‑то в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про выбор из похожих вариантов в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про связь этого места с поездками",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про ожидание оформления в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Туристический автобус": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про осмотр мест через окна в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про совместное путешествие с группой в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про остановки в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про использование этого места для экскурсий",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про атмосферу отдыха в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Иностранное метро": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про непонятные надписи в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про использование схем и карт в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про ощущение чужого города в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про необходимость ориентироваться в незнакомой системе в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про языковой барьер в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Маленький аэропорт": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про количество людей в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про размер этого места",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про скорость прохождения процессов в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про узнаваемость людей в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про ощущение «домашности» в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Кинотеатр": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про освещение в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про то",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "куда смотрят люди в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про поведение во время просмотра в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про покупки перед основным действием в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про уровень шума во время основного действия в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Ночной клуб": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про музыку в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про время суток",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "когда сюда приходят",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про уровень шума в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про типичную одежду в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про то",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "приходят сюда по одному или с компанией",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Караоке бар": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про участие людей в выступлениях в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про использование голоса в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про то",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "приходят ли сюда в компаниях",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про атмосферу поддержки в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про ожидание своей очереди в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Торговый центр": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про количество людей в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про возможность просто гулять в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про усталость от ходьбы в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про наличие еды в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про вероятность заблудиться в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Игровой клуб": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про игры в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про то",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "сидят здесь долго или нет",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про уровень общения в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про наличие соревнований в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про использование техники в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Казино": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про риск в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про эмоции при выигрыше и проигрыше в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про уровень формальности в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про длительность нахождения за одним занятием в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про работу здесь поздно вечером или ночью",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Фестиваль": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про количество людей в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про музыку и звуки в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про влияние погоды на это место",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про длительность мероприятия в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про уровень движения между зонами в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Аквапарк": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про воду в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про одежду в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про физическую активность в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про влияние погоды на посещение этого места",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про отдых и усталость в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Зоопарк": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про связь этого места с животными",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про прогулки в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про количество времени",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "которое здесь проводят",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про посещение с детьми в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про влияние погоды на это место",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Музей": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про отношение к тишине в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про то",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "чем здесь заняты глаза людей",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про длительность осмотра в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про посещение группами в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про наличие табличек и описаний в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Университет": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про размер этого места",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про людей",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "которые здесь учатся",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про наличие разных корпусов в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про жизнь вне занятий в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про длительность обучения в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Аудитория": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про расположение людей относительно друг друга в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про того",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "кто здесь говорит чаще других",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про длительность нахождения в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про использование доски или экрана в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про отношение к опозданиям в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Музыкальная школа": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про звуки в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про использование инструментов в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про регулярные занятия в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про выступления учеников в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про посещение после основной учёбы в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Театр": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про сцену и зал в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про поведение зрителей в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про разделение на действие и перерыв в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про уровень формальности в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про живое выступление в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Галерея": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про то",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "на что здесь в основном смотрят",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про скорость передвижения людей в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про уровень тишины в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про временность экспозиций в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про обсуждение увиденного в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Языковая школа": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про использование разных языков в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про маленькие группы в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про домашние задания в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про разговорную практику в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про людей",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "которые приходят сюда после работы или учёбы",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Читальный зал": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про отношение к тишине в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про длительность сидения за столом в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про концентрацию внимания в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про использование ноутбуков и книг в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про поведение перед экзаменами в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Консерватория": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про профессиональное обучение музыке в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про наличие больших залов в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про регулярные репетиции в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про концерты в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про разные музыкальные специальности в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Научная лаборатория": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про эксперименты в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про важность безопасности в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про измерения и наблюдения в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про оборудование в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про записи результатов в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Конференция": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про выступления в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про людей с бейджами в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про обсуждение профессиональных тем в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про перерывы между сессиями в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про знакомство с новыми людьми в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Военная база": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про дисциплину в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про форму и внешний вид в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про ограниченный доступ в это место",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про регулярные тренировки в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про иерархию в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Подводная лодка": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про замкнутое пространство в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про отсутствие привычного вида из окна в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про длительное пребывание без выхода в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про важность техники безопасности в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про ощущение изоляции в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Тюрьма": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про свободу передвижения в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про разделение людей по помещениям в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про уровень контроля в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про отношение к правилам в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про постоянных обитателей этого места",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Полицейский участок": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про людей",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "которые приходят сюда с проблемами",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про работу с документами в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про официальное общение в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про ожидание своей очереди в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про людей в форме в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Штаб спецслужб": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про конфиденциальность в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про ограниченный доступ в это место",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про уровень наблюдения в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про обсуждение важной информации в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про скрытность работы в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Секретная лаборатория": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про эксперименты с неизвестным результатом в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про ограниченный круг людей в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про особые меры безопасности в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про необычное оборудование в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про секретность проектов в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Корабль в шторм": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про устойчивость на ногах в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про влияние стихии в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про качку в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про звуки в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про эмоции экипажа в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Полевой госпиталь": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про атмосферу в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про звуки в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про эмоции людей в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про типичные действия в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про внешний вид в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Зона бедствия": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про атмосферу в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про звуки в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про эмоции людей в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про типичные действия в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про внешний вид в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Карантинный центр": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про атмосферу в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про звуки в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про эмоции людей в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про типичные действия в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про внешний вид в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Фэнтези таверна": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про атмосферу в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про звуки в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про эмоции людей в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про типичные действия в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про внешний вид в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Эльфийский лес": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про атмосферу в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про звуки в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про эмоции людей в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про типичные действия в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про внешний вид в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Замок ведьмаков": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про атмосферу в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про звуки в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про эмоции людей в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про типичные действия в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про внешний вид в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Пещера дракона": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про атмосферу в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про звуки в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про эмоции людей в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про типичные действия в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про внешний вид в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Гильдия магов": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про атмосферу в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про звуки в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про эмоции людей в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про типичные действия в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про внешний вид в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Пиратский порт": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про атмосферу в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про звуки в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про эмоции людей в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про типичные действия в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про внешний вид в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Башня мага": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про атмосферу в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про звуки в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про эмоции людей в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про типичные действия в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про внешний вид в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Рыцарский турнир": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про атмосферу в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про звуки в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про эмоции людей в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про типичные действия в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про внешний вид в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Лагерь орков": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про атмосферу в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про звуки в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про эмоции людей в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про типичные действия в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про внешний вид в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Подземелье": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про атмосферу в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про звуки в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про эмоции людей в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про типичные действия в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про внешний вид в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Космическая станция": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про атмосферу в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про звуки в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про эмоции людей в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про типичные действия в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про внешний вид в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Звездолет": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про атмосферу в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про звуки в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про эмоции людей в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про типичные действия в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про внешний вид в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Космический док": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про атмосферу в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про звуки в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про эмоции людей в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про типичные действия в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про внешний вид в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Марсианская колония": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про атмосферу в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про звуки в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про эмоции людей в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про типичные действия в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про внешний вид в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Инопланетный рынок": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про атмосферу в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про звуки в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про эмоции людей в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про типичные действия в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про внешний вид в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Зал галактического совета": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про атмосферу в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про звуки в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про эмоции людей в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про типичные действия в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про внешний вид в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Лаборатория ИИ": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про атмосферу в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про звуки в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про эмоции людей в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про типичные действия в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про внешний вид в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Киберпанк город": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про атмосферу в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про звуки в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про эмоции людей в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про типичные действия в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про внешний вид в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Подземный бункер": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про атмосферу в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про звуки в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про эмоции людей в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про типичные действия в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про внешний вид в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Офис мегакорпорации": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про атмосферу в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про звуки в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про эмоции людей в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про типичные действия в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про внешний вид в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Хогвартс": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про атмосферу в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про звуки в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про эмоции людей в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про типичные действия в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про внешний вид в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Корабль Звездных войн": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про атмосферу в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про звуки в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про эмоции людей в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про типичные действия в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про внешний вид в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Готэм": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про атмосферу в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про звуки в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про эмоции людей в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про типичные действия в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про внешний вид в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Штаб Мстителей": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про атмосферу в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про звуки в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про эмоции людей в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про типичные действия в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про внешний вид в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Парк юрского периода": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про атмосферу в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про звуки в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про эмоции людей в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про типичные действия в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про внешний вид в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Матрица": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про атмосферу в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про звуки в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про эмоции людей в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про типичные действия в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про внешний вид в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Дикий запад": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про атмосферу в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про звуки в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про эмоции людей в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про типичные действия в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про внешний вид в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Зомби город": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про атмосферу в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про звуки в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про эмоции людей в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про типичные действия в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про внешний вид в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Город будущего": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про атмосферу в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про звуки в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про эмоции людей в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про типичные действия в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про внешний вид в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Игровой мир": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про атмосферу в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про звуки в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про эмоции людей в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про типичные действия в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про внешний вид в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Сон": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про атмосферу в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про звуки в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про эмоции людей в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про типичные действия в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про внешний вид в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Гигантский магазин": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про атмосферу в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про звуки в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про эмоции людей в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про типичные действия в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про внешний вид в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Летающий город": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про атмосферу в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про звуки в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про эмоции людей в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про типичные действия в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про внешний вид в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Поезд времени": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про атмосферу в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про звуки в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про эмоции людей в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про типичные действия в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про внешний вид в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Бесконечный офис": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про атмосферу в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про звуки в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про эмоции людей в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про типичные действия в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про внешний вид в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Остров шоу": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про атмосферу в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про звуки в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про эмоции людей в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про типичные действия в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про внешний вид в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "VR переговорка": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про атмосферу в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про звуки в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про эмоции людей в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про типичные действия в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про внешний вид в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Магический рынок": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про атмосферу в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про звуки в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про эмоции людей в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про типичные действия в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про внешний вид в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Город шепота": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про атмосферу в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про звуки в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про эмоции людей в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про типичные действия в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про внешний вид в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Кафе между мирами": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про атмосферу в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про звуки в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про эмоции людей в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про типичные действия в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про внешний вид в этом месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    }
+  },
+  "shared_hints": {
+    "Пример общей подсказки": {
+      "hint_choosed_times": 0
+    }
+  }
+}

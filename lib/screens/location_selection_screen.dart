@@ -55,20 +55,20 @@ class _LocationSelectionScreenState extends State<LocationSelectionScreen> {
       displayGroupName = AppStrings.randomGroupDisplay;
       
       // Flatten all locations into one list
-      List<String> allLocations = [];
+      final List<String> allLocations = [];
       for (var group in LocationsData.groups) {
         final locs = group['locations'] as List<dynamic>;
-        allLocations.addAll(locs.map((e) => e['name'] as String));
+        allLocations.addAll(locs.map((e) => e as String));
       }
       
       secretLocation = allLocations[random.nextInt(allLocations.length)];
     } else {
       // Specific group
       final group = LocationsData.groups[_selectedIndex!];
-      displayGroupName = group['groupName'];
+      displayGroupName = group['groupName'] as String;
       
       final locs = group['locations'] as List<dynamic>;
-      List<String> locations = locs.map((e) => e['name'] as String).toList();
+      final List<String> locations = locs.map((e) => e as String).toList();
       secretLocation = locations[random.nextInt(locations.length)];
     }
 
