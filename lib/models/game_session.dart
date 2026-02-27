@@ -31,11 +31,11 @@ class GameSession {
     }
   }
 
-  void addScoreToSpy(int score) {
+  void addScoreToSpy(double score) {
     players[currentSpyIndex].addScore(score);
   }
 
-  void addScoreToCivilians(int score) {
+  void addScoreToCivilians(double score) {
     for (int i = 0; i < players.length; i++) {
       if (i != currentSpyIndex) {
         players[i].addScore(score);
@@ -43,7 +43,7 @@ class GameSession {
     }
   }
 
-  void punishSpy(int penalty) {
+  void punishSpy(double penalty) {
     players[currentSpyIndex].addScore(penalty);
   }
 }

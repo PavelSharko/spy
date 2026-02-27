@@ -228,7 +228,7 @@ class _RoundScoreScreenState extends State<RoundScoreScreen> {
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               child: Text(
-                                player.roundScore > 0 ? '+${player.roundScore}' : '${player.roundScore}',
+                                player.roundScore > 0 ? '+${player.roundScore % 1 == 0 ? player.roundScore.toInt() : player.roundScore.toStringAsFixed(1)}' : '${player.roundScore % 1 == 0 ? player.roundScore.toInt() : player.roundScore.toStringAsFixed(1)}',
                                 style: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.bold,
@@ -239,7 +239,7 @@ class _RoundScoreScreenState extends State<RoundScoreScreen> {
                             
                           // Total Score
                           Text(
-                            '${player.totalScore}',
+                            '${player.totalScore % 1 == 0 ? player.totalScore.toInt() : player.totalScore.toStringAsFixed(1)}',
                             style: const TextStyle(
                               fontSize: 24,
                               fontWeight: FontWeight.w900,

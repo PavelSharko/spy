@@ -1,7 +1,7 @@
 class Player {
   final String name;
-  int totalScore;
-  int roundScore;
+  double totalScore;
+  double roundScore;
 
   Player({
     required this.name,
@@ -9,7 +9,7 @@ class Player {
     this.roundScore = 0,
   });
 
-  void addScore(int delta) {
+  void addScore(double delta) {
     totalScore += delta;
     roundScore += delta;
   }

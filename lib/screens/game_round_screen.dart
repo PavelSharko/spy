@@ -22,9 +22,15 @@ class GameRoundScreen extends StatefulWidget {
   State<GameRoundScreen> createState() => _GameRoundScreenState();
 }
 
-class _GameRoundScreenState extends State<GameRoundScreen> {
+class _GameRoundScreenState extends State<GameRoundScreen> with SingleTickerProviderStateMixin {
   late int _mainTimerRemaining;
   int _questionTimerRemaining = 20;
+
+  int _additionalTimerRemaining = 0;
+  bool _isAdditionalTime = false;
+
+  late AnimationController _pulseController;
+  late Animation<double> _pulseAnimation;
 
   Timer? _mainTimer;
   Timer? _questionTimer;
@@ -44,6 +50,14 @@ class _GameRoundScreenState extends State<GameRoundScreen> {
   @override
   void initState() {
     super.initState();
+    _pulseController = AnimationController(vsync: this, duration: const Duration(milliseconds: 300));
+    _pulseAnimation = Tween<double>(begin: 1.0, end: 1.1).animate(CurvedAnimation(parent: _pulseController, curve: Curves.easeInOut))
+      ..addStatusListener((status) {
+        if (status == AnimationStatus.completed) {
+          _pulseController.reverse();
+        }
+      });
+
     _mainTimerRemaining = widget.session.gameTime * 60;
     
     // Setup initial players
@@ -82,10 +96,25 @@ class _GameRoundScreenState extends State<GameRoundScreen> {
       setState(() {
         if (_questionTimerRemaining > 0) {
           _questionTimerRemaining--;
-        }
 
-        if (_questionTimerRemaining == 0) {
-          _onQuestionTimeUp();
+          if (_questionTimerRemaining == 0 && !_isAdditionalTime) {
+            _isAdditionalTime = true;
+            _additionalTimerRemaining = 3;
+            _pulseController.forward(from: 0.0);
+          }
+        } else if (_isAdditionalTime) {
+          if (_additionalTimerRemaining > 0) {
+            _additionalTimerRemaining--;
+            if (_additionalTimerRemaining > 0) {
+              _pulseController.forward(from: 0.0);
+            }
+          }
+
+          if (_additionalTimerRemaining == 0) {
+            _isAdditionalTime = false;
+            widget.session.players[_currentAskerIndex].addScore(-0.1);
+            _onQuestionTimeUp();
+          }
         }
       });
     });
@@ -198,6 +227,8 @@ class _GameRoundScreenState extends State<GameRoundScreen> {
     setState(() {
       _isTransitioning = true;
       _isTimeUp = false;
+      _isAdditionalTime = false;
+      _additionalTimerRemaining = 0;
     });
 
     // Simulate transition delay (1 second) for the rotation animation (which will be in the build method)
@@ -263,6 +294,7 @@ class _GameRoundScreenState extends State<GameRoundScreen> {
   void dispose() {
     _mainTimer?.cancel();
     _questionTimer?.cancel();
+    _pulseController.dispose();
     super.dispose();
   }
 
@@ -522,23 +554,28 @@ class _GameRoundScreenState extends State<GameRoundScreen> {
         // 6. Action Button ("ДАЛЬШЕ!" / "Завершить раунд")
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: ElevatedButton(
-            onPressed: _isTimeUp ? null : _onNextPressed,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: _isLastQuestion ? Colors.red.shade600 : Colors.blue.shade800,
-              foregroundColor: Colors.white,
-              padding: const EdgeInsets.symmetric(vertical: 20),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15),
+          child: ScaleTransition(
+            scale: _pulseAnimation,
+            child: ElevatedButton(
+              onPressed: _isTimeUp ? null : _onNextPressed,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: _isLastQuestion ? Colors.red.shade600 : Colors.blue.shade800,
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(vertical: 20),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                elevation: 6,
               ),
-              elevation: 6,
-            ),
-            child: Text(
-              _isLastQuestion ? AppStrings.endRound : AppStrings.nextPlayer,
-              style: const TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-                letterSpacing: 1.5,
+              child: Text(
+                _isAdditionalTime
+                    ? "${_isLastQuestion ? AppStrings.endRound : AppStrings.nextPlayer} $_additionalTimerRemaining"
+                    : (_isLastQuestion ? AppStrings.endRound : AppStrings.nextPlayer),
+                style: const TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 1.5,
+                ),
               ),
             ),
           ),
