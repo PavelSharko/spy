@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../data/locations_data.dart';
 import '../utils/app_strings.dart';
 import '../utils/app_styles.dart';
+import '../widgets/exit_game_button.dart';
 
 class LocationSelectionScreen extends StatefulWidget {
   const LocationSelectionScreen({super.key});
@@ -81,12 +82,14 @@ class _LocationSelectionScreenState extends State<LocationSelectionScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: AppStyles.mainGradientDecoration,
-        child: SafeArea(
-          child: Column(
-            children: [
-              const SizedBox(height: 20),
+      body: Stack(
+        children: [
+          Container(
+            decoration: AppStyles.mainGradientDecoration,
+            child: SafeArea(
+              child: Column(
+                children: [
+                  const SizedBox(height: 20),
               
               // Top Random Button
               Padding(
@@ -138,7 +141,6 @@ class _LocationSelectionScreenState extends State<LocationSelectionScreen> {
                     AppStrings.confirmAction,
                     style: TextStyle(
                       fontSize: 20,
-                      fontWeight: FontWeight.bold,
                       letterSpacing: 1.5,
                     ),
                   ),
@@ -148,8 +150,12 @@ class _LocationSelectionScreenState extends State<LocationSelectionScreen> {
           ),
         ),
       ),
-    );
-  }
+      const ExitGameButton(), // Add exit button here
+    ],
+  ),
+);
+}
+
 
   Widget _buildLocationButton({
     required String title,

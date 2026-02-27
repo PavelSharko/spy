@@ -6,7 +6,9 @@ import '../models/player.dart';
 import '../utils/app_strings.dart';
 import '../utils/app_styles.dart';
 import '../widgets/game_card.dart';
+import '../widgets/game_card.dart';
 import '../widgets/menu_button.dart';
+import '../widgets/exit_game_button.dart';
 import 'game_round_screen.dart';
 
 enum FlowStep { nameSelection, cardReveal, roundReady }
@@ -127,14 +129,19 @@ class _PreGameFlowScreenState extends State<PreGameFlowScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: AppStyles.mainGradientDecoration,
-        child: SafeArea(
-          child: AnimatedSwitcher(
-            duration: const Duration(milliseconds: 300),
-            child: _buildCurrentStep(),
+      body: Stack(
+        children: [
+          Container(
+            decoration: AppStyles.mainGradientDecoration,
+            child: SafeArea(
+              child: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 300),
+                child: _buildCurrentStep(),
+              ),
+            ),
           ),
-        ),
+          const ExitGameButton(),
+        ],
       ),
     );
   }

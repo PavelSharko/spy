@@ -3,6 +3,7 @@ import '../models/game_session.dart';
 import '../utils/app_strings.dart';
 import '../utils/app_styles.dart';
 import 'round_score_screen.dart';
+import '../widgets/exit_game_button.dart';
 
 class SpyLastWordScreen extends StatefulWidget {
   final GameSession session;
@@ -40,13 +41,15 @@ class _SpyLastWordScreenState extends State<SpyLastWordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: AppStyles.mainGradientDecoration,
-        child: SafeArea(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const SizedBox(height: 20),
+      body: Stack(
+        children: [
+          Container(
+            decoration: AppStyles.mainGradientDecoration,
+            child: SafeArea(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const SizedBox(height: 20),
 
               // Title
               const Center(
@@ -174,13 +177,16 @@ class _SpyLastWordScreenState extends State<SpyLastWordScreen> {
                   ),
                 ),
 
-              if (_didGuessRight == null) const SizedBox(height: 100),
-            ],
+                if (_didGuessRight == null) const SizedBox(height: 100),
+              ],
+            ),
           ),
         ),
-      ),
-    );
-  }
+        const ExitGameButton(),
+      ],
+    ),
+  );
+}
 
   Widget _buildAnswerButton({
     required String text,

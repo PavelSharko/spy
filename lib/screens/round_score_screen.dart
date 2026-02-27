@@ -7,6 +7,7 @@ import '../utils/app_strings.dart';
 import '../utils/app_styles.dart';
 import 'main_menu_screen.dart';
 import 'pre_game_flow_screen.dart';
+import '../widgets/exit_game_button.dart';
 
 class RoundScoreScreen extends StatefulWidget {
   final GameSession session;
@@ -87,13 +88,15 @@ class _RoundScoreScreenState extends State<RoundScoreScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: AppStyles.mainGradientDecoration,
-        child: SafeArea(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const SizedBox(height: 20),
+      body: Stack(
+        children: [
+          Container(
+            decoration: AppStyles.mainGradientDecoration,
+            child: SafeArea(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const SizedBox(height: 20),
               
               // Title
               Center(
@@ -278,6 +281,9 @@ class _RoundScoreScreenState extends State<RoundScoreScreen> {
           ),
         ),
       ),
-    );
-  }
+      const ExitGameButton(),
+    ],
+  ),
+);
+}
 }

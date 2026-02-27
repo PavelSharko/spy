@@ -3,6 +3,7 @@ import '../models/game_session.dart';
 import '../utils/app_strings.dart';
 import '../utils/app_styles.dart';
 import 'voting_result_screen.dart';
+import '../widgets/exit_game_button.dart';
 
 class VotingScreen extends StatefulWidget {
   final GameSession session;
@@ -105,12 +106,14 @@ class _VotingScreenState extends State<VotingScreen> {
     int currentVoter = _votingQueue[_currentVoterIndexInQueue];
 
     return Scaffold(
-      body: Container(
-        decoration: AppStyles.mainGradientDecoration,
-        child: SafeArea(
-          child: Column(
-            children: [
-              const SizedBox(height: 20),
+      body: Stack(
+        children: [
+          Container(
+            decoration: AppStyles.mainGradientDecoration,
+            child: SafeArea(
+              child: Column(
+                children: [
+                  const SizedBox(height: 20),
               
               // Title
               const Text(
@@ -263,6 +266,9 @@ class _VotingScreenState extends State<VotingScreen> {
           ),
         ),
       ),
-    );
-  }
+      const ExitGameButton(),
+    ],
+  ),
+);
+}
 }

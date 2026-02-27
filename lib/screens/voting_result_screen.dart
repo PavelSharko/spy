@@ -3,6 +3,7 @@ import '../models/game_session.dart';
 import '../utils/app_strings.dart';
 import 'round_score_screen.dart';
 import 'spy_last_word_screen.dart';
+import '../widgets/exit_game_button.dart';
 
 class VotingResultScreen extends StatelessWidget {
   final GameSession session;
@@ -38,10 +39,12 @@ class VotingResultScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: bgColor,
-      body: SafeArea(
-        child: Column(
-          children: [
-            const Spacer(),
+      body: Stack(
+        children: [
+          SafeArea(
+            child: Column(
+              children: [
+                const Spacer(),
             
             // Icon
             Icon(
@@ -109,6 +112,9 @@ class VotingResultScreen extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
+      const ExitGameButton(),
+    ],
+  ),
+);
+}
 }

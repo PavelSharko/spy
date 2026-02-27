@@ -7,6 +7,7 @@ import '../widgets/number_selector.dart';
 import '../models/game_session.dart';
 import 'location_selection_screen.dart';
 import 'pre_game_flow_screen.dart';
+import '../widgets/exit_game_button.dart';
 
 class GameSettingsScreen extends StatefulWidget {
   const GameSettingsScreen({super.key});
@@ -163,12 +164,14 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
         ),
         extendBodyBehindAppBar: true, 
         backgroundColor: Colors.transparent, // Important for gradient background if provided by Container below
-        body: Container(
-          decoration: AppStyles.mainGradientDecoration,
-          child: SafeArea( 
-            child: Column(
-              children: [
-                const SizedBox(height: 20),
+        body: Stack(
+          children: [
+            Container(
+              decoration: AppStyles.mainGradientDecoration,
+              child: SafeArea( 
+                child: Column(
+                  children: [
+                    const SizedBox(height: 20),
                 
                 // Scrollable area for the large buttons
                 Expanded(
@@ -284,9 +287,12 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
             ),
           ),
         ),
-      ),
-    );
-  }
+        const ExitGameButton(), // Add exit button here
+      ],
+    ),
+  ),
+);
+}
 
   // Builder helper to handle the expansion logic
   Widget _buildSettingItem({

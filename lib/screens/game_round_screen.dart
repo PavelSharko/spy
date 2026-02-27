@@ -7,7 +7,8 @@ import '../utils/app_styles.dart';
 import '../data/locations_data.dart';
 import '../models/game_session.dart';
 import 'voting_screen.dart';
-import 'round_score_screen.dart'; // we will create this next
+import 'round_score_screen.dart';
+import '../widgets/exit_game_button.dart';
 
 class GameRoundScreen extends StatefulWidget {
   final GameSession session;
@@ -279,12 +280,14 @@ class _GameRoundScreenState extends State<GameRoundScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: AppStyles.mainGradientDecoration,
-        child: SafeArea(
-          child: Column(
-            children: [
-              const SizedBox(height: 10),
+      body: Stack(
+        children: [
+          Container(
+            decoration: AppStyles.mainGradientDecoration,
+            child: SafeArea(
+              child: Column(
+                children: [
+                  const SizedBox(height: 10),
               
                 // 1. Main Timer
                 Container(
@@ -363,8 +366,19 @@ class _GameRoundScreenState extends State<GameRoundScreen> {
           ),
         ),
       ),
-    );
-  }
+      ExitGameButton(
+        onPause: () {
+          _mainTimer?.cancel();
+          _questionTimer?.cancel();
+        },
+        onResume: () {
+          _startTimers();
+        },
+      ),
+    ],
+  ),
+);
+}
 
   Widget _buildRoundContent(BuildContext context) {
     return Column(
