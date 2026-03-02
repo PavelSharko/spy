@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/game_session.dart';
 import '../utils/app_strings.dart';
 import '../utils/app_styles.dart';
+import '../utils/sound_service.dart';
 import 'round_score_screen.dart';
 import '../widgets/exit_game_button.dart';
 
@@ -22,12 +23,14 @@ class _SpyLastWordScreenState extends State<SpyLastWordScreen> {
   bool? _didGuessRight;
 
   void _onAnswerPressed(bool val) {
+    SoundService.instance.playClick();
     setState(() {
       _didGuessRight = val;
     });
   }
 
   void _onEndRound() {
+    SoundService.instance.playClick();
     if (_didGuessRight == true) {
       widget.session.addScoreToSpy(1);
     }

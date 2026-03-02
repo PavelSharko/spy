@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/game_session.dart';
 import '../utils/app_strings.dart';
+import '../utils/sound_service.dart';
 import 'round_score_screen.dart';
 import 'spy_last_word_screen.dart';
 import '../widgets/exit_game_button.dart';
@@ -16,6 +17,7 @@ class VotingResultScreen extends StatelessWidget {
   });
 
   void _onNext(BuildContext context) {
+    SoundService.instance.playClick();
     if (isSpyFound) {
       // Spy found -> proceed directly to score screen
       Navigator.pushReplacement(

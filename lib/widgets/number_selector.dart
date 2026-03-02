@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../utils/sound_service.dart';
 
 class NumberSelector extends StatefulWidget {
   final int initialValue;
@@ -56,6 +57,7 @@ class _NumberSelectorState extends State<NumberSelector> {
 
   void _decrement() {
     if (_currentValue > widget.minValue) {
+      SoundService.instance.playClick();
       setState(() {
         _currentValue--;
       });
@@ -65,6 +67,7 @@ class _NumberSelectorState extends State<NumberSelector> {
 
   void _increment() {
     if (_currentValue < widget.maxValue) {
+      SoundService.instance.playClick();
       setState(() {
         _currentValue++;
       });

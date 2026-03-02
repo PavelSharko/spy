@@ -3,6 +3,7 @@ import 'package:audioplayers/audioplayers.dart';
 import '../models/game_session.dart';
 import '../utils/app_strings.dart';
 import '../utils/app_styles.dart';
+import '../utils/sound_service.dart';
 import 'voting_result_screen.dart';
 import '../widgets/exit_game_button.dart';
 
@@ -52,6 +53,7 @@ class _VotingScreenState extends State<VotingScreen> {
 
   void _onConfirmVote() {
     if (_selectedCandidateIndex == null) return;
+    SoundService.instance.playClick();
 
     setState(() {
       _votes[_selectedCandidateIndex!]++;
@@ -248,6 +250,7 @@ class _VotingScreenState extends State<VotingScreen> {
                       padding: const EdgeInsets.only(bottom: 15),
                       child: GestureDetector(
                         onTap: () {
+                          SoundService.instance.playClick();
                           setState(() {
                             _selectedCandidateIndex = index;
                           });

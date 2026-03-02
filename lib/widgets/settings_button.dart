@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../utils/sound_service.dart';
 
 class SettingsButton extends StatelessWidget {
   final String title;
@@ -35,7 +36,10 @@ class SettingsButton extends StatelessWidget {
           foregroundColor: Colors.blue.shade900, // Text color
           elevation: 4,
         ),
-        onPressed: onPressed,
+        onPressed: () {
+          SoundService.instance.playClick();
+          onPressed();
+        },
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../utils/app_strings.dart';
 import '../utils/app_styles.dart';
+import '../utils/sound_service.dart';
 import '../widgets/menu_button.dart';
 import '../widgets/settings_button.dart';
 import '../widgets/number_selector.dart';
@@ -133,6 +134,7 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
   }
 
   void _onPlayPressed() {
+    SoundService.instance.playClick();
     final String? validationError = _firstValidationError();
     if (validationError != null) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -173,6 +175,7 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
   }
 
   void _onBackPressed() {
+    SoundService.instance.playClick();
     Navigator.of(context).pop();
   }
 

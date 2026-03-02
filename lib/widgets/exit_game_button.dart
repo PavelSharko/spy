@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../screens/main_menu_screen.dart';
+import '../utils/sound_service.dart';
 
 class ExitGameButton extends StatelessWidget {
   final VoidCallback? onPause;
@@ -19,6 +20,7 @@ class ExitGameButton extends StatelessWidget {
       child: IconButton(
         icon: const Icon(Icons.close, color: Colors.white, size: 30),
         onPressed: () {
+          SoundService.instance.playClick();
           // Pause the game if necessary
           onPause?.call();
 
@@ -32,6 +34,7 @@ class ExitGameButton extends StatelessWidget {
                 actions: [
                   TextButton(
                     onPressed: () {
+                      SoundService.instance.playClick();
                       Navigator.of(ctx).pop();
                       onResume?.call();
                     },
@@ -39,6 +42,7 @@ class ExitGameButton extends StatelessWidget {
                   ),
                   TextButton(
                     onPressed: () {
+                      SoundService.instance.playClick();
                       // Navigate to start screen and clear stack
                       Navigator.of(context).pushAndRemoveUntil(
                         MaterialPageRoute(

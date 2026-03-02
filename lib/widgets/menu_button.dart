@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../utils/sound_service.dart';
 
 class MenuButton extends StatelessWidget {
   final String text;
@@ -20,11 +21,17 @@ class MenuButton extends StatelessWidget {
       width: width,
       child: isPrimary
           ? ElevatedButton(
-              onPressed: onPressed,
+              onPressed: () {
+                SoundService.instance.playClick();
+                onPressed();
+              },
               child: Text(text),
             )
           : OutlinedButton(
-              onPressed: onPressed,
+              onPressed: () {
+                SoundService.instance.playClick();
+                onPressed();
+              },
               // Maintain consistent outlined button style if not defined in theme globally
               style: OutlinedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),

@@ -7,6 +7,7 @@ import '../utils/app_strings.dart';
 import '../utils/app_styles.dart';
 import '../utils/game_rules.dart';
 import '../utils/game_sounds.dart';
+import '../utils/sound_service.dart';
 
 import '../models/game_session.dart';
 import '../services/storage_service.dart';
@@ -138,6 +139,7 @@ class _GameRoundScreenState extends State<GameRoundScreen> with SingleTickerProv
   }
 
   void _onNextPressed() {
+    SoundService.instance.playClick();
     if (_isLastQuestion) {
       _navigateToVoting();
     } else {
@@ -157,6 +159,7 @@ class _GameRoundScreenState extends State<GameRoundScreen> with SingleTickerProv
   }
 
   void _showStopRoundDialog() {
+    SoundService.instance.playClick();
     // Pause timers
     _mainTimer?.cancel();
     _questionTimer?.cancel();

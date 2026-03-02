@@ -4,6 +4,7 @@ import '../data/locations_data.dart';
 import '../services/storage_service.dart';
 import '../utils/app_strings.dart';
 import '../utils/app_styles.dart';
+import '../utils/sound_service.dart';
 import '../widgets/exit_game_button.dart';
 
 // ── Animated running-border painter ─────────────────────────────────────────
@@ -145,6 +146,7 @@ class _LocationSelectionScreenState extends State<LocationSelectionScreen>
   // ── Selection logic ────────────────────────────────────────────────
 
   void _onRandomPressed() {
+    SoundService.instance.playClick();
     if (_isRandomAll) {
       // Deselect
       setState(() => _isRandomAll = false);
@@ -164,6 +166,7 @@ class _LocationSelectionScreenState extends State<LocationSelectionScreen>
 
   void _onGroupPressed(int index) {
     if (_isRandomAll) return; // random mode locks groups
+    SoundService.instance.playClick();
 
     if (_selectedIndexes.contains(index)) {
       // Deselect
@@ -199,6 +202,7 @@ class _LocationSelectionScreenState extends State<LocationSelectionScreen>
       _triggerShakeHint();
       return;
     }
+    SoundService.instance.playClick();
 
     // Build location pool depending on selection mode
     List<String> pool;

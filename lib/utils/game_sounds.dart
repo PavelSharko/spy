@@ -6,4 +6,7 @@ class GameSounds {
 
   // Played when a tie occurs in voting
   static const String tiePig = 'audio/pig.wav';
+
+  // Played on every button tap across the entire app
+  static const String buttonClick = 'audio/pulk.wav';
 }

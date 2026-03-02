@@ -4,6 +4,7 @@ import '../models/game_session.dart';
 import '../models/player.dart';
 import '../utils/app_strings.dart';
 import '../utils/app_styles.dart';
+import '../utils/sound_service.dart';
 import 'main_menu_screen.dart';
 import 'pre_game_flow_screen.dart';
 import '../widgets/exit_game_button.dart';
@@ -35,6 +36,7 @@ class _RoundScoreScreenState extends State<RoundScoreScreen> {
   }
 
   void _onNextAction() {
+    SoundService.instance.playClick();
     if (_isLastRound) {
       // Go to main menu
       Navigator.pushAndRemoveUntil(

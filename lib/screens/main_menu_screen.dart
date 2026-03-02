@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/game_provider.dart';
 import '../utils/app_styles.dart';
+import '../utils/sound_service.dart';
 import 'game_settings_screen.dart';
 
 class MainMenuScreen extends StatelessWidget {
@@ -34,6 +35,7 @@ class MainMenuScreen extends StatelessWidget {
                 width: 200,
                 child: ElevatedButton(
                   onPressed: () {
+                      SoundService.instance.playClick();
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -48,6 +50,7 @@ class MainMenuScreen extends StatelessWidget {
                 width: 200,
                 child: OutlinedButton(
                   onPressed: () {
+                    SoundService.instance.playClick();
                     // TODO: Show rules
                     ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('Правила игры (Заглушка)')));
@@ -60,6 +63,7 @@ class MainMenuScreen extends StatelessWidget {
                 width: 200,
                 child: OutlinedButton(
                   onPressed: () {
+                    SoundService.instance.playClick();
                     // TODO: System settings
                     ScaffoldMessenger.of(context)
                         .showSnackBar(const SnackBar(content: Text('Настройки (Заглушка)')));

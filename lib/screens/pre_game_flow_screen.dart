@@ -5,6 +5,7 @@ import '../models/game_session.dart';
 import '../models/player.dart';
 import '../utils/app_strings.dart';
 import '../utils/app_styles.dart';
+import '../utils/sound_service.dart';
 import '../widgets/game_card.dart';
 import '../widgets/game_card.dart';
 import '../widgets/menu_button.dart';
@@ -59,6 +60,7 @@ class _PreGameFlowScreenState extends State<PreGameFlowScreen> {
   }
 
   void _onRandomNameTap(String name) {
+    SoundService.instance.playClick();
     setState(() {
       _selectedRandomName = name;
       _nameController.text = name; // Update text field to reflect choice
@@ -74,6 +76,7 @@ class _PreGameFlowScreenState extends State<PreGameFlowScreen> {
   }
 
   void _onConfirmName() {
+    SoundService.instance.playClick();
     String finalName = _nameController.text.trim();
     
     if (_selectedRandomName == null) {
