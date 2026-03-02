@@ -1,6 +1,5 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import '../data/locations_data.dart';
 import '../models/game_session.dart';
 import '../models/player.dart';
 import '../utils/app_strings.dart';
@@ -47,32 +46,15 @@ class _RoundScoreScreenState extends State<RoundScoreScreen> {
       // Prepare next round
       widget.session.currentRound++;
       widget.session.resetRoundScores();
-      
+
       // Select new Spy
-      widget.session.currentSpyIndex = Random().nextInt(widget.session.players.length);
+      widget.session.currentSpyIndex =
+          Random().nextInt(widget.session.players.length);
 
-      // Select new location
-      final random = Random();
-      String newLocation;
-      if (widget.session.locationGroupName == AppStrings.randomGroupDisplay) {
-        final List<String> allLocations = [];
-        for (var group in LocationsData.groups) {
-          final locs = group['locations'] as List<dynamic>;
-          allLocations.addAll(locs.map((e) => e as String));
-        }
-        newLocation = allLocations[random.nextInt(allLocations.length)];
-      } else {
-        var group = LocationsData.groups.firstWhere(
-            (g) => g['groupName'] == widget.session.locationGroupName,
-            orElse: () => LocationsData.groups.first);
-        final locs = group['locations'] as List<dynamic>;
-        final List<String> locations = locs.map((e) => e as String).toList();
-        newLocation = locations[random.nextInt(locations.length)];
-      }
+      // Location is already pre-computed in secretLocationsQueue —
+      // currentSecretLocation getter returns queue[currentRound - 1] automatically.
 
-      widget.session.currentSecretLocation = newLocation;
-
-      // Navigate to pre game flow (will map directly to card reveal for round 2+)
+      // Navigate to pre game flow
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(

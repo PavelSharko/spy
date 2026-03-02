@@ -28,7 +28,7 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
   int _roundCountValue = 1; // Default 1 round
 
   String? _selectedLocation;
-  String? _secretLocation; // Saves the actual randomly chosen location (hidden)
+  List<String>? _secretLocationsQueue; // Pre-computed queue of secret locations
   
   // Track which setting is currently open (expanded)
   String? _activeSettingId;
@@ -39,23 +39,41 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
 
   void _onSettingPressed(String settingName) async {
     if (settingName == AppStrings.locationSelection) {
-      if (_activeSettingId != null) {
-        setState(() {
-          _activeSettingId = null;
-        });
+      // Block if rounds not selected yet
+      if (_selectedRoundCount == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+              AppStrings.pleaseSelectRoundsFirst,
+              textAlign: TextAlign.center,
+            ),
+            backgroundColor: Colors.redAccent,
+            duration: Duration(seconds: 2),
+          ),
+        );
+        return;
       }
-      
+
+      if (_activeSettingId != null) {
+        setState(() => _activeSettingId = null);
+      }
+
       final result = await Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => const LocationSelectionScreen()),
+        MaterialPageRoute(
+          builder: (context) => LocationSelectionScreen(roundCount: _roundCountValue),
+        ),
       );
 
       if (result != null && result is Map<String, dynamic>) {
+        final queue = (result['secretLocationsQueue'] as List<dynamic>)
+            .map((e) => e as String)
+            .toList();
         setState(() {
-          _selectedLocation = result['displayGroupName'];
-          _secretLocation = result['secretLocation'];
+          _selectedLocation = result['displayGroupName'] as String;
+          _secretLocationsQueue = queue;
         });
-        debugPrint('Hidden Secret Location selected: $_secretLocation');
+        debugPrint('Locations queue: $_secretLocationsQueue');
       }
       return;
     }
@@ -108,11 +126,13 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
     setState(() {
       _roundCountValue = value;
       _selectedRoundCount = value.toString();
+      // Reset location selection when round count changes
+      _selectedLocation = null;
+      _secretLocationsQueue = null;
     });
   }
 
   void _onPlayPressed() {
-    // Validate each field in order — show only the FIRST unset field warning
     final String? validationError = _firstValidationError();
     if (validationError != null) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -130,14 +150,15 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
       totalRounds: _roundCountValue,
       gameTime: _gameTimeValue,
       locationGroupName: _selectedLocation,
-      currentSecretLocation: _secretLocation!,
+      secretLocationsQueue: List<String>.from(_secretLocationsQueue!),
       currentSpyIndex: 0,
     );
 
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => PreGameFlowScreen(session: session, playerCount: _playerCountValue),
+        builder: (context) =>
+            PreGameFlowScreen(session: session, playerCount: _playerCountValue),
       ),
     );
   }
@@ -147,7 +168,7 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
     if (_selectedPlayerCount == null) return AppStrings.pleaseSelectPlayerCount;
     if (_selectedGameTime == null) return AppStrings.pleaseSelectGameTime;
     if (_selectedRoundCount == null) return AppStrings.pleaseSelectRoundCount;
-    if (_secretLocation == null) return AppStrings.pleaseSelectWarning;
+    if (_secretLocationsQueue == null) return AppStrings.pleaseSelectWarning;
     return null;
   }
 

@@ -8,8 +8,19 @@ class GameSession {
   int currentRound;
   final int gameTime; // in minutes
   final String? locationGroupName;
-  
-  String currentSecretLocation;
+
+  /// Pre-computed ordered list of secret locations — one per round.
+  /// Index 0 = round 1, index 1 = round 2, etc.
+  final List<String> secretLocationsQueue;
+
+  /// Returns the secret location for the current round.
+  String get currentSecretLocation => secretLocationsQueue[currentRound - 1];
+
+  /// Allows overriding after-the-fact (kept for compatibility, not used in normal flow).
+  set currentSecretLocation(String value) {
+    secretLocationsQueue[currentRound - 1] = value;
+  }
+
   int currentSpyIndex;
 
   GameSession({
@@ -19,9 +30,10 @@ class GameSession {
     this.currentRound = 1,
     required this.gameTime,
     this.locationGroupName,
-    required this.currentSecretLocation,
+    required this.secretLocationsQueue,
     required this.currentSpyIndex,
-  }) : id = id ?? const Uuid().v4();
+  })  : assert(secretLocationsQueue.isNotEmpty),
+        id = id ?? const Uuid().v4();
 
   Player get currentSpy => players[currentSpyIndex];
 

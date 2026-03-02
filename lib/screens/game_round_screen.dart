@@ -7,7 +7,7 @@ import '../utils/app_strings.dart';
 import '../utils/app_styles.dart';
 import '../utils/game_rules.dart';
 import '../utils/game_sounds.dart';
-import '../data/locations_data.dart';
+
 import '../models/game_session.dart';
 import '../services/storage_service.dart';
 import 'voting_screen.dart';
@@ -54,8 +54,8 @@ class _GameRoundScreenState extends State<GameRoundScreen> with SingleTickerProv
 
   int _hintsUsed = 0;
   bool _isHintCooldown = false;
+  bool _privateHintsExhausted = false;
   List<String> _currentHintsText = [];
-  List<Map<String, dynamic>> _locationHints = []; // [{text, hint_choosed_times}]
 
   @override
   void initState() {
@@ -74,17 +74,7 @@ class _GameRoundScreenState extends State<GameRoundScreen> with SingleTickerProv
     _currentAskerIndex = Random().nextInt(widget.session.players.length);
     _currentTargetIndex = (_currentAskerIndex + 1) % widget.session.players.length;
 
-    // Load available hints for the location
-    _loadLocationHints();
-
     _startTimers();
-  }
-
-  void _loadLocationHints() {
-    _locationHints = storageService.getHints(widget.session.currentSecretLocation);
-    if (_locationHints.isEmpty) {
-      debugPrint('WARNING: No hints found in StorageService for ${widget.session.currentSecretLocation}');
-    }
   }
 
   void _startTimers() {
@@ -158,6 +148,8 @@ class _GameRoundScreenState extends State<GameRoundScreen> with SingleTickerProv
   void _navigateToVoting() {
     _mainTimer?.cancel();
     _questionTimer?.cancel();
+    // Reset private hints at end of round so next round starts fresh
+    storageService.resetPrivateHints(widget.session.currentSecretLocation);
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => VotingScreen(session: widget.session)),
@@ -227,6 +219,8 @@ class _GameRoundScreenState extends State<GameRoundScreen> with SingleTickerProv
   void _navigateToScores() {
     _mainTimer?.cancel();
     _questionTimer?.cancel();
+    // Reset private hints at end of round so next round starts fresh
+    storageService.resetPrivateHints(widget.session.currentSecretLocation);
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => RoundScoreScreen(session: widget.session)),
@@ -251,6 +245,7 @@ class _GameRoundScreenState extends State<GameRoundScreen> with SingleTickerProv
       _currentTargetIndex = (_currentTargetIndex + 1) % widget.session.players.length;
 
       _hintsUsed = 0;
+      _privateHintsExhausted = false;
       _currentHintsText.clear();
       _questionTimerRemaining = 20;
 
@@ -290,28 +285,43 @@ class _GameRoundScreenState extends State<GameRoundScreen> with SingleTickerProv
   }
 
   void _onHintPressed() {
-    if (_isHintCooldown || _hintsUsed >= 2 || _locationHints.isEmpty) return;
+    if (_isHintCooldown || _hintsUsed >= 2) return;
 
-    // Pick least-used hint
-    final sorted = List<Map<String, dynamic>>.from(_locationHints)
-      ..sort((a, b) => ((a['hint_choosed_times'] as num?)?.toInt() ?? 0)
-          .compareTo((b['hint_choosed_times'] as num?)?.toInt() ?? 0));
-    final chosen = sorted.first;
-    final hintText = chosen['text'] as String;
+    setState(() => _isHintCooldown = true);
 
-    setState(() {
-      _isHintCooldown = true;
-      _currentHintsText.clear();
-      _currentHintsText.add(hintText);
-      _hintsUsed++;
+    _pickHint().then((hintText) {
+      if (!mounted) return;
+      setState(() {
+        _currentHintsText.clear();
+        _currentHintsText.add(hintText);
+        _hintsUsed++;
+      });
+      Future.delayed(const Duration(milliseconds: 500), () {
+        if (mounted) setState(() => _isHintCooldown = false);
+      });
     });
+  }
 
-    // Persist increment in background
-    storageService.incrementHintPick(widget.session.currentSecretLocation, hintText);
-
-    Future.delayed(const Duration(milliseconds: 500), () {
-      if (mounted) setState(() => _isHintCooldown = false);
-    });
+  /// Selection logic:
+  /// - Hint 1 (hintsUsed == 0): always universal
+  /// - Hint 2 (hintsUsed == 1): private if available, else universal
+  /// If all private hints are exhausted for this round → always universal
+  Future<String> _pickHint() async {
+    if (_hintsUsed == 0 || _privateHintsExhausted) {
+      // Universal turn
+      return storageService.pickNextUniversalHint();
+    } else {
+      // Try private first
+      final privateHint = await storageService.pickNextPrivateHint(
+          widget.session.currentSecretLocation);
+      if (privateHint != null) {
+        return privateHint;
+      } else {
+        // Private exhausted — fall back to universal from now on
+        _privateHintsExhausted = true;
+        return storageService.pickNextUniversalHint();
+      }
+    }
   }
 
   @override
