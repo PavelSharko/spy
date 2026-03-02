@@ -1,4 +1,5 @@
 import 'package:audioplayers/audioplayers.dart';
+import 'app_settings.dart';
 import 'game_sounds.dart';
 
 /// Lightweight singleton for UI sound effects.
@@ -11,7 +12,7 @@ class SoundService {
   final AudioPlayer _clickPlayer = AudioPlayer();
 
   Future<void> playClick() async {
-    // Stop any currently playing click to avoid overlap on rapid taps
+    if (!AppSettings.instance.soundEnabled) return;
     await _clickPlayer.stop();
     await _clickPlayer.play(AssetSource(GameSounds.buttonClick));
   }

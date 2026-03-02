@@ -1,18 +1,36 @@
 /// Game rules and scoring constants.
-/// Change values here to adjust game balance.
+/// Change values here to adjust game balance — RulesScreen reads these automatically.
 class GameRules {
-  // --- Penalty for slow answer (timer runs out during 3-second flash) ---
+  // ── Penalty ──────────────────────────────────────────────────────────────
+  /// Points deducted from a player who fails to answer in time.
   static const double penaltyOvertime = -0.1;
 
-  // --- Spy wins: how many points the spy gets for guessing the location correctly ---
+  // ── Spy scoring ──────────────────────────────────────────────────────────
+  /// Spy guesses the location correctly during the round (mid-game secret guess).
   static const double spyWinsGuessCorrect = 4.0;
 
-  // --- Civilians win vote: how many points each civilian gets ---
-  static const double civiliansWinsVote = 1.0;
-
-  // --- Spy not found: how many points the spy gets ---
+  /// Spy was NOT found by vote → spy's team wins.
   static const double spyNotFound = 2.0;
 
-  // --- Additional overtime seconds shown on the button after question timer hits 0 ---
+  /// Spy WAS found by vote but correctly guesses the location afterwards.
+  static const double spyGuessedAfterFound = 1.0;
+
+  // ── Civilian scoring ─────────────────────────────────────────────────────
+  /// Each civilian gets this many points when the spy is found by vote.
+  static const double civiliansWinsVote = 1.0;
+
+  // ── Timer constants ───────────────────────────────────────────────────────
+  /// Extra overtime seconds given before applying penalty.
   static const int overtimeSeconds = 3;
+
+  /// Default question timer in seconds.
+  static const int questionTimerSeconds = 20;
+
+  // ── Player count limits ───────────────────────────────────────────────────
+  static const int minPlayers = 3;
+  static const int maxPlayers = 6;
+
+  // ── Round limits ──────────────────────────────────────────────────────────
+  static const int minRounds = 1;
+  static const int maxRounds = 5;
 }
