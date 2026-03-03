@@ -1,4 +1,6 @@
+import 'dart:math';
 import 'package:uuid/uuid.dart';
+import '../data/locations_data.dart';
 import 'player.dart';
 
 class GameSession {
@@ -57,5 +59,25 @@ class GameSession {
 
   void punishSpy(double penalty) {
     players[currentSpyIndex].addScore(penalty);
+  }
+
+  /// Assigns random roles to all non-spy players from the current location's role pool.
+  /// Roles can repeat if there are more players than unique roles.
+  /// Spy always gets role = null.
+  void assignRoles() {
+    final List<String>? pool = LocationsData.roles[currentSecretLocation];
+    if (pool == null || pool.isEmpty) return;
+
+    final shuffled = List<String>.from(pool)..shuffle(Random());
+
+    int roleIndex = 0;
+    for (int i = 0; i < players.length; i++) {
+      if (i == currentSpyIndex) {
+        players[i].role = null; // spy has no role
+      } else {
+        players[i].role = shuffled[roleIndex % shuffled.length];
+        roleIndex++;
+      }
+    }
   }
 }

@@ -95,7 +95,12 @@ class _PreGameFlowScreenState extends State<PreGameFlowScreen> {
     }
 
     widget.session.players.add(Player(name: finalName));
-    
+
+    // After last player is added, assign roles
+    if (widget.session.players.length == widget.playerCount) {
+      widget.session.assignRoles();
+    }
+
     // Move to card reveal for this player
     setState(() {
       _currentStep = FlowStep.cardReveal;
@@ -309,6 +314,7 @@ class _PreGameFlowScreenState extends State<PreGameFlowScreen> {
         GameCard(
           isSpy: isSpy,
           secretLocation: widget.session.currentSecretLocation,
+          role: isSpy ? null : widget.session.players[_currentPlayerIndex].role,
           onCardTapped: _onCardTappedToNext,
         ),
       ],

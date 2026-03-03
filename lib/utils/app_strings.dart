@@ -29,6 +29,19 @@ class AppStrings {
   static const String locationLabel = 'ЛОКАЦИЯ:\n';
   static const String guessSpy = 'угадайте кто шпион';
   static const String startRound = 'СТАРТУЕМ!';
+  static const String roleLabel = 'РОЛЬ:';
+
+  // Role-guess mini-game
+  static const String whoIsWho = 'КТО ЕСТЬ КТО?';
+  static const String revealingIn = 'Разоблачение через';
+  static const String guessRoleHint = 'Угадайте какая роль была у этого игрока?';
+  static const String guessedCorrectly = 'УГАДАЛ ПРАВИЛЬНО!';
+  static const String guessedWrong = 'УГАДАЛ НЕВЕРНО!';
+  static const String bothGetPoints = 'получают по +1 очку';
+  static const String bothGetNothing = 'получают по голове! (0 очков)';
+  static const String wasRole = 'был';
+  static const String nextReveal = 'ДАЛЬШЕ';
+  static const String finalReveal = 'ИТОГИ';
   
   // Action Buttons
   static const String playAction = 'ПОГНАЛИ!';

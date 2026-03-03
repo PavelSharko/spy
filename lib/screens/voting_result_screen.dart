@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/game_session.dart';
 import '../utils/app_strings.dart';
 import '../utils/sound_service.dart';
+import 'role_guess_screen.dart';
 import 'round_score_screen.dart';
 import 'spy_last_word_screen.dart';
 import '../widgets/exit_game_button.dart';
@@ -19,13 +20,13 @@ class VotingResultScreen extends StatelessWidget {
   void _onNext(BuildContext context) {
     SoundService.instance.playClick();
     if (isSpyFound) {
-      // Spy found -> proceed directly to score screen
+      // Spy found → mini-game "Guess the role" before going to score
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => RoundScoreScreen(session: session)),
+        MaterialPageRoute(builder: (context) => RoleGuessScreen(session: session)),
       );
     } else {
-      // Spy not found -> spy gets a chance to guess the location
+      // Spy not found → spy gets a chance to guess the location
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => SpyLastWordScreen(session: session)),

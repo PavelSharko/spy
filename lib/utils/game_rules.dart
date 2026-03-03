@@ -19,6 +19,13 @@ class GameRules {
   /// Each civilian gets this many points when the spy is found by vote.
   static const double civiliansWinsVote = 1.0;
 
+  // ── Role-guess mini-game scoring ─────────────────────────────────────────
+  /// Points given to the player who guessed the correct role.
+  static const double roleGuessCorrectGuesser = 1.0;
+
+  /// Points given to the player whose role was guessed correctly.
+  static const double roleGuessCorrectGuessed = 1.0;
+
   // ── Timer constants ───────────────────────────────────────────────────────
   /// Extra overtime seconds given before applying penalty.
   static const int overtimeSeconds = 3;

@@ -5,12 +5,14 @@ import '../utils/app_strings.dart';
 class GameCard extends StatefulWidget {
   final bool isSpy;
   final String secretLocation;
-  final VoidCallback onCardTapped; // What happens when the FRONT of the card is tapped
+  final String? role; // null for spy
+  final VoidCallback onCardTapped;
 
   const GameCard({
     super.key,
     required this.isSpy,
     required this.secretLocation,
+    this.role,
     required this.onCardTapped,
   });
 
@@ -204,15 +206,49 @@ class _GameCardState extends State<GameCard> with SingleTickerProviderStateMixin
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 30),
-                const Icon(Icons.language, size: 60, color: Colors.white),
-                const SizedBox(height: 30),
+                const SizedBox(height: 20),
+                const Icon(Icons.language, size: 50, color: Colors.white),
+                const SizedBox(height: 20),
+                if (widget.role != null) ...[
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withValues(alpha: 0.15),
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: Colors.white38, width: 1),
+                    ),
+                    child: Column(
+                      children: [
+                        const Text(
+                          AppStrings.roleLabel,
+                          style: TextStyle(
+                            color: Colors.white60,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            letterSpacing: 1,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          widget.role!,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            color: Colors.amberAccent,
+                            fontSize: 26,
+                            fontWeight: FontWeight.w900,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                ],
                 const Text(
                   AppStrings.guessSpy,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Colors.white70,
-                    fontSize: 20,
+                    fontSize: 18,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
