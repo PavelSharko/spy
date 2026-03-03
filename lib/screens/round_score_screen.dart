@@ -75,7 +75,7 @@ class _RoundScoreScreenState extends State<RoundScoreScreen> {
       body: Stack(
         children: [
           Container(
-            decoration: AppStyles.mainGradientDecoration,
+            decoration: AppStyles.mainBackgroundDecoration,
             child: SafeArea(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,

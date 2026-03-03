@@ -85,6 +85,15 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
         _activeSettingId = null;
       } else {
         _activeSettingId = settingName;
+        
+        // UX improvement: set default values on first click
+        if (settingName == AppStrings.playerCount && _selectedPlayerCount == null) {
+          _updatePlayerCount(_playerCountValue);
+        } else if (settingName == AppStrings.gameTime && _selectedGameTime == null) {
+          _updateGameTime(_gameTimeValue);
+        } else if (settingName == AppStrings.roundCount && _selectedRoundCount == null) {
+          _updateRoundCount(_roundCountValue);
+        }
       }
     });
   }
@@ -199,7 +208,7 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
         body: Stack(
           children: [
             Container(
-              decoration: AppStyles.mainGradientDecoration,
+              decoration: AppStyles.mainBackgroundDecoration,
               child: SafeArea( 
                 child: Column(
                   children: [

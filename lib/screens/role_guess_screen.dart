@@ -233,7 +233,7 @@ class _RoleGuessScreenState extends State<RoleGuessScreen>
       body: Stack(
         children: [
           Container(
-            decoration: AppStyles.mainGradientDecoration,
+            decoration: AppStyles.mainBackgroundDecoration,
             child: SafeArea(
               child: _isRevealPhase ? _buildRevealPhase() : _buildGuessPhase(),
             ),

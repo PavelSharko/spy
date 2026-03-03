@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../utils/app_images.dart';
 import '../utils/app_styles.dart';
 import '../utils/sound_service.dart';
 import 'game_settings_screen.dart';
@@ -12,16 +13,20 @@ class MainMenuScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: AppStyles.mainGradientDecoration,
+        decoration: AppStyles.mainBackgroundDecoration,
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               // Logo icon
-              const Icon(
-                Icons.security,
-                size: 100,
-                color: Colors.blue,
+              ClipRRect(
+                borderRadius: BorderRadius.circular(20),
+                child: Image.asset(
+                  AppImages.appIcon,
+                  width: 120,
+                  height: 120,
+                  fit: BoxFit.contain,
+                ),
               ),
               const SizedBox(height: 20),
 

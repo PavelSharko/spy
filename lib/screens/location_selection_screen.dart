@@ -260,7 +260,7 @@ class _LocationSelectionScreenState extends State<LocationSelectionScreen>
       body: Stack(
         children: [
           Container(
-            decoration: AppStyles.mainGradientDecoration,
+            decoration: AppStyles.mainBackgroundDecoration,
             child: SafeArea(
               child: Column(
                 children: [

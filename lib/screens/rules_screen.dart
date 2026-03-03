@@ -12,7 +12,7 @@ class RulesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: AppStyles.mainGradientDecoration,
+        decoration: AppStyles.rulesBackgroundDecoration,
         child: SafeArea(
           child: Column(
             children: [

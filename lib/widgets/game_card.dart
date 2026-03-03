@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import '../utils/app_images.dart';
 import '../utils/app_strings.dart';
 
 class GameCard extends StatefulWidget {
@@ -106,6 +107,10 @@ class _GameCardState extends State<GameCard> with SingleTickerProviderStateMixin
       decoration: BoxDecoration(
         color: Colors.blue.shade900,
         borderRadius: BorderRadius.circular(20),
+        image: const DecorationImage(
+          image: AssetImage(AppImages.bgCardBack),
+          fit: BoxFit.cover,
+        ),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.3),

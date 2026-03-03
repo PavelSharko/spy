@@ -45,6 +45,7 @@ class _PreGameFlowScreenState extends State<PreGameFlowScreen> {
       _generateRandomNames();
       _currentStep = FlowStep.nameSelection;
     } else {
+      widget.session.assignRoles(); // Ensure roles for subsequent rounds
       _currentStep = FlowStep.cardReveal;
     }
   }
@@ -96,34 +97,32 @@ class _PreGameFlowScreenState extends State<PreGameFlowScreen> {
 
     widget.session.players.add(Player(name: finalName));
 
-    // After last player is added, assign roles
     if (widget.session.players.length == widget.playerCount) {
+      // All names collected! Assign roles and start revealing
       widget.session.assignRoles();
+      setState(() {
+        _currentPlayerIndex = 0;
+        _currentStep = FlowStep.cardReveal;
+      });
+    } else {
+      // Next name entry
+      setState(() {
+        _currentPlayerIndex++;
+        _nameController.clear();
+        _selectedRandomName = null;
+        _generateRandomNames();
+      });
     }
-
-    // Move to card reveal for this player
-    setState(() {
-      _currentStep = FlowStep.cardReveal;
-    });
   }
 
   void _onCardTappedToNext() {
     if (_currentPlayerIndex < widget.playerCount - 1) {
-      // Next player
+      // Next reveal
       setState(() {
         _currentPlayerIndex++;
-        if (widget.session.currentRound == 1) {
-          _currentStep = FlowStep.nameSelection;
-          // Reset name selection state
-          _nameController.clear();
-          _selectedRandomName = null;
-          _generateRandomNames();
-        } else {
-          _currentStep = FlowStep.cardReveal;
-        }
       });
     } else {
-      // All players done, ready to start round
+      // All reveals done
       setState(() {
         _currentStep = FlowStep.roundReady;
       });
@@ -145,7 +144,7 @@ class _PreGameFlowScreenState extends State<PreGameFlowScreen> {
       body: Stack(
         children: [
           Container(
-            decoration: AppStyles.mainGradientDecoration,
+            decoration: AppStyles.mainBackgroundDecoration,
             child: SafeArea(
               child: AnimatedSwitcher(
                 duration: const Duration(milliseconds: 300),

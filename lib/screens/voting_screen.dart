@@ -173,7 +173,7 @@ class _VotingScreenState extends State<VotingScreen> {
       body: Stack(
         children: [
           Container(
-            decoration: AppStyles.mainGradientDecoration,
+            decoration: AppStyles.mainBackgroundDecoration,
             child: SafeArea(
               child: Column(
                 children: [

@@ -35,7 +35,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: AppStyles.mainGradientDecoration,
+        decoration: AppStyles.mainBackgroundDecoration,
         child: SafeArea(
           child: Column(
             children: [
@@ -102,6 +102,69 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       Switch(
                         value: _soundEnabled,
                         onChanged: _toggleSound,
+                        activeColor: Colors.amberAccent,
+                        inactiveThumbColor: Colors.white38,
+                        inactiveTrackColor: Colors.white12,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 16),
+
+              // Developer features toggle card
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 30),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.12),
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(color: Colors.white24, width: 1),
+                  ),
+                  child: Row(
+                    children: [
+                      // Icon
+                      const Icon(
+                        Icons.bug_report_rounded,
+                        color: Colors.white38,
+                        size: 32,
+                      ),
+                      const SizedBox(width: 16),
+
+                      // Label
+                      const Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Секретные функции разработчика',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                            Text(
+                              'По умолчанию выключено',
+                              style: TextStyle(
+                                fontSize: 13,
+                                color: Colors.white60,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      // Toggle
+                      Switch(
+                        value: AppSettings.instance.developerFeaturesEnabled,
+                        onChanged: (value) {
+                          setState(() {
+                            AppSettings.instance.developerFeaturesEnabled = value;
+                          });
+                        },
                         activeColor: Colors.amberAccent,
                         inactiveThumbColor: Colors.white38,
                         inactiveTrackColor: Colors.white12,

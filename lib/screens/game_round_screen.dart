@@ -5,6 +5,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import '../utils/app_strings.dart';
 import '../utils/app_styles.dart';
+import '../utils/app_settings.dart';
 import '../utils/game_rules.dart';
 import '../utils/game_sounds.dart';
 import '../utils/sound_service.dart';
@@ -354,7 +355,7 @@ class _GameRoundScreenState extends State<GameRoundScreen> with SingleTickerProv
       body: Stack(
         children: [
           Container(
-            decoration: AppStyles.mainGradientDecoration,
+            decoration: AppStyles.mainBackgroundDecoration,
             child: SafeArea(
               child: Column(
                 children: [
@@ -367,26 +368,47 @@ class _GameRoundScreenState extends State<GameRoundScreen> with SingleTickerProv
                     color: Colors.black.withOpacity(0.3),
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  child: Column(
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text(
-                        '${AppStrings.roundPrefix}${widget.session.currentRound}',
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.redAccent,
-                          letterSpacing: 1.5,
-                        ),
+                      Column(
+                        children: [
+                          Text(
+                            '${AppStrings.roundPrefix}${widget.session.currentRound}',
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.redAccent,
+                              letterSpacing: 1.5,
+                            ),
+                          ),
+                          Text(
+                            _formatTime(_mainTimerRemaining),
+                            style: const TextStyle(
+                              fontSize: 32,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                              letterSpacing: 2,
+                            ),
+                          ),
+                        ],
                       ),
-                      Text(
-                        _formatTime(_mainTimerRemaining),
-                        style: const TextStyle(
-                          fontSize: 32,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                          letterSpacing: 2,
+                      if (AppSettings.instance.developerFeaturesEnabled) ...[
+                        const SizedBox(width: 20),
+                        ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              _mainTimerRemaining = 0;
+                            });
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.redAccent,
+                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                            textStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                          ),
+                          child: const Text('СКИП\nТАЙМЕРА', textAlign: TextAlign.center),
                         ),
-                      ),
+                      ],
                     ],
                   ),
                 ),
