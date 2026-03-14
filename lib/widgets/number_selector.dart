@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../utils/app_styles.dart';
 import '../utils/sound_service.dart';
 
 class NumberSelector extends StatefulWidget {
@@ -82,11 +83,16 @@ class _NumberSelectorState extends State<NumberSelector> {
       child: Container(
         padding: const EdgeInsets.all(16.0),
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.9),
+          color: AppStyles.accent,
           borderRadius: const BorderRadius.vertical(bottom: Radius.circular(20)),
+          border: Border(
+            bottom: BorderSide(color: AppStyles.deriveStripeColor(AppStyles.accent), width: 3),
+            left: BorderSide(color: AppStyles.deriveStripeColor(AppStyles.accent), width: 3),
+            right: BorderSide(color: AppStyles.deriveStripeColor(AppStyles.accent), width: 3),
+          ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.1),
+              color: AppStyles.darkAccent.withValues(alpha: 0.3),
               blurRadius: 4,
               offset: const Offset(0, 4),
             ),
@@ -99,21 +105,23 @@ class _NumberSelectorState extends State<NumberSelector> {
               children: [
                 IconButton(
                   onPressed: _currentValue > widget.minValue ? _decrement : null,
-                  icon: const Icon(Icons.remove_circle_outline, size: 32),
-                  color: Colors.blue.shade900,
+                  icon: const Icon(Icons.remove_circle_outline, size: 36), // Increased size
+                  color: Colors.white,
+                  disabledColor: Colors.white38,
                 ),
                 Text(
                   '$_currentValue',
-                  style: TextStyle(
-                    fontSize: 32,
+                  style: const TextStyle(
+                    fontSize: 36, // Increased size
                     fontWeight: FontWeight.bold,
-                    color: Colors.blue.shade900,
+                    color: Colors.white,
                   ),
                 ),
                 IconButton(
                   onPressed: _currentValue < widget.maxValue ? _increment : null,
-                  icon: const Icon(Icons.add_circle_outline, size: 32),
-                  color: Colors.blue.shade900,
+                  icon: const Icon(Icons.add_circle_outline, size: 36), // Increased size
+                  color: Colors.white,
+                  disabledColor: Colors.white38,
                 ),
               ],
             ),

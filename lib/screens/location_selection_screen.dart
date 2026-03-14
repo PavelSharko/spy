@@ -5,6 +5,7 @@ import '../services/storage_service.dart';
 import '../utils/app_strings.dart';
 import '../utils/app_styles.dart';
 import '../utils/sound_service.dart';
+import '../widgets/animated_pattern_background.dart';
 import '../widgets/exit_game_button.dart';
 
 // ── Animated running-border painter ─────────────────────────────────────────
@@ -260,8 +261,9 @@ class _LocationSelectionScreenState extends State<LocationSelectionScreen>
       body: Stack(
         children: [
           Container(
-            decoration: AppStyles.mainBackgroundDecoration,
-            child: SafeArea(
+            color: AppStyles.bgColor,
+            child: AnimatedPatternBackground(
+              child: SafeArea(
               child: Column(
                 children: [
                   const SizedBox(height: 20),
@@ -325,7 +327,7 @@ class _LocationSelectionScreenState extends State<LocationSelectionScreen>
                               fontSize: 13,
                               color: _showRedHint
                                   ? Colors.red.shade300
-                                  : Colors.white60,
+                                  : AppStyles.textSecondary,
                               fontWeight: FontWeight.w500,
                             ),
                             child: Padding(
@@ -342,8 +344,9 @@ class _LocationSelectionScreenState extends State<LocationSelectionScreen>
                         ElevatedButton(
                           onPressed: _onConfirm,
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blue.shade900,
-                            foregroundColor: Colors.white,
+                            backgroundColor: AppStyles.accent,
+                            foregroundColor: AppStyles.cardBg,
+                            side: const BorderSide(color: AppStyles.darkAccent, width: 2),
                             minimumSize: const Size(double.infinity, 60),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(15),
@@ -362,6 +365,7 @@ class _LocationSelectionScreenState extends State<LocationSelectionScreen>
               ),
             ),
           ),
+          ),
           const ExitGameButton(),
         ],
       ),
@@ -379,11 +383,11 @@ class _LocationSelectionScreenState extends State<LocationSelectionScreen>
     bool isDisabled = false,
   }) {
     final Color bgColor = isSelected
-        ? (isRandom ? Colors.amber.shade400 : Colors.blue.shade500)
-        : Colors.white.withOpacity(isDisabled ? 0.4 : 0.9);
+        ? (isRandom ? AppStyles.warning : AppStyles.accent)
+        : AppStyles.cardBg.withValues(alpha: isDisabled ? 0.5 : 1.0);
     final Color textColor = isSelected
         ? Colors.white
-        : Colors.blue.shade900.withOpacity(isDisabled ? 0.4 : 1.0);
+        : AppStyles.darkAccent.withValues(alpha: isDisabled ? 0.4 : 1.0);
 
     final border = Border.all(
       color: isSelected ? Colors.transparent : Colors.transparent,

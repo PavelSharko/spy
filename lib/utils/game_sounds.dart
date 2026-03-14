@@ -9,4 +9,7 @@ class GameSounds {
 
   // Played on every button tap across the entire app
   static const String buttonClick = 'audio/pulk.wav';
+
+  // Played when a card is flipped
+  static const String cardFlip = 'audio/whoosh.wav';
 }

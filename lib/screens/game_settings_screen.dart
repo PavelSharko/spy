@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../utils/app_strings.dart';
 import '../utils/app_styles.dart';
 import '../utils/sound_service.dart';
+import '../widgets/animated_pattern_background.dart';
 import '../widgets/menu_button.dart';
 import '../widgets/settings_button.dart';
 import '../widgets/number_selector.dart';
@@ -43,13 +44,15 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
       // Block if rounds not selected yet
       if (_selectedRoundCount == null) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text(
+          SnackBar(
+            content: const Text(
               AppStrings.pleaseSelectRoundsFirst,
               textAlign: TextAlign.center,
             ),
-            backgroundColor: Colors.redAccent,
-            duration: Duration(seconds: 2),
+            backgroundColor: AppStyles.danger,
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            duration: const Duration(seconds: 2),
           ),
         );
         return;
@@ -149,7 +152,9 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(validationError, textAlign: TextAlign.center),
-          backgroundColor: Colors.redAccent,
+          backgroundColor: AppStyles.danger,
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           duration: const Duration(seconds: 2),
         ),
       );
@@ -197,18 +202,19 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
       behavior: HitTestBehavior.translucent, // Ensure taps pass through empty space
       child: Scaffold(
         appBar: AppBar(
-          title: const Text(AppStrings.gameSettingsTitle),
+          title: const Text(AppStrings.gameSettingsTitle, style: TextStyle(color: AppStyles.darkAccent, fontWeight: FontWeight.bold)),
           backgroundColor: Colors.transparent,
           centerTitle: true,
           elevation: 0, 
           automaticallyImplyLeading: false, 
         ),
         extendBodyBehindAppBar: true, 
-        backgroundColor: Colors.transparent, // Important for gradient background if provided by Container below
+        backgroundColor: Colors.transparent,
         body: Stack(
           children: [
             Container(
-              decoration: AppStyles.mainBackgroundDecoration,
+              color: AppStyles.bgColor,
+              child: AnimatedPatternBackground(
               child: SafeArea( 
                 child: Column(
                   children: [
@@ -298,9 +304,9 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                         child: OutlinedButton(
                           onPressed: _onBackPressed,
                            style: OutlinedButton.styleFrom(
-                               side: const BorderSide(color: Colors.blue, width: 2),
+                               foregroundColor: AppStyles.darkAccent,
+                               side: const BorderSide(color: AppStyles.accent, width: 2),
                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                               backgroundColor: Colors.white.withOpacity(0.5)
                            ),
                           child: const Text(AppStrings.backAction, style: TextStyle(fontWeight: FontWeight.bold)),
                         ),
@@ -315,6 +321,9 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                           child: ElevatedButton(
                             onPressed: _onPlayPressed,
                             style: ElevatedButton.styleFrom(
+                               backgroundColor: AppStyles.accent,
+                               foregroundColor: AppStyles.cardBg,
+                               side: const BorderSide(color: AppStyles.darkAccent, width: 2),
                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                             ),
                             child: const Text(AppStrings.playAction, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
@@ -327,6 +336,7 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
               ],
             ),
           ),
+        ),
         ),
         const ExitGameButton(), // Add exit button here
       ],

@@ -9,10 +9,10 @@ import 'settings_screen.dart';
 class MainMenuScreen extends StatelessWidget {
   const MainMenuScreen({super.key});
 
-  // ── Color palette ─────────────────────────────────────────────────
-  static const Color _bgColor = Color(0xFF87CEEB);       // sky blue
-  static const Color _green = Color(0xFF4CAF50);          // button fill
-  static const Color _darkGreen = Color(0xFF1B5E20);      // outlines & title
+  // ── Color palette — sandy cream ────────────────────────────────────
+  static const Color _bgColor   = Color(0xFFF5E6CC);  // sandy cream
+  static const Color _accent    = Color(0xFF6D4C41);   // warm brown (buttons & text)
+  static const Color _darkAccent = Color(0xFF3E2723);  // deep espresso (outlines & title stroke)
 
   @override
   Widget build(BuildContext context) {
@@ -31,22 +31,22 @@ class MainMenuScreen extends StatelessWidget {
                     // Stroke / outline layer
                     Text(
                       'ШПИОН',
-                      style: GoogleFonts.bungeeShade(
+                      style: GoogleFonts.russoOne(
                         fontSize: 64,
                         fontWeight: FontWeight.bold,
                         foreground: Paint()
                           ..style = PaintingStyle.stroke
-                          ..strokeWidth = 4
-                          ..color = _darkGreen,
+                          ..strokeWidth = 5
+                          ..color = _darkAccent,
                       ),
                     ),
                     // Fill layer on top
                     Text(
                       'ШПИОН',
-                      style: GoogleFonts.bungeeShade(
+                      style: GoogleFonts.russoOne(
                         fontSize: 64,
                         fontWeight: FontWeight.bold,
-                        color: _green,
+                        color: _accent,
                       ),
                     ),
                   ],
@@ -67,9 +67,9 @@ class MainMenuScreen extends StatelessWidget {
                       );
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: _green,
-                      foregroundColor: Colors.white,
-                      side: const BorderSide(color: _darkGreen, width: 2.5),
+                      backgroundColor: _accent,
+                      foregroundColor: const Color(0xFFFFF8F0), // warm white
+                      side: const BorderSide(color: _darkAccent, width: 2.5),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30),
                       ),
@@ -99,9 +99,9 @@ class MainMenuScreen extends StatelessWidget {
                       );
                     },
                     style: OutlinedButton.styleFrom(
-                      backgroundColor: _green.withOpacity(0.10),
-                      foregroundColor: _darkGreen,
-                      side: BorderSide(color: _green.withOpacity(0.6), width: 1.5),
+                      backgroundColor: _accent.withValues(alpha: 0.08),
+                      foregroundColor: _darkAccent,
+                      side: BorderSide(color: _accent.withValues(alpha: 0.5), width: 1.5),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30),
                       ),
@@ -129,9 +129,9 @@ class MainMenuScreen extends StatelessWidget {
                       );
                     },
                     style: OutlinedButton.styleFrom(
-                      backgroundColor: _green.withOpacity(0.10),
-                      foregroundColor: _darkGreen,
-                      side: BorderSide(color: _green.withOpacity(0.6), width: 1.5),
+                      backgroundColor: _accent.withValues(alpha: 0.08),
+                      foregroundColor: _darkAccent,
+                      side: BorderSide(color: _accent.withValues(alpha: 0.5), width: 1.5),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30),
                       ),

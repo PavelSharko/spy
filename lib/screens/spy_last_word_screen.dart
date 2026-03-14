@@ -4,6 +4,7 @@ import '../utils/app_strings.dart';
 import '../utils/app_styles.dart';
 import '../utils/game_rules.dart';
 import '../utils/sound_service.dart';
+import '../widgets/animated_pattern_background.dart';
 import 'round_score_screen.dart';
 import '../widgets/exit_game_button.dart';
 
@@ -48,8 +49,9 @@ class _SpyLastWordScreenState extends State<SpyLastWordScreen> {
       body: Stack(
         children: [
           Container(
-            decoration: AppStyles.mainBackgroundDecoration,
-            child: SafeArea(
+            color: AppStyles.bgColor,
+            child: AnimatedPatternBackground(
+              child: SafeArea(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
@@ -62,7 +64,7 @@ class _SpyLastWordScreenState extends State<SpyLastWordScreen> {
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white70,
+                    color: AppStyles.darkAccent,
                     letterSpacing: 2,
                   ),
                 ),
@@ -75,11 +77,11 @@ class _SpyLastWordScreenState extends State<SpyLastWordScreen> {
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
                   decoration: BoxDecoration(
-                    color: Colors.redAccent.shade700,
+                    color: AppStyles.danger,
                     borderRadius: BorderRadius.circular(15),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.3),
+                        color: AppStyles.danger.withValues(alpha: 0.3),
                         blurRadius: 10,
                         offset: const Offset(0, 5),
                       )
@@ -106,7 +108,7 @@ class _SpyLastWordScreenState extends State<SpyLastWordScreen> {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 18,
-                    color: Colors.white.withOpacity(0.8),
+                    color: AppStyles.textSecondary,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
@@ -122,7 +124,7 @@ class _SpyLastWordScreenState extends State<SpyLastWordScreen> {
                   style: TextStyle(
                     fontSize: 26,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                    color: AppStyles.darkAccent,
                   ),
                 ),
               ),
@@ -162,8 +164,9 @@ class _SpyLastWordScreenState extends State<SpyLastWordScreen> {
                   child: ElevatedButton(
                     onPressed: _onEndRound,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue.shade900,
-                      foregroundColor: Colors.white,
+                      backgroundColor: AppStyles.accent,
+                      foregroundColor: AppStyles.cardBg,
+                      side: const BorderSide(color: AppStyles.darkAccent, width: 2),
                       minimumSize: const Size(double.infinity, 60),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15),
@@ -186,7 +189,8 @@ class _SpyLastWordScreenState extends State<SpyLastWordScreen> {
             ),
           ),
         ),
-        const ExitGameButton(),
+      ),
+      const ExitGameButton(),
       ],
     ),
   );
@@ -205,7 +209,7 @@ class _SpyLastWordScreenState extends State<SpyLastWordScreen> {
         duration: const Duration(milliseconds: 200),
         padding: const EdgeInsets.symmetric(vertical: 20),
         decoration: BoxDecoration(
-          color: isSelected ? baseColor : Colors.white.withOpacity(0.9),
+          color: isSelected ? baseColor : AppStyles.cardBg,
           borderRadius: BorderRadius.circular(15),
           border: Border.all(
             color: isSelected ? Colors.white : Colors.transparent,
@@ -226,7 +230,7 @@ class _SpyLastWordScreenState extends State<SpyLastWordScreen> {
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
-              color: isSelected ? Colors.white : Colors.blue.shade900,
+              color: isSelected ? Colors.white : AppStyles.darkAccent,
             ),
           ),
         ),

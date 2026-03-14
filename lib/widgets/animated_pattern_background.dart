@@ -1,22 +1,24 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
 
-/// Animated background with diagonal moving stripes pattern.
-/// Wrap any screen content with this widget to get a dynamic background.
+/// Animated background with horizontal scan-lines moving upward,
+/// like interference on an old CRT television.
+///
+/// Works with ANY background color — pass [backgroundColor] and [lineColor]
+/// or let defaulting derive a slightly darker shade automatically.
 class AnimatedPatternBackground extends StatefulWidget {
   final Widget child;
   final Color backgroundColor;
-  final Color stripeColor;
-  final double stripeWidth;
-  final double gapWidth;
+  final Color lineColor;
+  final double lineHeight;
+  final double gapHeight;
 
   const AnimatedPatternBackground({
     super.key,
     required this.child,
-    this.backgroundColor = const Color(0xFF87CEEB),
-    this.stripeColor = const Color(0x205B9BD5), // darker blue at ~12% opacity
-    this.stripeWidth = 18,
-    this.gapWidth = 36,
+    this.backgroundColor = const Color(0xFFF5E6CC),
+    this.lineColor = const Color(0x22C4A87A),
+    this.lineHeight = 3,
+    this.gapHeight = 12,
   });
 
   @override
@@ -33,8 +35,8 @@ class _AnimatedPatternBackgroundState extends State<AnimatedPatternBackground>
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 10),
-    )..repeat(); // infinite loop
+      duration: const Duration(seconds: 6),
+    )..repeat();
   }
 
   @override
@@ -49,11 +51,11 @@ class _AnimatedPatternBackgroundState extends State<AnimatedPatternBackground>
       animation: _controller,
       builder: (context, child) {
         return CustomPaint(
-          painter: _StripePainter(
+          painter: _ScanLinePainter(
             progress: _controller.value,
-            stripeColor: widget.stripeColor,
-            stripeWidth: widget.stripeWidth,
-            gapWidth: widget.gapWidth,
+            lineColor: widget.lineColor,
+            lineHeight: widget.lineHeight,
+            gapHeight: widget.gapHeight,
           ),
           child: child,
         );
@@ -63,47 +65,37 @@ class _AnimatedPatternBackgroundState extends State<AnimatedPatternBackground>
   }
 }
 
-class _StripePainter extends CustomPainter {
+class _ScanLinePainter extends CustomPainter {
   final double progress;
-  final Color stripeColor;
-  final double stripeWidth;
-  final double gapWidth;
+  final Color lineColor;
+  final double lineHeight;
+  final double gapHeight;
 
-  _StripePainter({
+  _ScanLinePainter({
     required this.progress,
-    required this.stripeColor,
-    required this.stripeWidth,
-    required this.gapWidth,
+    required this.lineColor,
+    required this.lineHeight,
+    required this.gapHeight,
   });
 
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = stripeColor
+      ..color = lineColor
       ..style = PaintingStyle.fill;
 
-    final step = stripeWidth + gapWidth;
-    // Diagonal length — enough to cover the screen at 45°
-    final diagonal = size.width + size.height;
-    // Shift by one full step cycle per animation loop
-    final offset = progress * step;
+    final step = lineHeight + gapHeight;
+    final offset = (1.0 - progress) * step;
 
-    canvas.save();
-    // Rotate canvas 45° around top-left
-    canvas.rotate(pi / 4);
-
-    // Draw stripes across the full diagonal range
-    for (double x = -diagonal + offset; x < diagonal; x += step) {
+    for (double y = -step + offset; y < size.height; y += step) {
       canvas.drawRect(
-        Rect.fromLTWH(x, -diagonal, stripeWidth, diagonal * 2),
+        Rect.fromLTWH(0, y, size.width, lineHeight),
         paint,
       );
     }
-
-    canvas.restore();
   }
 
   @override
-  bool shouldRepaint(_StripePainter oldDelegate) =>
+  bool shouldRepaint(_ScanLinePainter oldDelegate) =>
       oldDelegate.progress != progress;
 }

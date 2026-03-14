@@ -12,6 +12,7 @@ import '../utils/sound_service.dart';
 
 import '../models/game_session.dart';
 import '../services/storage_service.dart';
+import '../widgets/animated_pattern_background.dart';
 import 'voting_screen.dart';
 import 'round_score_screen.dart';
 import '../widgets/exit_game_button.dart';
@@ -41,8 +42,6 @@ class _GameRoundScreenState extends State<GameRoundScreen> with SingleTickerProv
 
   late AnimationController _pulseController;
   late Animation<double> _pulseAnimation;
-
-  final AudioPlayer _sirenPlayer = AudioPlayer();
 
   Timer? _mainTimer;
   Timer? _questionTimer;
@@ -99,14 +98,14 @@ class _GameRoundScreenState extends State<GameRoundScreen> with SingleTickerProv
             _isAdditionalTime = true;
             _additionalTimerRemaining = GameRules.overtimeSeconds;
             _pulseController.forward(from: 0.0);
-            _sirenPlayer.play(AssetSource(GameSounds.overtimeSiren));
+            SoundService.instance.playSiren();
           }
         } else if (_isAdditionalTime) {
           if (_additionalTimerRemaining > 0) {
             _additionalTimerRemaining--;
             if (_additionalTimerRemaining > 0) {
               _pulseController.forward(from: 0.0);
-              _sirenPlayer.play(AssetSource(GameSounds.overtimeSiren));
+              SoundService.instance.playSiren();
             }
           }
 
@@ -170,12 +169,15 @@ class _GameRoundScreenState extends State<GameRoundScreen> with SingleTickerProv
       barrierDismissible: false,
       builder: (ctx) {
         return AlertDialog(
-          backgroundColor: Colors.white,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-          title: Text(
+          backgroundColor: AppStyles.bgColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+            side: BorderSide(color: AppStyles.darkAccent.withValues(alpha: 0.1), width: 2),
+          ),
+          title: const Text(
             AppStrings.whatHappened,
             textAlign: TextAlign.center,
-            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blue.shade900),
+            style: TextStyle(fontWeight: FontWeight.bold, color: AppStyles.accent),
           ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
@@ -188,8 +190,12 @@ class _GameRoundScreenState extends State<GameRoundScreen> with SingleTickerProv
                   widget.session.addScoreToSpy(3);
                   _navigateToScores();
                 },
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
-                child: const Text(AppStrings.spyGuessedLoc, textAlign: TextAlign.center, style: TextStyle(color: Colors.white)),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppStyles.success,
+                  foregroundColor: Colors.white,
+                  side: BorderSide(color: Colors.green.shade900, width: 2),
+                ),
+                child: const Text(AppStrings.spyGuessedLoc, textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold)),
               ),
               const SizedBox(height: 10),
               ElevatedButton(
@@ -200,8 +206,12 @@ class _GameRoundScreenState extends State<GameRoundScreen> with SingleTickerProv
                   widget.session.addScoreToSpy(-2);
                   _navigateToScores();
                 },
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent),
-                child: const Text(AppStrings.spyFailed, textAlign: TextAlign.center, style: TextStyle(color: Colors.white)),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppStyles.danger,
+                  foregroundColor: Colors.white,
+                  side: BorderSide(color: Colors.red.shade900, width: 2),
+                ),
+                child: const Text(AppStrings.spyCaught, textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold)),
               ),
               const SizedBox(height: 10),
               ElevatedButton(
@@ -210,8 +220,12 @@ class _GameRoundScreenState extends State<GameRoundScreen> with SingleTickerProv
                   // Ничего, играем дальше -> resume timers
                   _startTimers();
                 },
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.amber),
-                child: const Text(AppStrings.continueGame, textAlign: TextAlign.center, style: TextStyle(color: Colors.black87)),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppStyles.warning,
+                  foregroundColor: Colors.white,
+                  side: BorderSide(color: Colors.orange.shade900, width: 2),
+                ),
+                child: const Text(AppStrings.continueGame, textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold)),
               ),
             ],
           ),
@@ -265,15 +279,16 @@ class _GameRoundScreenState extends State<GameRoundScreen> with SingleTickerProv
 
   void _showLastQuestionToast() {
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text(
+      SnackBar(
+        content: const Text(
           AppStrings.lastQuestionToast,
           textAlign: TextAlign.center,
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
-        backgroundColor: Colors.redAccent,
-        duration: Duration(seconds: 3),
+        backgroundColor: AppStyles.danger,
+        duration: const Duration(seconds: 3),
         behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       ),
     );
   }
@@ -333,7 +348,7 @@ class _GameRoundScreenState extends State<GameRoundScreen> with SingleTickerProv
     _mainTimer?.cancel();
     _questionTimer?.cancel();
     _pulseController.dispose();
-    _sirenPlayer.dispose();
+    SoundService.instance.stopSiren();
     super.dispose();
   }
 
@@ -355,8 +370,9 @@ class _GameRoundScreenState extends State<GameRoundScreen> with SingleTickerProv
       body: Stack(
         children: [
           Container(
-            decoration: AppStyles.mainBackgroundDecoration,
-            child: SafeArea(
+            color: AppStyles.bgColor,
+            child: AnimatedPatternBackground(
+              child: SafeArea(
               child: Column(
                 children: [
                   const SizedBox(height: 10),
@@ -365,7 +381,7 @@ class _GameRoundScreenState extends State<GameRoundScreen> with SingleTickerProv
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.3),
+                    color: AppStyles.darkAccent.withValues(alpha: 0.7),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Row(
@@ -431,18 +447,18 @@ class _GameRoundScreenState extends State<GameRoundScreen> with SingleTickerProv
                           child: Container(
                             padding: const EdgeInsets.all(30),
                             decoration: BoxDecoration(
-                              color: Colors.white.withOpacity(0.1),
+                              color: AppStyles.accent.withValues(alpha: 0.1),
                               shape: BoxShape.circle,
                             ),
                             child: const Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                Icon(Icons.sync, color: Colors.white, size: 80),
+                                Icon(Icons.sync, color: AppStyles.accent, size: 80),
                                 SizedBox(height: 20),
                                 Text(
                                   AppStrings.transitionText,
                                   style: TextStyle(
-                                    color: Colors.white,
+                                    color: AppStyles.darkAccent,
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -459,6 +475,7 @@ class _GameRoundScreenState extends State<GameRoundScreen> with SingleTickerProv
           ),
         ),
       ),
+      ),
       // Penalty notification overlay
       if (_showPenaltyNotification)
         Positioned.fill(
@@ -469,9 +486,10 @@ class _GameRoundScreenState extends State<GameRoundScreen> with SingleTickerProv
                 margin: const EdgeInsets.symmetric(horizontal: 30),
                 padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 18),
                 decoration: BoxDecoration(
-                  color: Colors.red.shade800.withOpacity(0.93),
+                  color: AppStyles.danger.withValues(alpha: 0.95),
                   borderRadius: BorderRadius.circular(20),
-                  boxShadow: [BoxShadow(color: Colors.black54, blurRadius: 20)],
+                  border: Border.all(color: AppStyles.cardBg, width: 2),
+                  boxShadow: [BoxShadow(color: AppStyles.darkAccent.withValues(alpha: 0.5), blurRadius: 20)],
                 ),
                 child: Text(
                   '$_penaltyPlayerName − теряет часть своего очка 😭\n${GameRules.penaltyOvertime}',
@@ -512,11 +530,11 @@ class _GameRoundScreenState extends State<GameRoundScreen> with SingleTickerProv
           child: Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.9),
+              color: AppStyles.cardBg,
               borderRadius: BorderRadius.circular(15),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.2),
+                  color: AppStyles.darkAccent.withValues(alpha: 0.1),
                   blurRadius: 10,
                   offset: const Offset(0, 5),
                 ),
@@ -526,22 +544,22 @@ class _GameRoundScreenState extends State<GameRoundScreen> with SingleTickerProv
               children: [
                 Text(
                   widget.session.players[_currentAskerIndex].name,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
-                    color: Colors.blue.shade900,
+                    color: AppStyles.darkAccent,
                   ),
                 ),
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 8),
-                  child: Icon(Icons.arrow_downward, size: 30, color: Colors.blueAccent),
+                  child: Icon(Icons.arrow_downward, size: 30, color: AppStyles.accent),
                 ),
                 Text(
                   widget.session.players[_currentTargetIndex].name,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
-                    color: Colors.blue.shade900,
+                    color: AppStyles.darkAccent,
                   ),
                 ),
               ],
@@ -601,16 +619,17 @@ class _GameRoundScreenState extends State<GameRoundScreen> with SingleTickerProv
                   margin: const EdgeInsets.only(bottom: 8),
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: Colors.yellow.shade100,
+                    color: AppStyles.warning.withOpacity(0.15),
                     borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: AppStyles.warning, width: 2),
                   ),
                   child: Text(
                     hint,
                     textAlign: TextAlign.center,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 32,
-                      color: Colors.grey.shade800,
-                      fontWeight: FontWeight.w500,
+                      color: AppStyles.darkAccent,
+                      fontWeight: FontWeight.w900,
                     ),
                   ),
                 );
@@ -626,8 +645,8 @@ class _GameRoundScreenState extends State<GameRoundScreen> with SingleTickerProv
             icon: const Icon(Icons.lightbulb_outline),
             label: Text('${AppStrings.hintButton} (${2 - _hintsUsed})'),
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.amber.shade400,
-              foregroundColor: Colors.blue.shade900,
+              backgroundColor: AppStyles.warning,
+              foregroundColor: AppStyles.darkAccent,
               padding: const EdgeInsets.symmetric(vertical: 15),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(30),
@@ -650,7 +669,7 @@ class _GameRoundScreenState extends State<GameRoundScreen> with SingleTickerProv
                 // Red during overtime flash, otherwise normal colour
                 backgroundColor: _isAdditionalTime
                     ? Colors.red.shade700
-                    : (_isLastQuestion ? Colors.red.shade600 : Colors.blue.shade800),
+                    : (_isLastQuestion ? Colors.red.shade600 : AppStyles.accent),
                 foregroundColor: Colors.white,
                 padding: const EdgeInsets.symmetric(vertical: 20),
                 shape: RoundedRectangleBorder(
@@ -677,22 +696,23 @@ class _GameRoundScreenState extends State<GameRoundScreen> with SingleTickerProv
         // 7. Stop Round Button
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20).copyWith(bottom: 20),
-          child: OutlinedButton(
+          child: ElevatedButton(
             onPressed: _showStopRoundDialog,
-            style: OutlinedButton.styleFrom(
-              side: const BorderSide(color: Colors.redAccent, width: 2),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppStyles.danger,
+              foregroundColor: Colors.white,
+              side: BorderSide(color: Colors.red.shade900, width: 3),
               padding: const EdgeInsets.symmetric(vertical: 15),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15),
               ),
-              backgroundColor: Colors.white.withOpacity(0.9),
+              elevation: 4,
             ),
             child: const Text(
               AppStrings.stopRound,
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: Colors.redAccent,
               ),
             ),
           ),

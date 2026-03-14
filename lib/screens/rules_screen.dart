@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import '../utils/app_styles.dart';
 import '../utils/game_rules.dart';
+import '../widgets/animated_pattern_background.dart';
 import '../widgets/menu_button.dart';
 
 /// Rules screen — all numbers are read from [GameRules] dynamically.
-/// Change GameRules constants → this screen updates automatically.
 class RulesScreen extends StatelessWidget {
   const RulesScreen({super.key});
 
@@ -12,55 +12,57 @@ class RulesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: AppStyles.rulesBackgroundDecoration,
-        child: SafeArea(
-          child: Column(
-            children: [
-              const SizedBox(height: 24),
+        color: AppStyles.bgColor,
+        child: AnimatedPatternBackground(
+          child: SafeArea(
+            child: Column(
+              children: [
+                const SizedBox(height: 24),
 
-              // Title
-              const Text(
-                'ПРАВИЛА ИГРЫ',
-                style: TextStyle(
-                  fontSize: 26,
-                  fontWeight: FontWeight.w900,
-                  color: Colors.white,
-                  letterSpacing: 3,
+                // Title
+                const Text(
+                  'ПРАВИЛА ИГРЫ',
+                  style: TextStyle(
+                    fontSize: 26,
+                    fontWeight: FontWeight.w900,
+                    color: AppStyles.darkAccent,
+                    letterSpacing: 3,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
-                textAlign: TextAlign.center,
-              ),
 
-              const SizedBox(height: 16),
+                const SizedBox(height: 16),
 
-              // Scrollable content
-              Expanded(
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _section('🎯 Цель игры', _goalText),
-                      _section('👥 Роли', _rolesText),
-                      _section('🕹️ Ход игры', _gameplayText),
-                      _section('⭐ Очки', _scoringText),
-                      _section('🏆 Победитель', _winnerText),
-                      const SizedBox(height: 20),
-                    ],
+                // Scrollable content
+                Expanded(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _section('🎯 Цель игры', _goalText),
+                        _section('👥 Роли', _rolesText),
+                        _section('🕹️ Ход игры', _gameplayText),
+                        _section('⭐ Очки', _scoringText),
+                        _section('🏆 Победитель', _winnerText),
+                        const SizedBox(height: 20),
+                      ],
+                    ),
                   ),
                 ),
-              ),
 
-              // Back button
-              Padding(
-                padding: const EdgeInsets.fromLTRB(30, 0, 30, 24),
-                child: MenuButton(
-                  text: '← НАЗАД',
-                  onPressed: () => Navigator.of(context).pop(),
-                  isPrimary: false,
-                  width: 200,
+                // Back button
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(30, 0, 30, 24),
+                  child: MenuButton(
+                    text: '← НАЗАД',
+                    onPressed: () => Navigator.of(context).pop(),
+                    isPrimary: false,
+                    width: 200,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -75,9 +77,9 @@ class RulesScreen extends StatelessWidget {
         width: double.infinity,
         padding: const EdgeInsets.all(18),
         decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: 0.1),
+          color: AppStyles.cardBg,
           borderRadius: BorderRadius.circular(18),
-          border: Border.all(color: Colors.white24, width: 1),
+          border: Border.all(color: AppStyles.accent.withValues(alpha: 0.2), width: 1),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -87,7 +89,7 @@ class RulesScreen extends StatelessWidget {
               style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w900,
-                color: Colors.amberAccent,
+                color: AppStyles.accent,
                 letterSpacing: 1,
               ),
             ),
@@ -96,7 +98,7 @@ class RulesScreen extends StatelessWidget {
               body,
               style: const TextStyle(
                 fontSize: 15,
-                color: Colors.white,
+                color: AppStyles.darkAccent,
                 height: 1.6,
               ),
             ),
@@ -106,7 +108,7 @@ class RulesScreen extends StatelessWidget {
     );
   }
 
-  // ── Text blocks (dynamic via GameRules) ────────────────────────────────
+  // ── Text blocks ────────────────────────────────────────────────────────
   static const String _goalText =
       'Мирные жители должны вычислить шпиона и проголосовать за его исключение.\n'
       'Шпион должен остаться незамеченным и угадать секретную локацию.';

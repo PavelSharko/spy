@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../utils/app_styles.dart';
 import '../utils/sound_service.dart';
 
 class MenuButton extends StatelessWidget {
@@ -25,6 +26,16 @@ class MenuButton extends StatelessWidget {
                 SoundService.instance.playClick();
                 onPressed();
               },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppStyles.accent,
+                foregroundColor: AppStyles.cardBg,
+                side: const BorderSide(color: AppStyles.darkAccent, width: 2),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
               child: Text(text),
             )
           : OutlinedButton(
@@ -32,11 +43,14 @@ class MenuButton extends StatelessWidget {
                 SoundService.instance.playClick();
                 onPressed();
               },
-              // Maintain consistent outlined button style if not defined in theme globally
               style: OutlinedButton.styleFrom(
+                foregroundColor: AppStyles.darkAccent,
+                side: const BorderSide(color: AppStyles.accent, width: 2),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30),
+                ),
                 padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
                 textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                side: BorderSide(color: Theme.of(context).primaryColor, width: 2),
               ),
               child: Text(text),
             ),

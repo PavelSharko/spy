@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../utils/app_styles.dart';
 import '../utils/sound_service.dart';
 
 class SettingsButton extends StatelessWidget {
@@ -30,11 +31,11 @@ class SettingsButton extends StatelessWidget {
           padding: const EdgeInsets.all(16),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20), // Rounded corners
-            side: const BorderSide(color: Colors.white24, width: 1), // Subtle border
+            side: BorderSide(color: AppStyles.deriveStripeColor(AppStyles.accent), width: 3), // Pattern outline
           ),
-          backgroundColor: Colors.white.withOpacity(0.9), // Slightly transparent white or adjust based on theme
-          foregroundColor: Colors.blue.shade900, // Text color
-          elevation: 4,
+          backgroundColor: AppStyles.accent, // Warm brown
+          foregroundColor: Colors.white, // Text color
+          elevation: 6,
         ),
         onPressed: () {
           SoundService.instance.playClick();
@@ -47,7 +48,7 @@ class SettingsButton extends StatelessWidget {
               title,
               textAlign: TextAlign.center,
               style: const TextStyle(
-                fontSize: 18, 
+                fontSize: 20, // Slightly increased
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -56,8 +57,8 @@ class SettingsButton extends StatelessWidget {
               displayValue,
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: 14,
-                color: Colors.black.withOpacity(0.5), // More opaque/grey for placeholder
+                fontSize: 16, // Slightly increased
+                color: Colors.white.withValues(alpha: 0.8), // White, slightly transparent
                 fontStyle: FontStyle.italic,
               ),
             ),

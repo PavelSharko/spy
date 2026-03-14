@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:audioplayers/audioplayers.dart';
 import '../models/game_session.dart';
 import '../utils/app_strings.dart';
 import '../utils/app_styles.dart';
 import '../utils/sound_service.dart';
+import '../widgets/animated_pattern_background.dart';
 import 'voting_result_screen.dart';
 import '../widgets/exit_game_button.dart';
 
@@ -30,7 +30,6 @@ class _VotingScreenState extends State<VotingScreen> {
   List<int> _tieCandidates = [];
   
   bool _showTieNotification = false;
-  final AudioPlayer _audioPlayer = AudioPlayer();
 
   @override
   void initState() {
@@ -40,7 +39,6 @@ class _VotingScreenState extends State<VotingScreen> {
 
   @override
   void dispose() {
-    _audioPlayer.dispose();
     super.dispose();
   }
 
@@ -120,11 +118,7 @@ class _VotingScreenState extends State<VotingScreen> {
   }
 
   void _playTieSound() async {
-    try {
-      await _audioPlayer.play(AssetSource('audio/pig.wav'));
-    } catch (e) {
-      debugPrint('Error playing sound: $e');
-    }
+    SoundService.instance.playTiePig();
   }
 
   @override
@@ -141,19 +135,22 @@ class _VotingScreenState extends State<VotingScreen> {
             }
           },
           child: Container(
-            color: Colors.blue.shade800,
-            width: double.infinity,
-            height: double.infinity,
-            child: const Center(
-              child: Padding(
-                padding: EdgeInsets.all(20.0),
-                child: Text(
-                  'Одинаковое количество голосов\nнадо переголосовать !!',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 32,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
+            color: const Color(0xFF1565C0),
+            child: AnimatedPatternBackground(
+              lineColor: AppStyles.deriveStripeColor(const Color(0xFF1565C0)),
+              child: const SizedBox.expand(
+                child: Center(
+                  child: Padding(
+                    padding: EdgeInsets.all(20.0),
+                    child: Text(
+                      'Одинаковое количество голосов\nнадо переголосовать !!',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 32,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -173,8 +170,9 @@ class _VotingScreenState extends State<VotingScreen> {
       body: Stack(
         children: [
           Container(
-            decoration: AppStyles.mainBackgroundDecoration,
-            child: SafeArea(
+            color: AppStyles.bgColor,
+            child: AnimatedPatternBackground(
+              child: SafeArea(
               child: Column(
                 children: [
                   const SizedBox(height: 20),
@@ -185,7 +183,7 @@ class _VotingScreenState extends State<VotingScreen> {
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
-                  color: Colors.white70,
+                  color: AppStyles.darkAccent,
                   letterSpacing: 2,
                 ),
               ),
@@ -196,11 +194,11 @@ class _VotingScreenState extends State<VotingScreen> {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.9),
+                  color: AppStyles.cardBg,
                   borderRadius: BorderRadius.circular(15),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
+                      color: AppStyles.darkAccent.withValues(alpha: 0.1),
                       blurRadius: 10,
                       offset: const Offset(0, 5),
                     )
@@ -208,10 +206,10 @@ class _VotingScreenState extends State<VotingScreen> {
                 ),
                 child: Text(
                   '${AppStrings.votingPlayerPrefix}${widget.session.players[currentVoter].name}',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 26,
                     fontWeight: FontWeight.w900,
-                    color: Colors.blue.shade900,
+                    color: AppStyles.darkAccent,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -225,7 +223,7 @@ class _VotingScreenState extends State<VotingScreen> {
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w500,
-                  color: Colors.white.withOpacity(0.7),
+                  color: AppStyles.textSecondary,
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -259,10 +257,10 @@ class _VotingScreenState extends State<VotingScreen> {
                           duration: const Duration(milliseconds: 200),
                           padding: const EdgeInsets.symmetric(vertical: 20),
                           decoration: BoxDecoration(
-                            color: isSelected ? Colors.amber.shade400 : Colors.white.withOpacity(0.8),
+                            color: isSelected ? AppStyles.warning : AppStyles.cardBg,
                             borderRadius: BorderRadius.circular(15),
                             border: Border.all(
-                              color: isSelected ? Colors.white : Colors.transparent,
+                              color: isSelected ? AppStyles.darkAccent : Colors.transparent,
                               width: 2,
                             ),
                           ),
@@ -272,7 +270,7 @@ class _VotingScreenState extends State<VotingScreen> {
                               style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
-                                color: isSelected ? Colors.white : Colors.blue.shade900,
+                                color: isSelected ? Colors.white : AppStyles.darkAccent,
                               ),
                             ),
                           ),
@@ -294,7 +292,7 @@ class _VotingScreenState extends State<VotingScreen> {
                      if (_tieCandidates.isNotEmpty && !_tieCandidates.contains(index)) return const SizedBox.shrink();
                      return Text(
                        '${widget.session.players[index].name}: ${_votes[index]}',
-                       style: const TextStyle(color: Colors.white70, fontSize: 12),
+                       style: const TextStyle(color: AppStyles.textSecondary, fontSize: 12),
                      );
                   }),
                 ),
@@ -308,9 +306,10 @@ class _VotingScreenState extends State<VotingScreen> {
                 child: ElevatedButton(
                   onPressed: _selectedCandidateIndex == null ? null : _onConfirmVote,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue.shade900,
-                    foregroundColor: Colors.white,
-                    disabledBackgroundColor: Colors.grey.shade400,
+                    backgroundColor: AppStyles.accent,
+                    foregroundColor: AppStyles.cardBg,
+                    disabledBackgroundColor: Colors.grey.shade300,
+                    side: const BorderSide(color: AppStyles.darkAccent, width: 2),
                     minimumSize: const Size(double.infinity, 60),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15),
@@ -330,6 +329,7 @@ class _VotingScreenState extends State<VotingScreen> {
             ],
           ),
         ),
+      ),
       ),
       const ExitGameButton(),
     ],

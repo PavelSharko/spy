@@ -1,7 +1,10 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../utils/app_images.dart';
 import '../utils/app_strings.dart';
+import '../utils/app_styles.dart';
+import '../utils/sound_service.dart';
 
 class GameCard extends StatefulWidget {
   final bool isSpy;
@@ -51,6 +54,7 @@ class _GameCardState extends State<GameCard> with SingleTickerProviderStateMixin
 
   void _flipCard() {
     if (!_isFront) {
+      SoundService.instance.playCardFlip();
       _controller.forward();
       setState(() {
         _isFront = true;
@@ -105,7 +109,7 @@ class _GameCardState extends State<GameCard> with SingleTickerProviderStateMixin
       height: 400,
       margin: const EdgeInsets.symmetric(horizontal: 20),
       decoration: BoxDecoration(
-        color: Colors.blue.shade900,
+        color: AppStyles.darkAccent,
         borderRadius: BorderRadius.circular(20),
         image: const DecorationImage(
           image: AssetImage(AppImages.bgCardBack),
@@ -113,12 +117,12 @@ class _GameCardState extends State<GameCard> with SingleTickerProviderStateMixin
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.3),
+            color: AppStyles.darkAccent.withValues(alpha: 0.3),
             blurRadius: 10,
             offset: const Offset(0, 5),
           ),
         ],
-        border: Border.all(color: Colors.white.withOpacity(0.5), width: 3),
+        border: Border.all(color: AppStyles.cardBg.withValues(alpha: 0.5), width: 3),
       ),
       child: Center(
         child: Padding(
@@ -126,17 +130,34 @@ class _GameCardState extends State<GameCard> with SingleTickerProviderStateMixin
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.touch_app, size: 80, color: Colors.blue.shade200),
+              Icon(Icons.touch_app, size: 80, color: AppStyles.cardBg.withValues(alpha: 0.8)),
               const SizedBox(height: 20),
-              const Text(
-                AppStrings.tapCardToView,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                  height: 1.5,
-                ),
+              Stack(
+                children: [
+                  Text(
+                    AppStrings.tapCardToView,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      height: 1.5,
+                      foreground: Paint()
+                        ..style = PaintingStyle.stroke
+                        ..strokeWidth = 4
+                        ..color = AppStyles.darkAccent,
+                    ),
+                  ),
+                  const Text(
+                    AppStrings.tapCardToView,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: AppStyles.cardBg,
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      height: 1.5,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
@@ -146,122 +167,191 @@ class _GameCardState extends State<GameCard> with SingleTickerProviderStateMixin
   }
 
   Widget _buildFrontSide() {
+    final bool isSpy = widget.isSpy;
     return Container(
       width: double.infinity,
       height: 400,
       margin: const EdgeInsets.symmetric(horizontal: 20),
       decoration: BoxDecoration(
-        color: widget.isSpy ? Colors.red.shade800 : Colors.green.shade800,
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: isSpy
+              ? [Colors.red.shade600, Colors.red.shade900]
+              : [Colors.green.shade600, Colors.green.shade900],
+        ),
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.3),
+            color: AppStyles.darkAccent.withValues(alpha: 0.3),
             blurRadius: 10,
             offset: const Offset(0, 5),
           ),
         ],
-        border: Border.all(color: Colors.white, width: 4),
+        border: Border.all(color: AppStyles.cardBg, width: 4),
       ),
-      child: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              if (widget.isSpy) ...[
-                const Text(
-                  AppStrings.youAreSpy,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 40,
-                    fontWeight: FontWeight.w900,
-                    letterSpacing: 2,
-                  ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(16),
+        child: Stack(
+          children: [
+            // Dotted Pattern Background
+            Positioned.fill(
+              child: CustomPaint(
+                painter: DotsPatternPainter(
+                  dotColor: isSpy 
+                    ? Colors.red.shade900.withValues(alpha: 0.8) 
+                    : Colors.green.shade900.withValues(alpha: 0.8),
                 ),
-                const SizedBox(height: 30),
-                const Icon(Icons.search, size: 60, color: Colors.white),
-                const SizedBox(height: 30),
-                const Text(
-                  AppStrings.guessLocation,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.white70,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ] else ...[
-                const Text(
-                  AppStrings.locationLabel,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.white70,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600,
-                    letterSpacing: 1,
-                  ),
-                ),
-                Text(
-                  widget.secretLocation,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 34,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 20),
-                const Icon(Icons.language, size: 50, color: Colors.white),
-                const SizedBox(height: 20),
-                if (widget.role != null) ...[
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.15),
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.white38, width: 1),
+              ),
+            ),
+            // Content
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: Center(
+                      child: isSpy ? _buildSpyContent() : _buildCivilianContent(),
                     ),
-                    child: Column(
-                      children: [
-                        const Text(
-                          AppStrings.roleLabel,
-                          style: TextStyle(
-                            color: Colors.white60,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            letterSpacing: 1,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          widget.role!,
-                          textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 10),
+                  // Bottom hint text with icon
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(Icons.info_outline, color: Colors.white, size: 24),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          isSpy ? 'Угадайте в какой вы локации!' : 'Попробуйте отгадать шпиона!',
                           style: const TextStyle(
-                            color: Colors.amberAccent,
-                            fontSize: 26,
-                            fontWeight: FontWeight.w900,
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 16),
                 ],
-                const Text(
-                  AppStrings.guessSpy,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.white70,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ]
-            ],
-          ),
+              ),
+            ),
+          ],
         ),
       ),
     );
   }
+
+  Widget _buildSpyContent() {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const Icon(Icons.search, size: 60, color: Colors.white),
+        const SizedBox(height: 20),
+        Stack(
+          alignment: Alignment.center,
+          children: [
+            Text(
+              'ТЫ ШПИОН!',
+              textAlign: TextAlign.center,
+              style: GoogleFonts.russoOne(
+                fontSize: 42,
+                letterSpacing: 2,
+                foreground: Paint()
+                  ..style = PaintingStyle.stroke
+                  ..strokeWidth = 6
+                  ..color = Colors.black,
+              ),
+            ),
+            Text(
+              'ТЫ ШПИОН!',
+              textAlign: TextAlign.center,
+              style: GoogleFonts.russoOne(
+                fontSize: 42,
+                letterSpacing: 2,
+                color: Colors.redAccent.shade400, // Bloody red
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildCivilianContent() {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.15),
+        borderRadius: BorderRadius.circular(15),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.3), width: 1),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Text(
+            'ВЫ НАХОДИТЕСЬ:',
+            style: TextStyle(color: Colors.white70, fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            widget.secretLocation,
+            textAlign: TextAlign.center,
+            style: GoogleFonts.russoOne(
+              fontSize: 28,
+              color: Colors.white,
+            ),
+          ),
+          if (widget.role != null) ...[
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 12),
+              child: Divider(color: Colors.white38, height: 1),
+            ),
+            const Text(
+              'ВАША РОЛЬ:',
+              style: TextStyle(color: Colors.white70, fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              widget.role!,
+              textAlign: TextAlign.center,
+              style: GoogleFonts.russoOne(
+                fontSize: 24,
+                color: AppStyles.warning,
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+class DotsPatternPainter extends CustomPainter {
+  final Color dotColor;
+  final double spacing;
+  final double radius;
+
+  DotsPatternPainter({
+    required this.dotColor,
+    this.spacing = 15.0,
+    this.radius = 2.0,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()..color = dotColor;
+    for (double i = 0; i < size.width; i += spacing) {
+      for (double j = 0; j < size.height; j += spacing) {
+        double xOffset = (j / spacing % 2 == 1) ? spacing / 2 : 0;
+        if (i + xOffset < size.width) {
+          canvas.drawCircle(Offset(i + xOffset, j), radius, paint);
+        }
+      }
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant DotsPatternPainter old) => old.dotColor != dotColor;
 }

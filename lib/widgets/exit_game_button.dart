@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../screens/main_menu_screen.dart';
+import '../utils/app_styles.dart';
 import '../utils/sound_service.dart';
 
 class ExitGameButton extends StatelessWidget {
@@ -29,8 +30,10 @@ class ExitGameButton extends StatelessWidget {
             barrierDismissible: false,
             builder: (BuildContext ctx) {
               return AlertDialog(
-                title: const Text('Внимание'),
-                content: const Text('Вы действительно хотите выйти?'),
+                backgroundColor: AppStyles.cardBg,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                title: const Text('Внимание', style: TextStyle(color: AppStyles.darkAccent, fontWeight: FontWeight.bold)),
+                content: const Text('Вы действительно хотите выйти?', style: TextStyle(color: AppStyles.textSecondary)),
                 actions: [
                   TextButton(
                     onPressed: () {
@@ -38,7 +41,7 @@ class ExitGameButton extends StatelessWidget {
                       Navigator.of(ctx).pop();
                       onResume?.call();
                     },
-                    child: const Text('Нет'),
+                    child: const Text('Нет', style: TextStyle(color: AppStyles.textSecondary, fontWeight: FontWeight.bold)),
                   ),
                   TextButton(
                     onPressed: () {
@@ -51,7 +54,7 @@ class ExitGameButton extends StatelessWidget {
                         (Route<dynamic> route) => false,
                       );
                     },
-                    child: const Text('Да', style: TextStyle(color: Colors.red)),
+                    child: const Text('Да', style: TextStyle(color: AppStyles.danger, fontWeight: FontWeight.bold)),
                   ),
                 ],
               );
