@@ -75,6 +75,7 @@ class _SpyLastWordScreenState extends State<SpyLastWordScreen> {
               // Spy Name
               Center(
                 child: Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 20),
                   padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
                   decoration: BoxDecoration(
                     color: AppStyles.danger,
@@ -94,6 +95,7 @@ class _SpyLastWordScreenState extends State<SpyLastWordScreen> {
                       fontWeight: FontWeight.w900,
                       color: Colors.white,
                     ),
+                    textAlign: TextAlign.center,
                   ),
                 ),
               ),

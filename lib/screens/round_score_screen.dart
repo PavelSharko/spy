@@ -87,7 +87,7 @@ class _RoundScoreScreenState extends State<RoundScoreScreen> {
               // Title
               Center(
                 child: Text(
-                  _isLastRound ? AppStrings.finalRatingTitle : AppStrings.roundScoreTitle,
+                  _isLastRound ? "Итоги игры" : AppStrings.roundScoreTitle,
                   style: const TextStyle(
                     fontSize: 26,
                     fontWeight: FontWeight.w900,

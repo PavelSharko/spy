@@ -283,12 +283,12 @@ class _RoleGuessScreenState extends State<RoleGuessScreen>
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                _playerChip(_guesser.name, AppStyles.accent.withOpacity(0.5)),
+                Expanded(child: _playerChip(_guesser.name, AppStyles.accent.withOpacity(0.5))),
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 10),
                   child: Icon(Icons.arrow_forward_rounded, color: AppStyles.textSecondary),
                 ),
-                _playerChip(_target.name, AppStyles.warning.withOpacity(0.6)),
+                Expanded(child: _playerChip(_target.name, AppStyles.warning.withOpacity(0.6))),
               ],
             ),
           ),
@@ -346,7 +346,7 @@ class _RoleGuessScreenState extends State<RoleGuessScreen>
         crossAxisCount: 2,
         mainAxisSpacing: 10,
         crossAxisSpacing: 10,
-        childAspectRatio: 1.0, // square
+        childAspectRatio: 2.2, // Task 13: Reduce height significantly
       ),
       itemCount: _locationRoles.length,
       itemBuilder: (_, i) => _buildRoleTile(_locationRoles[i]),
@@ -385,11 +385,11 @@ class _RoleGuessScreenState extends State<RoleGuessScreen>
                 child: Text(
                   role,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 24,
+                  style: const TextStyle(
+                    fontSize: 16, // Task 13: Reduce font size
                     fontWeight: FontWeight.bold,
                     color: AppStyles.darkAccent,
-                    letterSpacing: 2,
+                    letterSpacing: 1,
                   ),
                 ),
               ),
@@ -446,18 +446,22 @@ class _RoleGuessScreenState extends State<RoleGuessScreen>
               children: [
                 TextSpan(
                   text: '${_target.name}\n',
-                  style: const TextStyle(color: AppStyles.darkAccent),
+                  style: const TextStyle(
+                    color: AppStyles.darkAccent,
+                    shadows: [Shadow(color: Colors.white, blurRadius: 2, offset: Offset(1,1))],
+                  ),
                 ),
-                TextSpan(
-                  text: '${AppStrings.wasRole} ',
-                  style: const TextStyle(color: Colors.white60, fontSize: 20),
+                const TextSpan(
+                  text: 'был ',
+                  style: TextStyle(color: Colors.white, fontSize: 18),
                 ),
                 TextSpan(
                   text: _target.role ?? '—',
                   style: TextStyle(
-                    fontSize: 18,
-                    color: AppStyles.textSecondary,
-                    fontWeight: FontWeight.w500,
+                    color: (_target.role == 'Шпионить' || _target.role == 'Шпион') ? AppStyles.danger : AppStyles.success,
+                    fontSize: 28,
+                    fontWeight: FontWeight.w900,
+                    shadows: const [Shadow(color: Colors.black45, blurRadius: 4, offset: Offset(1,1))],
                   ),
                 ),
               ],
@@ -535,12 +539,15 @@ class _RoleGuessScreenState extends State<RoleGuessScreen>
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: color.withValues(alpha: 0.5)),
       ),
-      child: Text(
-        name,
-        style: TextStyle(
-          color: color,
-          fontWeight: FontWeight.bold,
-          fontSize: 16,
+      child: FittedBox(
+        fit: BoxFit.scaleDown,
+        child: Text(
+          name,
+          style: TextStyle(
+            color: color,
+            fontWeight: FontWeight.bold,
+            fontSize: 16,
+          ),
         ),
       ),
     );

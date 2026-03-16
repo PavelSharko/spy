@@ -204,14 +204,28 @@ class _VotingScreenState extends State<VotingScreen> {
                     )
                   ],
                 ),
-                child: Text(
-                  '${AppStrings.votingPlayerPrefix}${widget.session.players[currentVoter].name}',
-                  style: const TextStyle(
-                    fontSize: 26,
-                    fontWeight: FontWeight.w900,
-                    color: AppStyles.darkAccent,
-                  ),
-                  textAlign: TextAlign.center,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      AppStrings.votingPlayerPrefix.trim(),
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: AppStyles.textSecondary,
+                      ),
+                    ),
+                    const SizedBox(height: 5),
+                    Text(
+                      widget.session.players[currentVoter].name,
+                      style: const TextStyle(
+                        fontSize: 26,
+                        fontWeight: FontWeight.w900,
+                        color: AppStyles.darkAccent,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
                 ),
               ),
 

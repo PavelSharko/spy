@@ -82,9 +82,36 @@ class VotingResultScreen extends StatelessWidget {
                     : 'Шпион получает 2 очка.\nГотовьтесь к последнему слову!',
                   textAlign: TextAlign.center,
                   style: const TextStyle(
-                    fontSize: 20,
+                    fontSize: 18,
                     color: Colors.white70,
                   ),
+                ),
+              ),
+
+              const SizedBox(height: 20),
+              
+              // Secret Location Display (Tasks 3 & 4)
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                decoration: BoxDecoration(
+                  color: Colors.black.withOpacity(0.2),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Column(
+                  children: [
+                    const Text(
+                      'Локация была:',
+                      style: TextStyle(color: Colors.white60, fontSize: 14),
+                    ),
+                    Text(
+                      session.currentSecretLocation,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
                 ),
               ),
 

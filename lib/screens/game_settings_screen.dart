@@ -3,7 +3,6 @@ import '../utils/app_strings.dart';
 import '../utils/app_styles.dart';
 import '../utils/sound_service.dart';
 import '../widgets/animated_pattern_background.dart';
-import '../widgets/menu_button.dart';
 import '../widgets/settings_button.dart';
 import '../widgets/number_selector.dart';
 import '../models/game_session.dart';
@@ -195,155 +194,145 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final double buttonSize = 180.0; 
+    final double buttonSize = 180.0;
 
     return GestureDetector(
-      onTap: _onBackgroundTap, // Close settings when tapping outside
-      behavior: HitTestBehavior.translucent, // Ensure taps pass through empty space
+      onTap: _onBackgroundTap,
+      behavior: HitTestBehavior.translucent,
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text(AppStrings.gameSettingsTitle, style: TextStyle(color: AppStyles.darkAccent, fontWeight: FontWeight.bold)),
-          backgroundColor: Colors.transparent,
-          centerTitle: true,
-          elevation: 0, 
-          automaticallyImplyLeading: false, 
-        ),
-        extendBodyBehindAppBar: true, 
-        backgroundColor: Colors.transparent,
+        backgroundColor: AppStyles.bgColor,
         body: Stack(
           children: [
-            Container(
-              color: AppStyles.bgColor,
-              child: AnimatedPatternBackground(
-              child: SafeArea( 
-                child: Column(
-                  children: [
-                    const SizedBox(height: 20),
-                
-                // Scrollable area for the large buttons
-                Expanded(
-                  child: SingleChildScrollView(
-                    child: Center(
-                      child: Column( // Trigger "Wrap" behavior vertically but use Column for better full-width control (for sliding drawer)
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          // 2.1 Players
-                          _buildSettingItem(
-                            id: AppStrings.playerCount,
-                            title: AppStrings.playerCount,
-                            value: _selectedPlayerCount,
-                            buttonSize: buttonSize,
-                            child: NumberSelector(
-                              initialValue: _playerCountValue, 
-                              minValue: 3,
-                              maxValue: 6,
-                              onChanged: _updatePlayerCount,
-                            ),
-                          ),
-
-                          const SizedBox(height: 20),
-
-                          // 2.2 Game Time
-                          _buildSettingItem(
-                            id: AppStrings.gameTime,
-                            title: AppStrings.gameTime,
-                            value: _selectedGameTime,
-                            buttonSize: buttonSize,
-                            child: NumberSelector(
-                              initialValue: _gameTimeValue,
-                              minValue: _minGameTime,
-                              maxValue: _maxGameTime,
-                              onChanged: _updateGameTime,
-                            ),
-                          ),
-
-                          const SizedBox(height: 20),
-
-                          // 2.2.1 Round Count
-                          _buildSettingItem(
-                            id: AppStrings.roundCount,
-                            title: AppStrings.roundCount,
-                            value: _selectedRoundCount,
-                            buttonSize: buttonSize,
-                            child: NumberSelector(
-                              initialValue: _roundCountValue,
-                              minValue: 1,
-                              maxValue: 5,
-                              onChanged: _updateRoundCount,
-                            ),
-                          ),
-
-                          const SizedBox(height: 20),
-
-                          // 2.3 Location (Navigates to new screen, doesn't use accordion child)
-                          _buildSettingItem(
-                            id: AppStrings.locationSelection,
-                            title: AppStrings.locationSelection,
-                            value: _selectedLocation,
-                            buttonSize: buttonSize,
-                            child: const SizedBox.shrink(), // Not used for this item type
-                          ),
-                        ],
+            // Background covers everything including SafeArea areas
+            const AnimatedPatternBackground(child: SizedBox.expand()),
+            
+            // Content
+            SafeArea(
+              child: Column(
+                children: [
+                  const SizedBox(height: 10),
+                  const Center(
+                    child: Text(
+                      AppStrings.gameSettingsTitle,
+                      style: TextStyle(
+                        color: AppStyles.darkAccent,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 22,
                       ),
                     ),
                   ),
-                ),
+                  const SizedBox(height: 10),
 
-                const SizedBox(height: 20),
-
-                // Bottom Action Buttons
-                Padding(
-                  padding: const EdgeInsets.all(20.0), 
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      // BACK Button
-                      SizedBox(
-                        width: 120, 
-                        height: 50,
-                        child: OutlinedButton(
-                          onPressed: _onBackPressed,
-                           style: OutlinedButton.styleFrom(
-                               foregroundColor: AppStyles.darkAccent,
-                               side: const BorderSide(color: AppStyles.accent, width: 2),
-                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                           ),
-                          child: const Text(AppStrings.backAction, style: TextStyle(fontWeight: FontWeight.bold)),
+                  // Scrollable Settings
+                  Expanded(
+                    child: SingleChildScrollView(
+                      physics: const BouncingScrollPhysics(),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                        child: Column(
+                          children: [
+                            _buildSettingItem(
+                              id: AppStrings.playerCount,
+                              title: AppStrings.playerCount,
+                              value: _selectedPlayerCount,
+                              buttonSize: buttonSize,
+                              child: NumberSelector(
+                                initialValue: _playerCountValue,
+                                minValue: 3,
+                                maxValue: 6,
+                                onChanged: _updatePlayerCount,
+                              ),
+                            ),
+                            const SizedBox(height: 20),
+                            _buildSettingItem(
+                              id: AppStrings.gameTime,
+                              title: AppStrings.gameTime,
+                              value: _selectedGameTime,
+                              buttonSize: buttonSize,
+                              child: NumberSelector(
+                                initialValue: _gameTimeValue,
+                                minValue: _minGameTime,
+                                maxValue: _maxGameTime,
+                                onChanged: _updateGameTime,
+                              ),
+                            ),
+                            const SizedBox(height: 20),
+                            _buildSettingItem(
+                              id: AppStrings.roundCount,
+                              title: AppStrings.roundCount,
+                              value: _selectedRoundCount,
+                              buttonSize: buttonSize,
+                              child: NumberSelector(
+                                initialValue: _roundCountValue,
+                                minValue: 1,
+                                maxValue: 5,
+                                onChanged: _updateRoundCount,
+                              ),
+                            ),
+                            const SizedBox(height: 20),
+                            _buildSettingItem(
+                              id: AppStrings.locationSelection,
+                              title: AppStrings.locationSelection,
+                              value: _selectedLocation,
+                              buttonSize: buttonSize,
+                              child: const SizedBox.shrink(),
+                            ),
+                          ],
                         ),
                       ),
-                      
-                      const SizedBox(width: 20),
+                    ),
+                  ),
 
-                      // PLAY Button
-                      Expanded(
-                        child: SizedBox(
+                  // Bottom Buttons
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
+                    child: Row(
+                      children: [
+                        SizedBox(
+                          width: 120,
                           height: 50,
-                          child: ElevatedButton(
-                            onPressed: _onPlayPressed,
-                            style: ElevatedButton.styleFrom(
-                               backgroundColor: AppStyles.accent,
-                               foregroundColor: AppStyles.cardBg,
-                               side: const BorderSide(color: AppStyles.darkAccent, width: 2),
-                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                          child: OutlinedButton(
+                            onPressed: _onBackPressed,
+                            style: OutlinedButton.styleFrom(
+                              foregroundColor: AppStyles.darkAccent,
+                              side: const BorderSide(color: AppStyles.accent, width: 2),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                             ),
-                            child: const Text(AppStrings.playAction, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+                            child: const Text(AppStrings.backAction, style: TextStyle(fontWeight: FontWeight.bold)),
                           ),
                         ),
-                      ),
-                    ],
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: SizedBox(
+                            height: 50,
+                            child: ElevatedButton(
+                              onPressed: _onPlayPressed,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppStyles.accent,
+                                foregroundColor: AppStyles.cardBg,
+                                side: const BorderSide(color: AppStyles.darkAccent, width: 2),
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                                elevation: 0,
+                              ),
+                              child: const Text(
+                                AppStrings.playAction,
+                                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
+            const ExitGameButton(),
+          ],
         ),
-        ),
-        const ExitGameButton(), // Add exit button here
-      ],
-    ),
-  ),
-);
-}
+      ),
+    );
+  }
 
   // Builder helper to handle the expansion logic
   Widget _buildSettingItem({
