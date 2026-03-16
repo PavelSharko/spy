@@ -5,11 +5,13 @@ import '../utils/app_images.dart';
 import '../utils/app_strings.dart';
 import '../utils/app_styles.dart';
 import '../utils/sound_service.dart';
+import 'dart:io';
 
 class GameCard extends StatefulWidget {
   final bool isSpy;
   final String secretLocation;
   final String? role; // null for spy
+  final String? bgImagePath;
   final VoidCallback onCardTapped;
 
   const GameCard({
@@ -17,6 +19,7 @@ class GameCard extends StatefulWidget {
     required this.isSpy,
     required this.secretLocation,
     this.role,
+    this.bgImagePath,
     required this.onCardTapped,
   });
 
@@ -104,10 +107,11 @@ class _GameCardState extends State<GameCard> with SingleTickerProviderStateMixin
   }
 
   Widget _buildBackSide() {
-    return Container(
-      width: double.infinity,
-      height: 400,
-      margin: const EdgeInsets.symmetric(horizontal: 20),
+    return AspectRatio(
+      aspectRatio: 0.7,
+      child: Container(
+        width: double.infinity,
+        margin: const EdgeInsets.symmetric(horizontal: 20),
       decoration: BoxDecoration(
         color: AppStyles.darkAccent,
         borderRadius: BorderRadius.circular(20),
@@ -163,23 +167,24 @@ class _GameCardState extends State<GameCard> with SingleTickerProviderStateMixin
           ),
         ),
       ),
-    );
+    ));
   }
 
   Widget _buildFrontSide() {
     final bool isSpy = widget.isSpy;
-    return Container(
-      width: double.infinity,
-      height: 400,
-      margin: const EdgeInsets.symmetric(horizontal: 20),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: isSpy
-              ? [Colors.red.shade600, Colors.red.shade900]
-              : [Colors.green.shade600, Colors.green.shade900],
-        ),
+    return AspectRatio(
+      aspectRatio: 0.7,
+      child: Container(
+        width: double.infinity,
+        margin: const EdgeInsets.symmetric(horizontal: 20),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: isSpy
+                ? [Colors.red.shade600, Colors.red.shade900]
+                : [Colors.green.shade600, Colors.green.shade900],
+          ),
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
@@ -193,8 +198,22 @@ class _GameCardState extends State<GameCard> with SingleTickerProviderStateMixin
       child: ClipRRect(
         borderRadius: BorderRadius.circular(16),
         child: Stack(
+          fit: StackFit.expand,
           children: [
-            // Dotted Pattern Background
+            // Background Image
+            Opacity(
+              opacity: 0.5,
+              child: widget.bgImagePath != null
+                  ? Image.file(
+                      File(widget.bgImagePath!),
+                      fit: BoxFit.cover,
+                    )
+                  : Image.asset(
+                      'assets/images/рубашка_показа_роли.jpeg',
+                      fit: BoxFit.cover,
+                    ),
+            ),
+            // Dotted Pattern Background (optional overlay effect)
             Positioned.fill(
               child: CustomPaint(
                 painter: DotsPatternPainter(
@@ -240,7 +259,7 @@ class _GameCardState extends State<GameCard> with SingleTickerProviderStateMixin
           ],
         ),
       ),
-    );
+    ));
   }
 
   Widget _buildSpyContent() {

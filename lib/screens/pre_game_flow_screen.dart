@@ -10,6 +10,7 @@ import '../widgets/animated_pattern_background.dart';
 import '../widgets/game_card.dart';
 import '../widgets/menu_button.dart';
 import '../widgets/exit_game_button.dart';
+import '../services/image_fetch_service.dart';
 import 'game_round_screen.dart';
 
 enum FlowStep { nameSelection, cardReveal, roundReady }
@@ -47,6 +48,19 @@ class _PreGameFlowScreenState extends State<PreGameFlowScreen> {
     } else {
       widget.session.assignRoles(); // Ensure roles for subsequent rounds
       _currentStep = FlowStep.cardReveal;
+    }
+    _loadLocationImageIfNeeded();
+  }
+
+  Future<void> _loadLocationImageIfNeeded() async {
+    final location = widget.session.currentSecretLocation;
+    if (!widget.session.locationImages.containsKey(location)) {
+      final imagePath = await ImageFetchService.fetchLocationImage(location);
+      if (imagePath != null && mounted) {
+        setState(() {
+          widget.session.locationImages[location] = imagePath;
+        });
+      }
     }
   }
 
@@ -319,6 +333,7 @@ class _PreGameFlowScreenState extends State<PreGameFlowScreen> {
           isSpy: isSpy,
           secretLocation: widget.session.currentSecretLocation,
           role: isSpy ? null : widget.session.players[_currentPlayerIndex].role,
+          bgImagePath: widget.session.locationImages[widget.session.currentSecretLocation],
           onCardTapped: _onCardTappedToNext,
         ),
       ],

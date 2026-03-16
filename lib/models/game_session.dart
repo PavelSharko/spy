@@ -15,6 +15,9 @@ class GameSession {
   /// Index 0 = round 1, index 1 = round 2, etc.
   final List<String> secretLocationsQueue;
 
+  /// Cache of downloaded images linked to location name.
+  final Map<String, String> locationImages;
+
   /// Returns the secret location for the current round.
   String get currentSecretLocation => secretLocationsQueue[currentRound - 1];
 
@@ -34,8 +37,10 @@ class GameSession {
     this.locationGroupName,
     required this.secretLocationsQueue,
     required this.currentSpyIndex,
+    Map<String, String>? locationImages,
   })  : assert(secretLocationsQueue.isNotEmpty),
-        id = id ?? const Uuid().v4();
+        id = id ?? const Uuid().v4(),
+        locationImages = locationImages ?? {};
 
   Player get currentSpy => players[currentSpyIndex];
 
