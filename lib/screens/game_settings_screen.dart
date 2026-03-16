@@ -219,7 +219,7 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 50),
 
                   // Scrollable Settings
                   Expanded(
