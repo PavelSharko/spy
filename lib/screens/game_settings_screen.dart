@@ -194,8 +194,6 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final double buttonSize = 180.0;
-
     return GestureDetector(
       onTap: _onBackgroundTap,
       behavior: HitTestBehavior.translucent,
@@ -235,7 +233,7 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                               id: AppStrings.playerCount,
                               title: AppStrings.playerCount,
                               value: _selectedPlayerCount,
-                              buttonSize: buttonSize,
+                              buttonSize: double.infinity,
                               child: NumberSelector(
                                 initialValue: _playerCountValue,
                                 minValue: 3,
@@ -243,12 +241,12 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                                 onChanged: _updatePlayerCount,
                               ),
                             ),
-                            const SizedBox(height: 20),
+                            const SizedBox(height: 12),
                             _buildSettingItem(
                               id: AppStrings.gameTime,
                               title: AppStrings.gameTime,
                               value: _selectedGameTime,
-                              buttonSize: buttonSize,
+                              buttonSize: double.infinity,
                               child: NumberSelector(
                                 initialValue: _gameTimeValue,
                                 minValue: _minGameTime,
@@ -256,12 +254,12 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                                 onChanged: _updateGameTime,
                               ),
                             ),
-                            const SizedBox(height: 20),
+                            const SizedBox(height: 12),
                             _buildSettingItem(
                               id: AppStrings.roundCount,
                               title: AppStrings.roundCount,
                               value: _selectedRoundCount,
-                              buttonSize: buttonSize,
+                              buttonSize: double.infinity,
                               child: NumberSelector(
                                 initialValue: _roundCountValue,
                                 minValue: 1,
@@ -269,12 +267,12 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                                 onChanged: _updateRoundCount,
                               ),
                             ),
-                            const SizedBox(height: 20),
+                            const SizedBox(height: 12),
                             _buildSettingItem(
                               id: AppStrings.locationSelection,
                               title: AppStrings.locationSelection,
                               value: _selectedLocation,
-                              buttonSize: buttonSize,
+                              buttonSize: double.infinity,
                               child: const SizedBox.shrink(),
                             ),
                           ],
@@ -360,7 +358,7 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
               ? Container(
                   width: buttonSize, // Match button width
                   // Ensure it looks connected or just below
-                  margin: const EdgeInsets.only(top: 10), 
+                  margin: const EdgeInsets.only(top: 8, bottom: 8), 
                   child: child,
                 )
               : const SizedBox.shrink(), // Hidden

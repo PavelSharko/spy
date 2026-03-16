@@ -21,10 +21,9 @@ class SettingsButton extends StatelessWidget {
     // Default placeholder style
     final String displayValue = value ?? '--не выбрано--';
     
-    return Container(
-      width: size,
-      height: size,
-      constraints: const BoxConstraints(minWidth: 150, minHeight: 150),
+    return SizedBox(
+      width: double.infinity,
+      height: 80, // Horizontal fixed smaller height
       // Use ElevatedButton for interaction but customize shape
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
@@ -41,25 +40,26 @@ class SettingsButton extends StatelessWidget {
           SoundService.instance.playClick();
           onPressed();
         },
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
               title,
-              textAlign: TextAlign.center,
               style: const TextStyle(
-                fontSize: 20, // Slightly increased
+                fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            const SizedBox(height: 12),
-            Text(
-              displayValue,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 16, // Slightly increased
-                color: Colors.white.withValues(alpha: 0.8), // White, slightly transparent
-                fontStyle: FontStyle.italic,
+            Flexible(
+              child: Text(
+                displayValue,
+                textAlign: TextAlign.right,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.white.withValues(alpha: 0.8),
+                  fontStyle: FontStyle.italic,
+                ),
               ),
             ),
           ],
