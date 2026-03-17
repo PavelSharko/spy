@@ -26,6 +26,7 @@
 | [code_patterns.md](memory_bank/code_patterns.md) | Паттерны кода: синглтоны, константные классы, навигация, стили |
 | [business_logic.md](memory_bank/business_logic.md) | Бизнес-логика: раунды, роли, подсказки, голосование, очки |
 | [agent_instructions.md](memory_bank/agent_instructions.md) | Протокол для AI-агентов: как читать, менять и обновлять память |
+| [manager_protocol.md](memory_bank/manager_protocol.md) | Протокол для main_agent: оркестрация под-агентов, генерация промптов, декомпозиция |
 
 ---
 

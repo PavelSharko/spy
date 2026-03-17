@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:typed_data';
 import 'package:uuid/uuid.dart';
 import '../data/locations_data.dart';
 import 'player.dart';
@@ -16,7 +17,7 @@ class GameSession {
   final List<String> secretLocationsQueue;
 
   /// Cache of downloaded images linked to location name.
-  final Map<String, String> locationImages;
+  final Map<String, Uint8List> locationImages;
 
   /// Returns the secret location for the current round.
   String get currentSecretLocation => secretLocationsQueue[currentRound - 1];
@@ -37,7 +38,7 @@ class GameSession {
     this.locationGroupName,
     required this.secretLocationsQueue,
     required this.currentSpyIndex,
-    Map<String, String>? locationImages,
+    Map<String, Uint8List>? locationImages,
   })  : assert(secretLocationsQueue.isNotEmpty),
         id = id ?? const Uuid().v4(),
         locationImages = locationImages ?? {};

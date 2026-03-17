@@ -179,3 +179,58 @@ SoundService.instance.playClick();
 6. Каждая кнопка — `SoundService.instance.playClick()` в `onPressed`
 7. Навигация: `Navigator.push(context, MaterialPageRoute(...))`
 8. Обнови `memory_bank/project_structure.md`
+
+---
+
+## 11. Работа с AI/Webhook
+
+### AiGenerationService (`lib/services/ai_generation_service.dart`)
+- **Единая точка** для всех AI-запросов к внешнему webhook.
+- Статический класс (все методы — `static`), без инстанцирования.
+- Авторизация: Basic Auth (логин/пароль хранятся как `static const` в классе).
+
+### Хранение медиа — только Uint8List, никакого dart:io
+```dart
+// ✅ Правильно — работает на Web, iOS, Android
+final Uint8List? imageBytes = await AiGenerationService.fetchLocationImage(location);
+widget.session.locationImages[location] = imageBytes; // Map<String, Uint8List>
+
+// ✅ Отображение
+Image.memory(imageBytes!, fit: BoxFit.cover)
+
+// ❌ Нельзя — dart:io не работает на Flutter Web
+File file = File(path);
+Image.file(file)
+```
+
+### Паттерн fallback URL + retry (_fetchWithRetry)
+```
+Попытка 1 → основной URL, до 3 ретраев (timeout 20s каждый)
+     ↓ все упали
+Попытка 2 → fallback URL, до 3 ретраев (timeout 20s каждый)
+     ↓ все упали
+null → UI показывает дефолтный ассет
+```
+`_fetchWithRetry(url, headers, body, {retries: 3})` — внутренний приватный метод, оба URL используют его.
+
+### Паттерн параллельного prefetch (prefetchAllLocations)
+```dart
+AiGenerationService.prefetchAllLocations(
+  locations: toFetch,      // список локаций без кэша
+  cache: session.locationImages, // Map<String, Uint8List> — пишем прямо сюда
+  onFirstComplete: () {
+    if (mounted) setState(() => _isFirstImageLoading = false);
+  },
+);
+```
+- Все запросы запускаются **одновременно** через `Future.wait`.
+- `onFirstComplete` вызывается один раз — когда первая картинка записана в кэш.
+- Используется в `PreGameFlowScreen._prefetchAllLocations()` из `initState`.
+
+### Правило: шпион и фоновая картинка
+```dart
+// В _buildCardReveal — шпион ВСЕГДА получает null (дефолтная рубашка)
+bgImageBytes: isSpy ? null : session.locationImages[location],
+```
+
+> **Правило:** Для любых HTTP-запросов возвращающих медиа — используй `response.bodyBytes` как `Uint8List`. Не сохраняй файлы через `dart:io`. Не используй `path_provider` в Web-совместимом коде. Шпион никогда не должен видеть картинку локации.

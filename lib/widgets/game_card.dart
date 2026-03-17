@@ -1,17 +1,17 @@
 import 'dart:math';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../utils/app_images.dart';
 import '../utils/app_strings.dart';
 import '../utils/app_styles.dart';
 import '../utils/sound_service.dart';
-import 'dart:io';
 
 class GameCard extends StatefulWidget {
   final bool isSpy;
   final String secretLocation;
   final String? role; // null for spy
-  final String? bgImagePath;
+  final Uint8List? bgImageBytes;
   final VoidCallback onCardTapped;
 
   const GameCard({
@@ -19,7 +19,7 @@ class GameCard extends StatefulWidget {
     required this.isSpy,
     required this.secretLocation,
     this.role,
-    this.bgImagePath,
+    this.bgImageBytes,
     required this.onCardTapped,
   });
 
@@ -203,9 +203,9 @@ class _GameCardState extends State<GameCard> with SingleTickerProviderStateMixin
             // Background Image
             Opacity(
               opacity: 0.5,
-              child: widget.bgImagePath != null
-                  ? Image.file(
-                      File(widget.bgImagePath!),
+              child: widget.bgImageBytes != null
+                  ? Image.memory(
+                      widget.bgImageBytes!,
                       fit: BoxFit.cover,
                     )
                   : Image.asset(

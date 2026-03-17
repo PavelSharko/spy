@@ -10,7 +10,7 @@ import '../widgets/animated_pattern_background.dart';
 import '../widgets/game_card.dart';
 import '../widgets/menu_button.dart';
 import '../widgets/exit_game_button.dart';
-import '../services/image_fetch_service.dart';
+import '../services/ai_generation_service.dart';
 import 'game_round_screen.dart';
 
 enum FlowStep { nameSelection, cardReveal, roundReady }
@@ -32,6 +32,7 @@ class PreGameFlowScreen extends StatefulWidget {
 class _PreGameFlowScreenState extends State<PreGameFlowScreen> {
   FlowStep _currentStep = FlowStep.nameSelection;
   int _currentPlayerIndex = 0;
+  bool _isFirstImageLoading = true; // hides once the first prefetched image arrives
   
   // Name Selection State
   final TextEditingController _nameController = TextEditingController();
@@ -49,19 +50,31 @@ class _PreGameFlowScreenState extends State<PreGameFlowScreen> {
       widget.session.assignRoles(); // Ensure roles for subsequent rounds
       _currentStep = FlowStep.cardReveal;
     }
-    _loadLocationImageIfNeeded();
+    _prefetchAllLocations();
   }
 
-  Future<void> _loadLocationImageIfNeeded() async {
-    final location = widget.session.currentSecretLocation;
-    if (!widget.session.locationImages.containsKey(location)) {
-      final imagePath = await ImageFetchService.fetchLocationImage(location);
-      if (imagePath != null && mounted) {
-        setState(() {
-          widget.session.locationImages[location] = imagePath;
-        });
-      }
+  /// Kicks off parallel image prefetch for ALL session locations.
+  /// Spinner hides as soon as the first image arrives.
+  void _prefetchAllLocations() {
+    final locations = widget.session.secretLocationsQueue;
+    final cache = widget.session.locationImages;
+
+    // Only fetch what's not already cached
+    final toFetch =
+        locations.where((loc) => !cache.containsKey(loc)).toList();
+
+    if (toFetch.isEmpty) {
+      if (mounted) setState(() => _isFirstImageLoading = false);
+      return;
     }
+
+    AiGenerationService.prefetchAllLocations(
+      locations: toFetch,
+      cache: cache,
+      onFirstComplete: () {
+        if (mounted) setState(() => _isFirstImageLoading = false);
+      },
+    );
   }
 
   @override
@@ -188,127 +201,153 @@ class _PreGameFlowScreenState extends State<PreGameFlowScreen> {
   }
 
   Widget _buildNameSelection() {
-    return SingleChildScrollView(
+    return Stack(
       key: ValueKey('nameSelection_$_currentPlayerIndex'),
-      padding: const EdgeInsets.all(20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          const SizedBox(height: 20),
-          Text(
-            '${AppStrings.passPhoneTo} ${_currentPlayerIndex + 1}${AppStrings.playerSuffix}',
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-              color: AppStyles.darkAccent,
-              letterSpacing: 1.2,
-            ),
-          ),
-          const SizedBox(height: 40),
-          
-          // Input field
-          Container(
-            decoration: BoxDecoration(
-              color: AppStyles.cardBg,
-              borderRadius: BorderRadius.circular(15),
-              boxShadow: [
-                BoxShadow(
-                  color: AppStyles.darkAccent.withValues(alpha: 0.1),
-                  blurRadius: 10,
-                  offset: const Offset(0, 5),
+      children: [
+        SingleChildScrollView(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const SizedBox(height: 20),
+              Text(
+                '${AppStrings.passPhoneTo} ${_currentPlayerIndex + 1}${AppStrings.playerSuffix}',
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: AppStyles.darkAccent,
+                  letterSpacing: 1.2,
                 ),
-              ],
-            ),
-            child: TextField(
-              controller: _nameController,
-              onChanged: _onNameChanged,
-              maxLength: 20,
-              decoration: InputDecoration(
-                hintText: 'Введите имя...',
-                counterText: "",
-                border: OutlineInputBorder(
+              ),
+              const SizedBox(height: 40),
+              
+              // Input field
+              Container(
+                decoration: BoxDecoration(
+                  color: AppStyles.cardBg,
                   borderRadius: BorderRadius.circular(15),
-                  borderSide: BorderSide.none,
-                ),
-                contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-              ),
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-          
-          const SizedBox(height: 30),
-          
-          // Random Name Options
-          ..._randomNames.map((name) {
-            bool isSelected = name == _selectedRandomName;
-            return Padding(
-              padding: const EdgeInsets.only(bottom: 12),
-              child: GestureDetector(
-                onTap: () => _onRandomNameTap(name),
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 200),
-                  padding: const EdgeInsets.symmetric(vertical: 15),
-                  decoration: BoxDecoration(
-                    color: isSelected ? AppStyles.warning : AppStyles.cardBg,
-                    borderRadius: BorderRadius.circular(15),
-                    border: Border.all(
-                      color: isSelected ? AppStyles.darkAccent : Colors.transparent,
-                      width: 2,
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppStyles.darkAccent.withValues(alpha: 0.1),
+                      blurRadius: 10,
+                      offset: const Offset(0, 5),
                     ),
-                    boxShadow: [
-                      if (isSelected)
-                        BoxShadow(
-                          color: AppStyles.warning.withValues(alpha: 0.4),
-                          blurRadius: 8,
-                          spreadRadius: 2,
-                        )
-                    ],
+                  ],
+                ),
+                child: TextField(
+                  controller: _nameController,
+                  onChanged: _onNameChanged,
+                  maxLength: 20,
+                  decoration: InputDecoration(
+                    hintText: 'Введите имя...',
+                    counterText: "",
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      borderSide: BorderSide.none,
+                    ),
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                   ),
-                  child: Center(
-                    child: Text(
-                      name,
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: isSelected ? Colors.white : AppStyles.darkAccent,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+              
+              const SizedBox(height: 30),
+              
+              // Random Name Options
+              ..._randomNames.map((name) {
+                bool isSelected = name == _selectedRandomName;
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 12),
+                  child: GestureDetector(
+                    onTap: () => _onRandomNameTap(name),
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 200),
+                      padding: const EdgeInsets.symmetric(vertical: 15),
+                      decoration: BoxDecoration(
+                        color: isSelected ? AppStyles.warning : AppStyles.cardBg,
+                        borderRadius: BorderRadius.circular(15),
+                        border: Border.all(
+                          color: isSelected ? AppStyles.darkAccent : Colors.transparent,
+                          width: 2,
+                        ),
+                        boxShadow: [
+                          if (isSelected)
+                            BoxShadow(
+                              color: AppStyles.warning.withValues(alpha: 0.4),
+                              blurRadius: 8,
+                              spreadRadius: 2,
+                            )
+                        ],
+                      ),
+                      child: Center(
+                        child: Text(
+                          name,
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: isSelected ? Colors.white : AppStyles.darkAccent,
+                          ),
+                        ),
                       ),
                     ),
                   ),
+                );
+              }),
+
+              const SizedBox(height: 40),
+
+              // Confirm Button
+              ElevatedButton(
+                onPressed: _onConfirmName,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppStyles.accent,
+                  foregroundColor: AppStyles.cardBg,
+                  side: const BorderSide(color: AppStyles.darkAccent, width: 2),
+                  minimumSize: const Size(double.infinity, 60),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  elevation: 5,
+                ),
+                child: const Text(
+                  AppStrings.confirmAction,
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 1.5,
+                  ),
                 ),
               ),
-            );
-          }), // Remove .toList() from map
-
-          const SizedBox(height: 40),
-
-          // Confirm Button
-          ElevatedButton(
-            onPressed: _onConfirmName,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppStyles.accent,
-              foregroundColor: AppStyles.cardBg,
-              side: const BorderSide(color: AppStyles.darkAccent, width: 2),
-              minimumSize: const Size(double.infinity, 60),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15),
-              ),
-              elevation: 5,
-            ),
-            child: const Text(
-              AppStrings.confirmAction,
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                letterSpacing: 1.5,
+            ],
+          ),
+        ),
+        // Subtle spinner — visible only while first image is loading
+        if (_isFirstImageLoading)
+          Positioned(
+            top: 8,
+            left: 8,
+            child: Opacity(
+              opacity: 0.5,
+              child: Container(
+                width: 28,
+                height: 28,
+                padding: const EdgeInsets.all(4),
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.3),
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                child: const CircularProgressIndicator(
+                  strokeWidth: 2,
+                  color: Colors.grey,
+                ),
               ),
             ),
           ),
-        ],
-      ),
+      ],
     );
   }
 
@@ -333,7 +372,10 @@ class _PreGameFlowScreenState extends State<PreGameFlowScreen> {
           isSpy: isSpy,
           secretLocation: widget.session.currentSecretLocation,
           role: isSpy ? null : widget.session.players[_currentPlayerIndex].role,
-          bgImagePath: widget.session.locationImages[widget.session.currentSecretLocation],
+          // Spy always sees the default card back — never the location image
+          bgImageBytes: isSpy
+              ? null
+              : widget.session.locationImages[widget.session.currentSecretLocation],
           onCardTapped: _onCardTappedToNext,
         ),
       ],
