@@ -6,7 +6,4 @@ class AppSettings {
 
   /// Whether sound effects are enabled globally.
   bool soundEnabled = true;
-
-  /// Whether secret developer features are enabled.
-  bool developerFeaturesEnabled = false;
 }

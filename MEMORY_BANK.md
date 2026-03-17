@@ -27,6 +27,20 @@
 | [business_logic.md](memory_bank/business_logic.md) | Бизнес-логика: раунды, роли, подсказки, голосование, очки |
 | [agent_instructions.md](memory_bank/agent_instructions.md) | Протокол для AI-агентов: как читать, менять и обновлять память |
 | [manager_protocol.md](memory_bank/manager_protocol.md) | Протокол для main_agent: оркестрация под-агентов, генерация промптов, декомпозиция |
+| [visual_config.dart](lib/utils/visual_config.dart) | Визуальные константы: прозрачности, оверлеи — меняй здесь для быстрой кастомизации |
+
+---
+
+## 🤝 Очередь задач (`agent_tasks/`)
+
+> Через этот каталог `main_agent` выдаёт задачи под-агентам. Агентам ничего копировать не нужно.
+
+| Файл | Что внутри |
+|---|---|
+| [current_tasks.md](agent_tasks/current_tasks.md) | **Очередь** — активные задачи. Каждый агент читает свой раздел, выполняет, ставит ✅ и переносит промпт в архив |
+| [old_prompts_ui_agent.md](agent_tasks/old_prompts_ui_agent.md) | Архив выполненных задач ui-agent |
+| [old_prompts_code_agent.md](agent_tasks/old_prompts_code_agent.md) | Архив выполненных задач code-agent |
+| [old_prompts_rules_agent.md](agent_tasks/old_prompts_rules_agent.md) | Архив выполненных задач rules-agent |
 
 ---
 
@@ -43,10 +57,20 @@
 
 ### Как начать работу
 
+### Если ты под-агент (ui-agent / code-agent / rules-agent)
+
 1. **Прочитай этот файл** — пойми структуру проекта.
-2. **Найди нужный файл** в `memory_bank/` — подробности по теме.
-3. **Изучи код** — следуй паттернам из `code_patterns.md`.
-4. **Обнови память** — после завершения фичи проверь, нужно ли дополнить файлы в `memory_bank/`.
+2. **Прочитай `memory_bank/agent_instructions.md`** — правила кода.
+3. **Открой `agent_tasks/current_tasks.md`** — найди раздел со своим именем и выполни задачу.
+4. **После выполнения:** отметь свой раздел как ✅ в `current_tasks.md` и перенеси промпт в архив `agent_tasks/old_prompts_<имя>.md`.
+5. **Обнови память** — при необходимости дополни файлы в `memory_bank/`.
+
+### Если ты main_agent
+
+1. Прочитай этот файл, `memory_bank/manager_protocol.md`, `plan_for_tests.md`.
+2. Разбей задачу на роли, составь промпты.
+3. **Запиши промпты** в `agent_tasks/current_tasks.md` (каждый агент — свой раздел).
+4. Скажи пользователю одну команду для запуска нужного агента.
 
 ### Частые задачи → где искать
 
@@ -60,11 +84,12 @@
 | Добавить новый виджет | `project_structure.md` → Widgets, `code_patterns.md` → Виджет-паттерны |
 | Работа с хранилищем / JSON | `code_patterns.md` → StorageService |
 | Понять игровой поток | `business_logic.md` → Игровой цикл |
+| Изменить прозрачность картинки на карточке | `visual_config.dart` → `VisualConfig` |
 
 ---
 
-## ⚠️ Главное правило
+## ⚠️ Главные правила
 
-> **Основная задача агента — НЕ менять `MEMORY_BANK.md`, а дополнять детальные файлы в папке `memory_bank/`.**
+> **Под-агенты НЕ меняют `MEMORY_BANK.md` напрямую** — только дополняют файлы в `memory_bank/`. Этот файл трогают только при добавлении новых файлов.
 >
-> Этот файл обновляется **только** при добавлении нового файла в `memory_bank/`.
+> **Единственный источник правды** — файлы в репозитории (`memory_bank/`, `agent_tasks/`, `plan_for_tests.md`). Не полагайся на историю чата.

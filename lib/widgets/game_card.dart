@@ -6,6 +6,7 @@ import '../utils/app_images.dart';
 import '../utils/app_strings.dart';
 import '../utils/app_styles.dart';
 import '../utils/sound_service.dart';
+import '../utils/visual_config.dart';
 
 class GameCard extends StatefulWidget {
   final bool isSpy;
@@ -178,13 +179,7 @@ class _GameCardState extends State<GameCard> with SingleTickerProviderStateMixin
         width: double.infinity,
         margin: const EdgeInsets.symmetric(horizontal: 20),
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: isSpy
-                ? [Colors.red.shade600, Colors.red.shade900]
-                : [Colors.green.shade600, Colors.green.shade900],
-          ),
+          color: AppStyles.darkAccent, // neutral dark base under the image
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
@@ -202,7 +197,7 @@ class _GameCardState extends State<GameCard> with SingleTickerProviderStateMixin
           children: [
             // Background Image
             Opacity(
-              opacity: 0.5,
+              opacity: VisualConfig.cardBgImageOpacity,
               child: widget.bgImageBytes != null
                   ? Image.memory(
                       widget.bgImageBytes!,
@@ -213,14 +208,10 @@ class _GameCardState extends State<GameCard> with SingleTickerProviderStateMixin
                       fit: BoxFit.cover,
                     ),
             ),
-            // Dotted Pattern Background (optional overlay effect)
+            // White overlay to soften the background image
             Positioned.fill(
-              child: CustomPaint(
-                painter: DotsPatternPainter(
-                  dotColor: isSpy 
-                    ? Colors.red.shade900.withValues(alpha: 0.8) 
-                    : Colors.green.shade900.withValues(alpha: 0.8),
-                ),
+              child: ColoredBox(
+                color: Colors.white.withValues(alpha: VisualConfig.cardWhiteOverlayOpacity),
               ),
             ),
             // Content

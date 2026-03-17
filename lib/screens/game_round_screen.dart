@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import '../utils/app_strings.dart';
 import '../utils/app_styles.dart';
 import '../utils/app_settings.dart';
+import '../utils/dev_config.dart';
 import '../utils/game_rules.dart';
 import '../utils/game_sounds.dart';
 import '../utils/sound_service.dart';
@@ -409,7 +410,7 @@ class _GameRoundScreenState extends State<GameRoundScreen> with SingleTickerProv
                           ),
                         ],
                       ),
-                      if (AppSettings.instance.developerFeaturesEnabled) ...[
+                      if (DevConfig.developerFeaturesEnabled) ...[
                         const SizedBox(width: 20),
                         ElevatedButton(
                           onPressed: () {

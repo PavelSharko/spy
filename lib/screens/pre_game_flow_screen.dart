@@ -53,29 +53,39 @@ class _PreGameFlowScreenState extends State<PreGameFlowScreen> {
     _prefetchAllLocations();
   }
 
-  /// Kicks off parallel image prefetch for ALL session locations.
-  /// Spinner hides as soon as the first image arrives.
+  /// Kicks off a parallel fetch for each uncached location.
+  /// Each completes independently and calls setState directly — no callbacks.
   void _prefetchAllLocations() {
     final locations = widget.session.secretLocationsQueue;
     final cache = widget.session.locationImages;
 
-    // Only fetch what's not already cached
+    // Deduplicate — same location may appear in multiple rounds
     final toFetch =
-        locations.where((loc) => !cache.containsKey(loc)).toList();
+        locations.toSet().where((loc) => !cache.containsKey(loc)).toList();
 
     if (toFetch.isEmpty) {
       if (mounted) setState(() => _isFirstImageLoading = false);
       return;
     }
 
-    AiGenerationService.prefetchAllLocations(
-      locations: toFetch,
-      cache: cache,
-      onFirstComplete: () {
-        if (mounted) setState(() => _isFirstImageLoading = false);
-      },
-    );
+    // Fire one independent async task per location
+    for (final loc in toFetch) {
+      _fetchAndCache(loc);
+    }
   }
+
+  /// Fetches a single location image and updates state when done.
+  Future<void> _fetchAndCache(String location) async {
+    final bytes = await AiGenerationService.fetchLocationImage(location);
+    if (bytes != null && mounted) {
+      setState(() {
+        widget.session.locationImages[location] = bytes;
+        // Hide the spinner on the very first success
+        if (_isFirstImageLoading) _isFirstImageLoading = false;
+      });
+    }
+  }
+
 
   @override
   void dispose() {

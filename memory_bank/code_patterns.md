@@ -1,6 +1,6 @@
 # 🧩 Паттерны кода
 
-> Последнее обновление: 2026-03-10
+> Последнее обновление: 2026-03-17
 
 ---
 
@@ -234,3 +234,26 @@ bgImageBytes: isSpy ? null : session.locationImages[location],
 ```
 
 > **Правило:** Для любых HTTP-запросов возвращающих медиа — используй `response.bodyBytes` как `Uint8List`. Не сохраняй файлы через `dart:io`. Не используй `path_provider` в Web-совместимом коде. Шпион никогда не должен видеть картинку локации.
+
+---
+
+## 12. Визуальные настройки (VisualConfig)
+
+`lib/utils/visual_config.dart` — единый реестр визуальных числовых констант.
+
+| Тип константы | Куда класть |
+|---|---|
+| Цвета палитры | `AppStyles` |
+| Прозрачности, оверлеи, размеры влияющие на стиль | `VisualConfig` |
+| Строки UI | `AppStrings` |
+
+```dart
+// ✅ Правильно
+Opacity(opacity: VisualConfig.cardBgImageOpacity, child: ...)
+ColoredBox(color: Colors.white.withValues(alpha: VisualConfig.cardWhiteOverlayOpacity))
+
+// ❌ Нельзя — хардкод числа в виджете
+Opacity(opacity: 0.5, child: ...)
+```
+
+> **Правило:** Никогда не хардкодь числа прозрачности, отступов или размеров, влияющих на визуальный стиль, прямо в виджетах. Добавляй в `VisualConfig`.
