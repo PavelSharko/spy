@@ -1,0 +1,17 @@
+{
+  "mcpServers": {
+    "n8n-mcp": {
+      "command": "npx",
+      "args": [
+        "n8n-mcp"
+      ],
+      "env": {
+        "MCP_MODE": "stdio",
+        "LOG_LEVEL": "error",
+        "DISABLE_CONSOLE_OUTPUT": "true",
+        "N8N_API_URL": "https://n8n.sharksbots.com",
+        "N8N_API_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJiMjI2Zjg1MS1mM2Y1LTQzMjItYWU2My0yZWNiZGQ1NTAzNGQiLCJpc3MiOiJuOG4iLCJhdWQiOiJwdWJsaWMtYXBpIiwianRpIjoiODViNDhkM2QtNzY3NC00OWVlLWI4MGItODNlMmZlYjlhMzE1IiwiaWF0IjoxNzczOTA0MDI3fQ.3kdC-aeydAvc2TCyb9r8q8xuLjIxEjY89HoIrEZ5Hy4"
+      }
+    }
+  }
+}
