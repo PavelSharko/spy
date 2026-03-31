@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'providers/game_provider.dart';
 import 'services/storage_service.dart';
+import 'utils/app_settings.dart'; // IMPORT SETTINGS
 
 // Import screens
 import 'screens/main_menu_screen.dart';
@@ -9,6 +10,7 @@ import 'screens/main_menu_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await storageService.init();
+  await AppSettings.instance.init(); // INITIALIZE SETTINGS
   runApp(const MyApp());
 }
 

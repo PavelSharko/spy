@@ -22,11 +22,13 @@
 
 ## 📂 Оглавление тест-кейсов (`tests_bank/`)
 
-Здесь собраны ссылки на файлы с тест-кейсами для конкретных логических блоков.
+Здесь собраны ссылки на файлы с тест-кейсами для конкрельные логических блоков.
 
 | Блок логики / Фича | Файл тест-кейсов | Статус |
 |---|---|---|
+| [Системные настройки] Настройки сессии | [tests_bank/system_settings.md](tests_bank/system_settings.md) | 🟢 Активен |
 | [Настройки] Экран перед игрой | [tests_bank/pre_game_settings.md](tests_bank/pre_game_settings.md) | 🟢 Активен |
+| [Уникальные карточки] Камера и Результаты | [tests_bank/unique_cards.md](tests_bank/unique_cards.md) | 🟢 Активен |
 | [Сквозное] Полный тест | [tests_bank/e2e_full_flow.md](tests_bank/e2e_full_flow.md) | ℹ️ В планах |
 | [Шаблон] Пример | [tests_bank/_template.md](tests_bank/_template.md) | ℹ️ Шаблон |
 

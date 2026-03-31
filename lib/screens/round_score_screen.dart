@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import '../models/game_session.dart';
 import '../models/player.dart';
@@ -151,6 +152,30 @@ class _RoundScoreScreenState extends State<RoundScoreScreen> {
                   ),
                 ),
 
+              // Final round card (generated AI art)
+              Builder(builder: (context) {
+                final round = widget.session.currentRound;
+                final cards = widget.session.roundFinalCards[round];
+                // Determine which card to show based on whether spy won this round
+                // We check if spy's round score is positive (spy won) or not
+                final spyWon = widget.session.players[widget.session.currentSpyIndex].roundScore > 0;
+                final Uint8List? cardBytes = cards?[spyWon ? 'win' : 'loss'];
+
+                if (cardBytes == null) return const SizedBox.shrink();
+
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(15),
+                    child: Image.memory(
+                      cardBytes,
+                      fit: BoxFit.contain,
+                      width: double.infinity,
+                    ),
+                  ),
+                );
+              }),
+
               // Players List
               Expanded(
                 child: ListView.builder(
@@ -162,7 +187,7 @@ class _RoundScoreScreenState extends State<RoundScoreScreen> {
                     
                     return Container(
                       margin: const EdgeInsets.only(bottom: 15),
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                       decoration: BoxDecoration(
                         color: isFirst 
                             ? AppStyles.warning.withOpacity(0.15) 
@@ -184,8 +209,8 @@ class _RoundScoreScreenState extends State<RoundScoreScreen> {
                         children: [
                           // Rank
                           Container(
-                            width: 35,
-                            height: 35,
+                            width: 30,
+                            height: 30,
                             decoration: BoxDecoration(
                               color: isFirst ? AppStyles.warning : AppStyles.accent,
                               shape: BoxShape.circle,
@@ -196,19 +221,32 @@ class _RoundScoreScreenState extends State<RoundScoreScreen> {
                                 style: TextStyle(
                                   color: isFirst ? AppStyles.darkAccent : Colors.white,
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 16,
+                                  fontSize: 14,
                                 ),
                               ),
                             ),
                           ),
-                          const SizedBox(width: 15),
+                          const SizedBox(width: 10),
+
+                          // Player Avatar
+                          CircleAvatar(
+                            radius: 18,
+                            backgroundColor: AppStyles.accent.withOpacity(0.15),
+                            backgroundImage: player.photoBytes != null
+                                ? MemoryImage(player.photoBytes!)
+                                : null,
+                            child: player.photoBytes == null
+                                ? const Icon(Icons.person, color: AppStyles.textSecondary, size: 18)
+                                : null,
+                          ),
+                          const SizedBox(width: 10),
                           
                           // Name
                           Expanded(
                             child: Text(
                               player.name,
                               style: const TextStyle(
-                                fontSize: 18,
+                                fontSize: 16,
                                 fontWeight: FontWeight.bold,
                                 color: AppStyles.darkAccent,
                               ),
@@ -219,8 +257,8 @@ class _RoundScoreScreenState extends State<RoundScoreScreen> {
                           // Round Score (if not last round or even if last round to show what happened)
                           if (!_isLastRound || player.roundScore != 0)
                             Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                              margin: const EdgeInsets.only(right: 15),
+                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                              margin: const EdgeInsets.only(right: 10),
                               decoration: BoxDecoration(
                                 color: player.roundScore > 0 ? Colors.green.shade100 : (player.roundScore < 0 ? Colors.red.shade100 : Colors.grey.shade200),
                                 borderRadius: BorderRadius.circular(10),
@@ -228,7 +266,7 @@ class _RoundScoreScreenState extends State<RoundScoreScreen> {
                               child: Text(
                                 player.roundScore > 0 ? '+${player.roundScore % 1 == 0 ? player.roundScore.toInt() : player.roundScore.toStringAsFixed(1)}' : '${player.roundScore % 1 == 0 ? player.roundScore.toInt() : player.roundScore.toStringAsFixed(1)}',
                                 style: TextStyle(
-                                  fontSize: 14,
+                                  fontSize: 13,
                                   fontWeight: FontWeight.bold,
                                   color: player.roundScore > 0 ? Colors.green.shade800 : (player.roundScore < 0 ? Colors.red.shade800 : Colors.grey.shade600),
                                 ),
@@ -239,7 +277,7 @@ class _RoundScoreScreenState extends State<RoundScoreScreen> {
                           Text(
                             '${player.totalScore % 1 == 0 ? player.totalScore.toInt() : player.totalScore.toStringAsFixed(1)}',
                             style: TextStyle(
-                              fontSize: 24,
+                              fontSize: 22,
                               fontWeight: isFirst ? FontWeight.w900 : FontWeight.bold,
                               color: isFirst ? AppStyles.warning : AppStyles.darkAccent,
                             ),

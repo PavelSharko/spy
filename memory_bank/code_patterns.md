@@ -1,6 +1,6 @@
 # 🧩 Паттерны кода
 
-> Последнее обновление: 2026-03-17
+> Последнее обновление: 2026-03-31
 
 ---
 
@@ -11,7 +11,7 @@
 | Класс | Способ | Где используется |
 |---|---|---|
 | `StorageService` | Глобальная переменная `final storageService = StorageService()` | Инициализация в `main()`, используется на экранах |
-| `AppSettings` | `AppSettings._() + static final instance` | `SoundService`, `SettingsScreen` |
+| `AppSettings` | `AppSettings._() + static final instance` | `SoundService`, `SettingsScreen`, `AiGenerationService`. Persistent via `SharedPreferences`. |
 | `SoundService` | `SoundService._() + static final instance` | Все виджеты/экраны при нажатии кнопок |
 
 **Паттерн нового синглтона:**
@@ -118,6 +118,7 @@ SoundService.instance.playClick();
 - При **первом запуске** копируются в `Documents/` устройства
 - Далее читаются/записываются из локальной копии
 - На **Web** — всегда из ассетов (read-only)
+- **AppSettings** — используют `SharedPreferences` для хранения звука, настройки уникальных карт и стилей. Инициализируются в `main.dart` через `await AppSettings.instance.init()`.
 
 ### Файлы данных
 | Файл | Содержимое |
@@ -203,15 +204,26 @@ File file = File(path);
 Image.file(file)
 ```
 
-### Паттерн fallback URL + retry (_fetchWithRetry)
+### Паттерн ручной сборки Multipart-body (Manual Construction)
+Для корректной обработки русских символов (`utf8`) и предотвращения автоматического добавления n8n полей в `binary` (из-за заголовков `content-transfer-encoding`), используется ручная сборка `Uint8List` тела запроса.
+
+**Правила сборки:**
+- **Boundary**: `----SpyGame` + таймстамп.
+- **Текстовые поля**: ТОЛЬКО `content-disposition`, БЕЗ `content-type` → n8n кладёт в `body`.
+- **Массивы (roles)**: Используется **bracket notation** (`roles[0]`, `roles[1]`) — n8n собирает их в чистый массив.
+- **Фото**: `content-disposition` + `filename` + `content-type: image/jpeg` → n8n кладёт в `binary`.
+- **Encoding**: Значения кодируются через `utf8.encode()`.
+
+```dart
+// Пример части текстового поля
+buf.addAll(utf8.encode('--$boundary\r\n'));
+buf.addAll(utf8.encode('content-disposition: form-data; name="location"\r\n\r\n'));
+buf.addAll(utf8.encode(locationText));
+buf.addAll(utf8.encode('\r\n'));
 ```
-Попытка 1 → основной URL, до 3 ретраев (timeout 20s каждый)
-     ↓ все упали
-Попытка 2 → fallback URL, до 3 ретраев (timeout 20s каждый)
-     ↓ все упали
-null → UI показывает дефолтный ассет
-```
-`_fetchWithRetry(url, headers, body, {retries: 3})` — внутренний приватный метод, оба URL используют его.
+
+### Паттерн fallback URL + retry
+Метод `_send(url)` вызывает ручную сборку body и делает `http.post` с заголовком `multipart/form-data; boundary=$boundary`. Основной URL пробуется первым, при ошибке/таймауте — fallback.
 
 ### Паттерн параллельного prefetch (prefetchAllLocations)
 ```dart
@@ -257,3 +269,34 @@ Opacity(opacity: 0.5, child: ...)
 ```
 
 > **Правило:** Никогда не хардкодь числа прозрачности, отступов или размеров, влияющих на визуальный стиль, прямо в виджетах. Добавляй в `VisualConfig`.
+
+---
+
+## 13. Работа с Фото и Аватарами
+
+### Захват фото (image_picker)
+Используем `image_picker` для кроссплатформенности. Фото хранится как `Uint8List`.
+```dart
+final XFile? photo = await _picker.pickImage(source: ImageSource.camera);
+if (photo != null) {
+  final bytes = await photo.readAsBytes();
+  player.photoBytes = bytes;
+}
+```
+
+### Отображение аватарок (CircleAvatar)
+```dart
+CircleAvatar(
+  backgroundImage: player.photoBytes != null ? MemoryImage(player.photoBytes!) : null,
+  child: player.photoBytes == null ? Icon(Icons.person) : null,
+)
+```
+
+### Кэширование финальных карточек в сессии
+```dart
+// session.roundFinalCards — Map<int, Map<String, Uint8List>>
+// int = номер раунда, String = "win" или "loss"
+final cards = session.roundFinalCards[round];
+final cardBytes = cards?[isSpyWin ? 'win' : 'loss'];
+```
+Очистка памяти в конце сессии: `session.clearPhotosAndFinalCards()`.

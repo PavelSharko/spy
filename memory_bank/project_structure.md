@@ -1,6 +1,6 @@
 # 📁 Структура проекта
 
-> Последнее обновление: 2026-03-10
+> Последнее обновление: 2026-03-31
 
 ---
 
@@ -42,6 +42,7 @@ spy/
 │   │   ├── game_sounds.dart       # Пути к аудиофайлам
 │   │   └── sound_service.dart     # Singleton для проигрывания звуков
 │   └── widgets/                   # Переиспользуемые виджеты
+│       ├── camera_overlay.dart     # Оверлей захвата фото с овальной рамкой
 │       ├── exit_game_button.dart   # Кнопка выхода с подтверждением
 │       ├── game_card.dart          # Анимированная карточка (flip-эффект)
 │       ├── menu_button.dart        # Кнопка меню (primary / outlined)
@@ -94,3 +95,5 @@ spy/
 | `audioplayers` ^6.5.1 | Звуковые эффекты |
 | `path_provider` ^2.1.2 | Путь к документам для JSON-хранилища |
 | `cupertino_icons` ^1.0.8 | iOS-стиль иконок |
+| `image_picker` ^1.2.1 | Захват фото игроков (Web/Mobile) |
+| `http` ^1.6.0 | Запросы к AI Webhook (n8n) |

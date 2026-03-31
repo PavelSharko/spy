@@ -269,7 +269,7 @@ class _VotingScreenState extends State<VotingScreen> {
                         },
                         child: AnimatedContainer(
                           duration: const Duration(milliseconds: 200),
-                          padding: const EdgeInsets.symmetric(vertical: 20),
+                          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
                           decoration: BoxDecoration(
                             color: isSelected ? AppStyles.warning : AppStyles.cardBg,
                             borderRadius: BorderRadius.circular(15),
@@ -278,15 +278,37 @@ class _VotingScreenState extends State<VotingScreen> {
                               width: 2,
                             ),
                           ),
-                          child: Center(
-                            child: Text(
-                              widget.session.players[index].name,
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: isSelected ? Colors.white : AppStyles.darkAccent,
+                          child: Row(
+                            children: [
+                              // Player avatar
+                              CircleAvatar(
+                                radius: 20,
+                                backgroundColor: isSelected 
+                                    ? AppStyles.darkAccent.withValues(alpha: 0.3) 
+                                    : AppStyles.accent.withValues(alpha: 0.15),
+                                backgroundImage: widget.session.players[index].photoBytes != null
+                                    ? MemoryImage(widget.session.players[index].photoBytes!)
+                                    : null,
+                                child: widget.session.players[index].photoBytes == null
+                                    ? Icon(
+                                        Icons.person,
+                                        color: isSelected ? Colors.white70 : AppStyles.textSecondary,
+                                        size: 22,
+                                      )
+                                    : null,
                               ),
-                            ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: Text(
+                                  widget.session.players[index].name,
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: isSelected ? Colors.white : AppStyles.darkAccent,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ),

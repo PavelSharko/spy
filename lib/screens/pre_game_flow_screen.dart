@@ -1,19 +1,22 @@
 import 'dart:math';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import '../data/names_data.dart';
 import '../models/game_session.dart';
 import '../models/player.dart';
 import '../utils/app_strings.dart';
 import '../utils/app_styles.dart';
+import '../utils/app_settings.dart';
 import '../utils/sound_service.dart';
 import '../widgets/animated_pattern_background.dart';
 import '../widgets/game_card.dart';
 import '../widgets/menu_button.dart';
 import '../widgets/exit_game_button.dart';
+import '../widgets/camera_overlay.dart';
 import '../services/ai_generation_service.dart';
 import 'game_round_screen.dart';
 
-enum FlowStep { nameSelection, cardReveal, roundReady }
+enum FlowStep { nameSelection, photoCapture, cardReveal, roundReady }
 
 class PreGameFlowScreen extends StatefulWidget {
   final GameSession session;
@@ -56,6 +59,11 @@ class _PreGameFlowScreenState extends State<PreGameFlowScreen> {
   /// Kicks off a parallel fetch for each uncached location.
   /// Each completes independently and calls setState directly — no callbacks.
   void _prefetchAllLocations() {
+    if (!AppSettings.instance.uniqueCardsEnabled) {
+      if (mounted) setState(() => _isFirstImageLoading = false);
+      return;
+    }
+    
     final locations = widget.session.secretLocationsQueue;
     final cache = widget.session.locationImages;
 
@@ -76,7 +84,9 @@ class _PreGameFlowScreenState extends State<PreGameFlowScreen> {
 
   /// Fetches a single location image and updates state when done.
   Future<void> _fetchAndCache(String location) async {
-    final bytes = await AiGenerationService.fetchLocationImage(location);
+    final roles = widget.session.getSelectedRolesForLocation(location, playerCount: widget.playerCount);
+    debugPrint('[PreGameFlow] Fetching $location with roles: $roles');
+    final bytes = await AiGenerationService.fetchLocationImage(location, roles: roles);
     if (bytes != null && mounted) {
       setState(() {
         widget.session.locationImages[location] = bytes;
@@ -136,6 +146,19 @@ class _PreGameFlowScreenState extends State<PreGameFlowScreen> {
 
     widget.session.players.add(Player(name: finalName));
 
+    // If faces enabled, go to photo capture for this player
+    if (AppSettings.instance.playerFacesEnabled) {
+      setState(() {
+        _currentStep = FlowStep.photoCapture;
+      });
+      return;
+    }
+
+    _advanceAfterPhoto();
+  }
+
+  /// Called after photo is taken (or skipped) to move to the next player or to card reveal.
+  void _advanceAfterPhoto() {
     if (widget.session.players.length == widget.playerCount) {
       // All names collected! Assign roles and start revealing
       widget.session.assignRoles();
@@ -150,9 +173,17 @@ class _PreGameFlowScreenState extends State<PreGameFlowScreen> {
         _nameController.clear();
         _selectedRandomName = null;
         _generateRandomNames();
+        _currentStep = FlowStep.nameSelection;
       });
     }
   }
+
+  void _onPhotoCaptured(Uint8List bytes) {
+    // Save to the last added player
+    widget.session.players.last.photoBytes = bytes;
+    _advanceAfterPhoto();
+  }
+
 
   void _onCardTappedToNext() {
     if (_currentPlayerIndex < widget.playerCount - 1) {
@@ -169,11 +200,38 @@ class _PreGameFlowScreenState extends State<PreGameFlowScreen> {
   }
 
   void _onStartRound() {
+    _launchEndGameCardGeneration();
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
         builder: (context) => GameRoundScreen(session: widget.session),
       ),
+    );
+  }
+
+  /// Launches two delayed background requests for finish-round cards
+  /// (spy_is_win: true after 15s, spy_is_win: false after 25s).
+  void _launchEndGameCardGeneration() {
+    final session = widget.session;
+    final location = session.currentSecretLocation;
+    final roles = session.getSelectedRolesForLocation(location, playerCount: widget.playerCount);
+
+    // Separate spy photo from civilian photos
+    final Uint8List? spyPhoto = session.players[session.currentSpyIndex].photoBytes;
+    final List<Uint8List> civilianPhotos = [];
+    for (int i = 0; i < session.players.length; i++) {
+      if (i != session.currentSpyIndex && session.players[i].photoBytes != null) {
+        civilianPhotos.add(session.players[i].photoBytes!);
+      }
+    }
+
+    AiGenerationService.fetchEndGameCards(
+      location: location,
+      roles: roles,
+      spyPhoto: spyPhoto,
+      civilianPhotos: civilianPhotos,
+      roundNumber: session.currentRound,
+      targetMap: session.roundFinalCards,
     );
   }
 
@@ -203,11 +261,22 @@ class _PreGameFlowScreenState extends State<PreGameFlowScreen> {
     switch (_currentStep) {
       case FlowStep.nameSelection:
         return _buildNameSelection();
+      case FlowStep.photoCapture:
+        return _buildPhotoCapture();
       case FlowStep.cardReveal:
         return _buildCardReveal();
       case FlowStep.roundReady:
         return _buildRoundReady();
     }
+  }
+
+  Widget _buildPhotoCapture() {
+    final playerName = widget.session.players.last.name;
+    return CameraOverlay(
+      key: ValueKey('photo_$_currentPlayerIndex'),
+      playerName: playerName,
+      onPhotoCaptured: _onPhotoCaptured,
+    );
   }
 
   Widget _buildNameSelection() {
@@ -364,31 +433,36 @@ class _PreGameFlowScreenState extends State<PreGameFlowScreen> {
   Widget _buildCardReveal() {
     bool isSpy = _currentPlayerIndex == widget.session.currentSpyIndex;
     
-    return Column(
+    return SingleChildScrollView(
       key: ValueKey('cardReveal_$_currentPlayerIndex'),
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          widget.session.players[_currentPlayerIndex].name,
-          style: const TextStyle(
-            fontSize: 28,
-            fontWeight: FontWeight.w900,
-            color: AppStyles.darkAccent,
-            letterSpacing: 2,
-          ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 40.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              widget.session.players[_currentPlayerIndex].name,
+              style: const TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.w900,
+                color: AppStyles.darkAccent,
+                letterSpacing: 2,
+              ),
+            ),
+            const SizedBox(height: 40),
+            GameCard(
+              isSpy: isSpy,
+              secretLocation: widget.session.currentSecretLocation,
+              role: isSpy ? null : widget.session.players[_currentPlayerIndex].role,
+              // Spy always sees the default card back — never the location image
+              bgImageBytes: isSpy
+                  ? null
+                  : widget.session.locationImages[widget.session.currentSecretLocation],
+              onCardTapped: _onCardTappedToNext,
+            ),
+          ],
         ),
-        const SizedBox(height: 40),
-        GameCard(
-          isSpy: isSpy,
-          secretLocation: widget.session.currentSecretLocation,
-          role: isSpy ? null : widget.session.players[_currentPlayerIndex].role,
-          // Spy always sees the default card back — never the location image
-          bgImageBytes: isSpy
-              ? null
-              : widget.session.locationImages[widget.session.currentSecretLocation],
-          onCardTapped: _onCardTappedToNext,
-        ),
-      ],
+      ),
     );
   }
 
