@@ -326,9 +326,9 @@ def test_2_3(url):
         "need_add_faces": False,
         "spy_is_win": True,
     }
-    return send_json(url, payload, "2_3")
+    return send_multipart_manual(url, payload, None, [], "2_3")
 
-register("2_3", "gen_card_for_finish_round | spy_win | faces OFF | без фото (JSON)", test_2_3)
+register("2_3", "gen_card_for_finish_round | spy_win | faces OFF | без фото (multipart)", test_2_3)
 
 
 # ━━━ 2-4: gen_card_for_finish_round | spy_is_win=false | faces=false | БЕЗ фото
@@ -345,9 +345,9 @@ def test_2_4(url):
         "need_add_faces": False,
         "spy_is_win": False,
     }
-    return send_json(url, payload, "2_4")
+    return send_multipart_manual(url, payload, None, [], "2_4")
 
-register("2_4", "gen_card_for_finish_round | spy_loss | faces OFF | без фото (JSON)", test_2_4)
+register("2_4", "gen_card_for_finish_round | spy_loss | faces OFF | без фото (multipart)", test_2_4)
 
 
 # ─── CLI ─────────────────────────────────────────────────────────────────────

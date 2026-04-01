@@ -105,7 +105,7 @@ class AiGenerationService {
   ///   → n8n sees: body.data (JSON string) + binary.data0, binary.data1, ...
   ///
   /// When [need_add_faces] is FALSE or no photos:
-  ///   → application/json: same format as gen_card_for_location + spy_is_win
+  ///   → multipart/form-data: json payload in "body" field, NO binary files appended.
   ///
   /// Timing:
   ///   - After [delayWin]  → spy_is_win: true  → stored as "win"
@@ -128,8 +128,8 @@ class AiGenerationService {
 
     targetMap.putIfAbsent(roundNumber, () => {});
 
-    final bool hasPhotos = settings.playerFacesEnabled && (civilianPhotos.isNotEmpty || spyPhoto != null);
-
+    // We exclusively use multipart to consistently send roles[0], roles[1] array structure,
+    // regardless of whether there are actual photos.
     // Build JSON payload — identical fields to gen_card_for_location + extras
     Map<String, dynamic> buildPayload(bool spyIsWin) => {
       'location': location,
@@ -144,13 +144,7 @@ class AiGenerationService {
     Future.delayed(delayWin, () async {
       debugPrint('[AiGenerationService] Sending finish-round card (spy_is_win=true) for round $roundNumber');
       final payload = buildPayload(true);
-      final Uint8List? result;
-
-      if (hasPhotos) {
-        result = await _postMultipartWithFallback(payload, spyPhoto, civilianPhotos);
-      } else {
-        result = await _postJsonWithFallback(jsonEncode(payload));
-      }
+      final Uint8List? result = await _postMultipartWithFallback(payload, spyPhoto, civilianPhotos);
 
       if (result != null) {
         targetMap.putIfAbsent(roundNumber, () => {});
@@ -163,13 +157,7 @@ class AiGenerationService {
     Future.delayed(delayLoss, () async {
       debugPrint('[AiGenerationService] Sending finish-round card (spy_is_win=false) for round $roundNumber');
       final payload = buildPayload(false);
-      final Uint8List? result;
-
-      if (hasPhotos) {
-        result = await _postMultipartWithFallback(payload, spyPhoto, civilianPhotos);
-      } else {
-        result = await _postJsonWithFallback(jsonEncode(payload));
-      }
+      final Uint8List? result = await _postMultipartWithFallback(payload, spyPhoto, civilianPhotos);
 
       if (result != null) {
         targetMap.putIfAbsent(roundNumber, () => {});
