@@ -106,22 +106,22 @@ class _NumberSelectorState extends State<NumberSelector> {
                 IconButton(
                   onPressed: _currentValue > widget.minValue ? _decrement : null,
                   icon: const Icon(Icons.remove_circle_outline, size: 36), // Increased size
-                  color: Colors.white,
-                  disabledColor: Colors.white38,
+                  color: AppStyles.settings_game_text_colors,
+                  disabledColor: AppStyles.settings_game_text_colors.withValues(alpha: 0.38),
                 ),
                 Text(
                   '$_currentValue',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 36, // Increased size
                     fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                    color: AppStyles.settings_game_text_colors,
                   ),
                 ),
                 IconButton(
                   onPressed: _currentValue < widget.maxValue ? _increment : null,
                   icon: const Icon(Icons.add_circle_outline, size: 36), // Increased size
-                  color: Colors.white,
-                  disabledColor: Colors.white38,
+                  color: AppStyles.settings_game_text_colors,
+                  disabledColor: AppStyles.settings_game_text_colors.withValues(alpha: 0.38),
                 ),
               ],
             ),

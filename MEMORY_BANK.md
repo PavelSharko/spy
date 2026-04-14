@@ -28,6 +28,7 @@
 | [business_logic.md](memory_bank/business_logic.md) | Бизнес-логика: раунды, роли, подсказки, голосование, очки |
 | [agent_instructions.md](memory_bank/agent_instructions.md) | Протокол для AI-агентов: как читать, менять и обновлять память |
 | [manager_protocol.md](memory_bank/manager_protocol.md) | Протокол для main_agent: оркестрация под-агентов, генерация промптов, декомпозиция |
+| [app_environment.dart](lib/config/app_environment.dart) | Тестовые и Prod флаги окружения (например, включение секретных функций) |
 | [visual_config.dart](lib/utils/visual_config.dart) | Визуальные константы: прозрачности, оверлеи — меняй здесь для быстрой кастомизации |
 
 ---

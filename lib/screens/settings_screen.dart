@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../utils/app_settings.dart';
 import '../utils/app_styles.dart';
-import '../utils/dev_config.dart';
+import '../config/app_environment.dart';
 import '../utils/sound_service.dart';
 import '../widgets/menu_button.dart';
 
@@ -237,20 +237,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
                       SizedBox(height: 16),
 
-                      // Developer features toggle card
-                      if (DevConfig.developerFeaturesEnabled) ...[
-                        _buildSettingsCard(
-                          icon: Icons.bug_report_rounded,
-                          iconColor: AppStyles.textSecondary,
-                          title: 'Секретные функции',
-                          subtitle: 'Включены (только чтение)',
-                          trailing: _buildToggle(
-                            value: true,
-                            onChanged: null,
-                          ),
-                        ),
-                        SizedBox(height: 16),
-                      ],
+
 
                       // Unique Cards Toggle
                       _buildSettingsCard(

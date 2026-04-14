@@ -33,7 +33,7 @@ class SettingsButton extends StatelessWidget {
             side: BorderSide(color: Colors.transparent, width: 3), // Pattern outline
           ),
           backgroundColor: AppStyles.accent, // Warm brown
-          foregroundColor: Colors.white, // Text color
+          foregroundColor: AppStyles.settings_game_text_colors, // Text color
           elevation: 6,
         ),
         onPressed: () {
@@ -57,7 +57,7 @@ class SettingsButton extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                   fontSize: 16,
-                  color: Colors.white.withValues(alpha: 0.8),
+                  color: AppStyles.settings_game_text_colors.withValues(alpha: 0.8),
                   fontStyle: FontStyle.italic,
                 ),
               ),

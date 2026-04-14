@@ -387,7 +387,7 @@ class _LocationSelectionScreenState extends State<LocationSelectionScreen>
         : AppStyles.cardBg.withValues(alpha: isDisabled ? 0.5 : 1.0);
     final Color textColor = isSelected
         ? Colors.white
-        : AppStyles.darkAccent.withValues(alpha: isDisabled ? 0.4 : 1.0);
+        : AppStyles.location_menu_button_text_color.withValues(alpha: isDisabled ? 0.4 : 1.0);
 
     final border = Border.all(
       color: isSelected ? Colors.transparent : Colors.transparent,

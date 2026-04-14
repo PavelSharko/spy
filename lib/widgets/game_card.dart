@@ -6,7 +6,6 @@ import '../utils/app_images.dart';
 import '../utils/app_strings.dart';
 import '../utils/app_styles.dart';
 import '../utils/sound_service.dart';
-import '../utils/visual_config.dart';
 
 class GameCard extends StatefulWidget {
   final bool isSpy;
@@ -28,9 +27,11 @@ class GameCard extends StatefulWidget {
   State<GameCard> createState() => _GameCardState();
 }
 
-class _GameCardState extends State<GameCard> with SingleTickerProviderStateMixin {
+class _GameCardState extends State<GameCard> with TickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
+  late AnimationController _iconBlinkController;
+  late Animation<double> _iconBlinkAnimation;
   bool _isFront = false;
 
   @override
@@ -48,10 +49,18 @@ class _GameCardState extends State<GameCard> with SingleTickerProviderStateMixin
         curve: Curves.easeInOut,
       ),
     );
+
+    _iconBlinkController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 1),
+    )..repeat(reverse: true);
+    
+    _iconBlinkAnimation = Tween<double>(begin: 0.1, end: 1.0).animate(_iconBlinkController);
   }
 
   @override
   void dispose() {
+    _iconBlinkController.dispose();
     _controller.dispose();
     super.dispose();
   }
@@ -113,62 +122,71 @@ class _GameCardState extends State<GameCard> with SingleTickerProviderStateMixin
       child: Container(
         width: double.infinity,
         margin: EdgeInsets.symmetric(horizontal: 20),
-      decoration: BoxDecoration(
-        color: AppStyles.darkAccent,
-        borderRadius: BorderRadius.circular(20),
-        image: const DecorationImage(
-          image: AssetImage(AppImages.bgCardBack),
-          fit: BoxFit.cover,
+        decoration: BoxDecoration(
+          color: AppStyles.darkAccent,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: AppStyles.darkAccent.withValues(alpha: 0.3),
+              blurRadius: 10,
+              offset: const Offset(0, 5),
+            ),
+          ],
+          border: Border.all(color: AppStyles.cardBg.withValues(alpha: 0.5), width: 3),
         ),
-        boxShadow: [
-          BoxShadow(
-            color: AppStyles.darkAccent.withValues(alpha: 0.3),
-            blurRadius: 10,
-            offset: const Offset(0, 5),
-          ),
-        ],
-        border: Border.all(color: AppStyles.cardBg.withValues(alpha: 0.5), width: 3),
-      ),
-      child: Center(
-        child: Padding(
-          padding: EdgeInsets.all(20.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(17), // 20 - 3 (border width)
+          child: Stack(
+            fit: StackFit.expand,
             children: [
-              Icon(Icons.touch_app, size: 80, color: AppStyles.cardBg.withValues(alpha: 0.8)),
-              SizedBox(height: 20),
-              Stack(
-                children: [
-                  Text(
-                    AppStrings.tapCardToView,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                      height: 1.5,
-                      foreground: Paint()
-                        ..style = PaintingStyle.stroke
-                        ..strokeWidth = 4
-                        ..color = AppStyles.darkAccent,
-                    ),
+              // Background Image with opacity
+              Opacity(
+                opacity: AppStyles.cardBackBgImageOpacity,
+                child: Image.asset(
+                  AppImages.bgCardBack,
+                  fit: BoxFit.cover,
+                ),
+              ),
+              // White overlay
+              if (AppStyles.cardBackWhiteOverlayOpacity > 0)
+                Positioned.fill(
+                  child: ColoredBox(
+                    color: Colors.white.withValues(alpha: AppStyles.cardBackWhiteOverlayOpacity),
                   ),
-                  Text(
-                    AppStrings.tapCardToView,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: AppStyles.cardBg,
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                      height: 1.5,
-                    ),
+                ),
+              // Content
+              // Content
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Padding(
+                  padding: EdgeInsets.only(bottom: 40.0, left: 20, right: 20),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        AppStrings.tapCardToView,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: AppStyles.cardBg,
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          height: 1.5,
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      FadeTransition(
+                        opacity: _iconBlinkAnimation,
+                        child: Icon(Icons.touch_app, size: 60, color: AppStyles.cardBg),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
             ],
           ),
         ),
       ),
-    ));
+    );
   }
 
   Widget _buildFrontSide() {
@@ -197,21 +215,17 @@ class _GameCardState extends State<GameCard> with SingleTickerProviderStateMixin
           children: [
             // Background Image
             Opacity(
-              opacity: VisualConfig.cardBgImageOpacity,
-              child: widget.bgImageBytes != null
-                  ? Image.memory(
-                      widget.bgImageBytes!,
-                      fit: BoxFit.cover,
-                    )
-                  : Image.asset(
-                      'assets/images/рубашка_показа_роли.jpeg',
-                      fit: BoxFit.cover,
-                    ),
+              opacity: AppStyles.cardBgImageOpacity,
+              child: isSpy
+                  ? Image.asset(AppImages.revealBgSpy, fit: BoxFit.cover)
+                  : (widget.bgImageBytes != null
+                      ? Image.memory(widget.bgImageBytes!, fit: BoxFit.cover)
+                      : Image.asset(AppImages.revealBgNotSpy, fit: BoxFit.cover)),
             ),
             // White overlay to soften the background image
             Positioned.fill(
               child: ColoredBox(
-                color: Colors.white.withValues(alpha: VisualConfig.cardWhiteOverlayOpacity),
+                color: Colors.white.withValues(alpha: AppStyles.cardWhiteOverlayOpacity),
               ),
             ),
             // Content
@@ -221,9 +235,12 @@ class _GameCardState extends State<GameCard> with SingleTickerProviderStateMixin
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Expanded(
-                    child: Center(
-                      child: isSpy ? _buildSpyContent() : _buildCivilianContent(),
-                    ),
+                    child: isSpy
+                        ? Center(child: _buildSpyContent())
+                        : Align(
+                            alignment: Alignment.bottomCenter,
+                            child: _buildCivilianContent(),
+                          ),
                   ),
                   SizedBox(height: 10),
                   // Bottom hint text with icon
@@ -257,8 +274,6 @@ class _GameCardState extends State<GameCard> with SingleTickerProviderStateMixin
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(Icons.search, size: 60, color: Colors.white),
-        SizedBox(height: 20),
         Stack(
           alignment: Alignment.center,
           children: [
@@ -293,7 +308,7 @@ class _GameCardState extends State<GameCard> with SingleTickerProviderStateMixin
     return Container(
       padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.15),
+        color: Colors.white.withValues(alpha: 0.75),
         borderRadius: BorderRadius.circular(15),
         border: Border.all(color: Colors.white.withValues(alpha: 0.3), width: 1),
       ),
@@ -302,7 +317,7 @@ class _GameCardState extends State<GameCard> with SingleTickerProviderStateMixin
         children: [
           Text(
             'ВЫ НАХОДИТЕСЬ:',
-            style: TextStyle(color: Colors.white70, fontSize: 16, fontWeight: FontWeight.bold),
+            style: TextStyle(color: AppStyles.cardBg, fontSize: 16, fontWeight: FontWeight.bold),
           ),
           SizedBox(height: 8),
           Text(
@@ -310,7 +325,7 @@ class _GameCardState extends State<GameCard> with SingleTickerProviderStateMixin
             textAlign: TextAlign.center,
             style: GoogleFonts.russoOne(
               fontSize: 28,
-              color: Colors.white,
+              color: AppStyles.cardBg,
             ),
           ),
           if (widget.role != null) ...[
@@ -320,15 +335,15 @@ class _GameCardState extends State<GameCard> with SingleTickerProviderStateMixin
             ),
             Text(
               'ВАША РОЛЬ:',
-              style: TextStyle(color: Colors.white70, fontSize: 16, fontWeight: FontWeight.bold),
+              style: TextStyle(color: AppStyles.cardBg, fontSize: 16, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 8),
             Text(
               widget.role!,
               textAlign: TextAlign.center,
               style: GoogleFonts.russoOne(
-                fontSize: 24,
-                color: AppStyles.warning,
+                fontSize: 32,
+                color: AppStyles.cardBg,
               ),
             ),
           ],

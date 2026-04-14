@@ -5,14 +5,14 @@ class AppImages {
 
   static const String _basePath = 'assets/images';
 
-  /// Default background for all screens.
-  static const String bgMain = '$_basePath/bg_main.png';
-
-  /// Background for the rules screen.
-  static const String bgRules = '$_basePath/bg_rules.png';
-
   /// Background for the back side of game cards.
-  static const String bgCardBack = '$_basePath/bg_card_back.png';
+  static const String bgCardBack = '$_basePath/bg_card_back.jpeg';
+
+  /// Background for the front side of game cards (Spy).
+  static const String revealBgSpy = '$_basePath/card_reveal_bg_spy.jpeg';
+
+  /// Background for the front side of game cards (Civilians fallback).
+  static const String revealBgNotSpy = '$_basePath/card_reveal_bg_not_spy.jpeg';
 
   /// App icon / logo shown on the main menu.
   static const String appIcon = '$_basePath/app_icon.png';

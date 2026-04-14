@@ -31,7 +31,7 @@ class PreGameFlowScreen extends StatefulWidget {
   State<PreGameFlowScreen> createState() => _PreGameFlowScreenState();
 }
 
-class _PreGameFlowScreenState extends State<PreGameFlowScreen> {
+class _PreGameFlowScreenState extends State<PreGameFlowScreen> with SingleTickerProviderStateMixin {
   FlowStep _currentStep = FlowStep.nameSelection;
   int _currentPlayerIndex = 0;
   bool _isFirstImageLoading = true; // hides once the first prefetched image arrives
@@ -41,9 +41,19 @@ class _PreGameFlowScreenState extends State<PreGameFlowScreen> {
   List<String> _randomNames = [];
   String? _selectedRandomName;
 
+  late AnimationController _clockBlinkController;
+  late Animation<double> _clockBlinkAnimation;
+
   @override
   void initState() {
     super.initState();
+    
+    _clockBlinkController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 1),
+    )..repeat(reverse: true);
+    _clockBlinkAnimation = Tween<double>(begin: 0.1, end: 1.0).animate(_clockBlinkController);
+
     if (widget.session.currentRound == 1) {
       widget.session.currentSpyIndex = Random().nextInt(widget.playerCount);
       _generateRandomNames();
@@ -98,6 +108,7 @@ class _PreGameFlowScreenState extends State<PreGameFlowScreen> {
 
   @override
   void dispose() {
+    _clockBlinkController.dispose();
     _nameController.dispose();
     super.dispose();
   }
@@ -145,8 +156,8 @@ class _PreGameFlowScreenState extends State<PreGameFlowScreen> {
 
     widget.session.players.add(Player(name: finalName));
 
-    // If faces enabled, go to photo capture for this player
-    if (AppSettings.instance.playerFacesEnabled) {
+    // If unique cards AND faces are enabled, go to photo capture for this player
+    if (AppSettings.instance.uniqueCardsEnabled && AppSettings.instance.playerFacesEnabled) {
       setState(() {
         _currentStep = FlowStep.photoCapture;
       });
@@ -294,7 +305,7 @@ class _PreGameFlowScreenState extends State<PreGameFlowScreen> {
                 style: TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
-                  color: AppStyles.darkAccent,
+                  color: AppStyles.primaryAccent,
                   letterSpacing: 1.2,
                 ),
               ),
@@ -319,6 +330,9 @@ class _PreGameFlowScreenState extends State<PreGameFlowScreen> {
                   maxLength: 20,
                   decoration: InputDecoration(
                     hintText: 'Введите имя...',
+                    hintStyle: TextStyle(
+                      color: AppStyles.textSecondary,
+                    ),
                     counterText: "",
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15),
@@ -326,9 +340,10 @@ class _PreGameFlowScreenState extends State<PreGameFlowScreen> {
                     ),
                     contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                   ),
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w600,
+                    color: AppStyles.primaryAccent,
                   ),
                 ),
               ),
@@ -349,7 +364,7 @@ class _PreGameFlowScreenState extends State<PreGameFlowScreen> {
                         color: isSelected ? AppStyles.warning : AppStyles.cardBg,
                         borderRadius: BorderRadius.circular(15),
                         border: Border.all(
-                          color: isSelected ? AppStyles.darkAccent : Colors.transparent,
+                          color: isSelected ? AppStyles.primaryAccent : Colors.transparent,
                           width: 2,
                         ),
                         boxShadow: [
@@ -367,7 +382,7 @@ class _PreGameFlowScreenState extends State<PreGameFlowScreen> {
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
-                            color: isSelected ? Colors.white : AppStyles.darkAccent,
+                            color: isSelected ? AppStyles.bgColor : AppStyles.location_menu_button_text_color,
                           ),
                         ),
                       ),
@@ -444,7 +459,7 @@ class _PreGameFlowScreenState extends State<PreGameFlowScreen> {
               style: TextStyle(
                 fontSize: 28,
                 fontWeight: FontWeight.w900,
-                color: AppStyles.darkAccent,
+                color: AppStyles.accent,
                 letterSpacing: 2,
               ),
             ),
@@ -466,30 +481,52 @@ class _PreGameFlowScreenState extends State<PreGameFlowScreen> {
   }
 
   Widget _buildRoundReady() {
-    return Column(
-      key: const ValueKey('roundReady'),
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Icon(Icons.timer, size: 100, color: AppStyles.accent),
-        const SizedBox(height: 20),
-        Text(
-          '${widget.session.gameTime}:00',
-          style: TextStyle(
-            fontSize: 60,
-            fontWeight: FontWeight.bold,
-            color: AppStyles.darkAccent,
+    return Container(
+      width: double.infinity,
+      color: AppStyles.bgColor,
+      padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.1),
+      child: Column(
+        key: const ValueKey('roundReady'),
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          FadeTransition(
+            opacity: _clockBlinkAnimation,
+            child: Icon(Icons.timer, size: 100, color: AppStyles.accent),
           ),
-        ),
-        const SizedBox(height: 50),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 40),
-          child: MenuButton(
-            text: AppStrings.startRound,
-            onPressed: _onStartRound,
-            isPrimary: true,
+          const SizedBox(height: 20),
+          Text(
+            '${widget.session.gameTime}:00',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 60,
+              fontWeight: FontWeight.bold,
+              color: AppStyles.accent,
+            ),
           ),
-        ),
-      ],
+          const SizedBox(height: 50),
+          SizedBox(
+            height: 90,
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppStyles.accent,
+                foregroundColor: AppStyles.bgColor,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                elevation: 4,
+              ),
+              onPressed: _onStartRound,
+              child: Text(
+                AppStrings.startRound.toUpperCase(),
+                style: const TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: 2.0,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

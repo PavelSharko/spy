@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import '../utils/app_strings.dart';
 import '../utils/app_styles.dart';
 import '../utils/app_settings.dart';
-import '../utils/dev_config.dart';
+import '../config/app_environment.dart';
 import '../utils/game_rules.dart';
 import '../utils/game_sounds.dart';
 import '../utils/sound_service.dart';
@@ -409,7 +409,7 @@ class _GameRoundScreenState extends State<GameRoundScreen> with SingleTickerProv
                           ),
                         ],
                       ),
-                      if (DevConfig.developerFeaturesEnabled) ...[
+                      if (AppEnvironment.showDeveloperFeatures) ...[
                         const SizedBox(width: 20),
                         ElevatedButton(
                           onPressed: () {
@@ -693,30 +693,31 @@ class _GameRoundScreenState extends State<GameRoundScreen> with SingleTickerProv
 
         const SizedBox(height: 10),
 
-        // 7. Stop Round Button
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20).copyWith(bottom: 20),
-          child: ElevatedButton(
-            onPressed: _showStopRoundDialog,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppStyles.danger,
-              foregroundColor: Colors.white,
-              side: BorderSide(color: Colors.red.shade900, width: 3),
-              padding: const EdgeInsets.symmetric(vertical: 15),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15),
+        // 7. Stop Round Button (Only in developer mode)
+        if (AppEnvironment.showDeveloperFeatures)
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20).copyWith(bottom: 20),
+            child: ElevatedButton(
+              onPressed: _showStopRoundDialog,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppStyles.danger,
+                foregroundColor: Colors.white,
+                side: BorderSide(color: Colors.red.shade900, width: 3),
+                padding: const EdgeInsets.symmetric(vertical: 15),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                elevation: 4,
               ),
-              elevation: 4,
-            ),
-            child: const Text(
-              AppStrings.stopRound,
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
+              child: const Text(
+                AppStrings.stopRound,
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ),
-        ),
       ],
     );
   }

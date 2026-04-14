@@ -9,6 +9,8 @@
 ```
 spy/
 ├── lib/
+│   ├── config/                    # Конфигурация и окружения
+│   │   └── app_environment.dart   # Настройки окружения (dev/prod)
 │   ├── main.dart                  # Точка входа, MaterialApp, тема, Provider
 │   ├── data/                      # Статические данные (локации, имена)
 │   │   ├── locations_data.dart    # 10 групп × 10 локаций + роли для каждой
@@ -42,8 +44,10 @@ spy/
 │   │   ├── game_sounds.dart       # Пути к аудиофайлам
 │   │   └── sound_service.dart     # Singleton для проигрывания звуков
 │   └── widgets/                   # Переиспользуемые виджеты
+│       ├── common/                 # Переиспользуемые базовые UI-компоненты
+│       │   ├── game_button.dart    # Унифицированная кнопка (primary/secondary)
+│       │   └── game_screen_title.dart # Стандартный заголовок экрана
 │       ├── camera_overlay.dart     # Оверлей захвата фото с овальной рамкой
-│       ├── exit_game_button.dart   # Кнопка выхода с подтверждением
 │       ├── game_card.dart          # Анимированная карточка (flip-эффект)
 │       ├── menu_button.dart        # Кнопка меню (primary / outlined)
 │       ├── number_selector.dart    # ±-селектор числа

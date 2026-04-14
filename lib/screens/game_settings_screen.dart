@@ -8,6 +8,8 @@ import '../models/game_session.dart';
 import 'location_selection_screen.dart';
 import 'pre_game_flow_screen.dart';
 import '../widgets/exit_game_button.dart';
+import '../widgets/common/game_button.dart';
+import '../widgets/common/game_screen_title.dart';
 
 class GameSettingsScreen extends StatefulWidget {
   const GameSettingsScreen({super.key});
@@ -208,15 +210,8 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
               child: Column(
                 children: [
                   const SizedBox(height: 10),
-                  Center(
-                    child: Text(
-                      AppStrings.gameSettingsTitle,
-                      style: TextStyle(
-                        color: AppStyles.darkAccent,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 22,
-                      ),
-                    ),
+                  const Center(
+                    child: GameScreenTitle(title: AppStrings.gameSettingsTitle),
                   ),
                   const SizedBox(height: 50),
 
@@ -285,37 +280,20 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                     padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
                     child: Row(
                       children: [
-                        SizedBox(
+                        GameButton(
+                          text: AppStrings.backAction,
+                          type: GameButtonType.secondary,
                           width: 120,
                           height: 50,
-                          child: OutlinedButton(
-                            onPressed: _onBackPressed,
-                            style: OutlinedButton.styleFrom(
-                              foregroundColor: AppStyles.darkAccent,
-                              side: BorderSide(color: AppStyles.accent, width: 2),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                            ),
-                            child: const Text(AppStrings.backAction, style: TextStyle(fontWeight: FontWeight.bold)),
-                          ),
+                          onPressed: _onBackPressed,
                         ),
                         const SizedBox(width: 16),
                         Expanded(
-                          child: SizedBox(
+                          child: GameButton(
+                            text: AppStrings.playAction,
+                            width: double.infinity,
                             height: 50,
-                            child: ElevatedButton(
-                              onPressed: _onPlayPressed,
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: AppStyles.accent,
-                                foregroundColor: AppStyles.cardBg,
-                                side: BorderSide(color: AppStyles.darkAccent, width: 2),
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                                elevation: 0,
-                              ),
-                              child: const Text(
-                                AppStrings.playAction,
-                                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                              ),
-                            ),
+                            onPressed: _onPlayPressed,
                           ),
                         ),
                       ],
