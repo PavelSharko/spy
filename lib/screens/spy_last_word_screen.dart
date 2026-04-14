@@ -4,7 +4,6 @@ import '../utils/app_strings.dart';
 import '../utils/app_styles.dart';
 import '../utils/game_rules.dart';
 import '../utils/sound_service.dart';
-import '../widgets/animated_pattern_background.dart';
 import 'round_score_screen.dart';
 import '../widgets/exit_game_button.dart';
 
@@ -46,37 +45,38 @@ class _SpyLastWordScreenState extends State<SpyLastWordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppStyles.bgColor,
       body: Stack(
         children: [
           Container(
             color: AppStyles.bgColor,
-            child: AnimatedPatternBackground(
+            child: Container(
               child: SafeArea(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const SizedBox(height: 20),
+                  SizedBox(height: 20),
 
               // Title
-              const Center(
+              Center(
                 child: Text(
                   AppStrings.spyLastWordTitle,
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
-                    color: AppStyles.darkAccent,
+                    color: AppStyles.accent,
                     letterSpacing: 2,
                   ),
                 ),
               ),
 
-              const SizedBox(height: 30),
+              SizedBox(height: 30),
 
               // Spy Name
               Center(
                 child: Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 20),
-                  padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                  margin: EdgeInsets.symmetric(horizontal: 20),
+                  padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
                   decoration: BoxDecoration(
                     color: AppStyles.danger,
                     borderRadius: BorderRadius.circular(15),
@@ -90,7 +90,7 @@ class _SpyLastWordScreenState extends State<SpyLastWordScreen> {
                   ),
                   child: Text(
                     widget.session.players[widget.session.currentSpyIndex].name,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 32,
                       fontWeight: FontWeight.w900,
                       color: Colors.white,
@@ -100,11 +100,11 @@ class _SpyLastWordScreenState extends State<SpyLastWordScreen> {
                 ),
               ),
 
-              const SizedBox(height: 40),
+              SizedBox(height: 40),
 
               // Subtitle
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
+                padding: EdgeInsets.symmetric(horizontal: 20),
                 child: Text(
                   AppStrings.spyMustGuess,
                   textAlign: TextAlign.center,
@@ -119,23 +119,23 @@ class _SpyLastWordScreenState extends State<SpyLastWordScreen> {
               const Spacer(),
 
               // Question
-              const Center(
+              Center(
                 child: Text(
                   AppStrings.spyGuessedQuestion,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 26,
                     fontWeight: FontWeight.bold,
-                    color: AppStyles.darkAccent,
+                    color: AppStyles.accent,
                   ),
                 ),
               ),
 
-              const SizedBox(height: 30),
+              SizedBox(height: 30),
 
               // Buttons Yes/No
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
+                padding: EdgeInsets.symmetric(horizontal: 20),
                 child: Row(
                   children: [
                     Expanded(
@@ -145,7 +145,7 @@ class _SpyLastWordScreenState extends State<SpyLastWordScreen> {
                         isSelected: _didGuessRight == false,
                       ),
                     ),
-                    const SizedBox(width: 15),
+                    SizedBox(width: 15),
                     Expanded(
                       child: _buildAnswerButton(
                         text: AppStrings.guessedYes,
@@ -162,20 +162,20 @@ class _SpyLastWordScreenState extends State<SpyLastWordScreen> {
               // Complete Round Button (appears after selection)
               if (_didGuessRight != null)
                 Padding(
-                  padding: const EdgeInsets.all(20),
+                  padding: EdgeInsets.all(20),
                   child: ElevatedButton(
                     onPressed: _onEndRound,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppStyles.accent,
                       foregroundColor: AppStyles.cardBg,
-                      side: const BorderSide(color: AppStyles.darkAccent, width: 2),
+                      side: BorderSide(color: AppStyles.darkAccent, width: 2),
                       minimumSize: const Size(double.infinity, 60),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15),
                       ),
                       elevation: 5,
                     ),
-                    child: const Text(
+                    child: Text(
                       AppStrings.endRoundVotes,
                       style: TextStyle(
                         fontSize: 20,
@@ -186,7 +186,7 @@ class _SpyLastWordScreenState extends State<SpyLastWordScreen> {
                   ),
                 ),
 
-                if (_didGuessRight == null) const SizedBox(height: 100),
+                if (_didGuessRight == null) SizedBox(height: 100),
               ],
             ),
           ),
@@ -209,7 +209,7 @@ class _SpyLastWordScreenState extends State<SpyLastWordScreen> {
       onTap: () => _onAnswerPressed(isYes),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(vertical: 20),
+        padding: EdgeInsets.symmetric(vertical: 20),
         decoration: BoxDecoration(
           color: isSelected ? baseColor : AppStyles.cardBg,
           borderRadius: BorderRadius.circular(15),
@@ -232,7 +232,7 @@ class _SpyLastWordScreenState extends State<SpyLastWordScreen> {
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
-              color: isSelected ? Colors.white : AppStyles.darkAccent,
+              color: isSelected ? Colors.white : AppStyles.accent,
             ),
           ),
         ),

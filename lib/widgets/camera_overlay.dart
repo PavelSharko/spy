@@ -78,22 +78,22 @@ class _CameraOverlayState extends State<CameraOverlay> {
     return Column(
       key: const ValueKey('cameraOverlay'),
       children: [
-        const SizedBox(height: 20),
+        SizedBox(height: 20),
 
         // Title
         Text(
           widget.playerName,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.w900,
-            color: AppStyles.darkAccent,
+            color: AppStyles.accent,
             letterSpacing: 1.5,
           ),
         ),
 
-        const SizedBox(height: 8),
+        SizedBox(height: 8),
 
-        const Text(
+        Text(
           'Сделай фото мордахи 📸',
           style: TextStyle(
             fontSize: 16,
@@ -101,7 +101,7 @@ class _CameraOverlayState extends State<CameraOverlay> {
           ),
         ),
 
-        const SizedBox(height: 20),
+        SizedBox(height: 20),
 
         // Camera frame area with oval
         Expanded(
@@ -123,7 +123,7 @@ class _CameraOverlayState extends State<CameraOverlay> {
                       else
                         Container(
                           color: AppStyles.darkAccent.withValues(alpha: 0.08),
-                          child: const Center(
+                          child: Center(
                             child: Icon(
                               Icons.camera_alt_rounded,
                               size: 80,
@@ -144,11 +144,11 @@ class _CameraOverlayState extends State<CameraOverlay> {
           ),
         ),
 
-        const SizedBox(height: 20),
+        SizedBox(height: 20),
 
         // Action buttons
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 30),
+          padding: EdgeInsets.symmetric(horizontal: 30),
           child: _previewBytes != null
               ? Row(
                   children: [
@@ -156,12 +156,12 @@ class _CameraOverlayState extends State<CameraOverlay> {
                     Expanded(
                       child: ElevatedButton.icon(
                         onPressed: _retakePhoto,
-                        icon: const Icon(Icons.replay_rounded),
-                        label: const Text('Ещё раз'),
+                        icon: Icon(Icons.replay_rounded),
+                        label: Text('Ещё раз'),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppStyles.cardBg,
-                          foregroundColor: AppStyles.darkAccent,
-                          side: const BorderSide(color: AppStyles.accent, width: 2),
+                          foregroundColor: Colors.white,
+                          side: BorderSide(color: AppStyles.accent, width: 2),
                           minimumSize: const Size(0, 55),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(15),
@@ -169,17 +169,17 @@ class _CameraOverlayState extends State<CameraOverlay> {
                         ),
                       ),
                     ),
-                    const SizedBox(width: 15),
+                    SizedBox(width: 15),
                     // Confirm
                     Expanded(
                       child: ElevatedButton.icon(
                         onPressed: _confirmPhoto,
-                        icon: const Icon(Icons.check_rounded),
-                        label: const Text('Ок!'),
+                        icon: Icon(Icons.check_rounded),
+                        label: Text('Ок!'),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppStyles.accent,
                           foregroundColor: AppStyles.cardBg,
-                          side: const BorderSide(color: AppStyles.darkAccent, width: 2),
+                          side: BorderSide(color: AppStyles.darkAccent, width: 2),
                           minimumSize: const Size(0, 55),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(15),
@@ -194,16 +194,16 @@ class _CameraOverlayState extends State<CameraOverlay> {
                 ElevatedButton.icon(
                   onPressed: _isCapturing ? null : _takePhoto,
                   icon: _isCapturing
-                      ? const SizedBox(
+                      ? SizedBox(
                           width: 20, height: 20,
                           child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
                         )
-                      : const Icon(Icons.camera_alt_rounded),
+                      : Icon(Icons.camera_alt_rounded),
                   label: Text(_isCapturing ? 'Открываем камеру...' : 'Сфоткать мордаху'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppStyles.accent,
                     foregroundColor: AppStyles.cardBg,
-                    side: const BorderSide(color: AppStyles.darkAccent, width: 2),
+                    side: BorderSide(color: AppStyles.darkAccent, width: 2),
                     minimumSize: const Size(double.infinity, 60),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15),
@@ -213,7 +213,7 @@ class _CameraOverlayState extends State<CameraOverlay> {
                 ),
         ),
 
-        const SizedBox(height: 20),
+        SizedBox(height: 20),
       ],
     );
   }

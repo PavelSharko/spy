@@ -29,7 +29,7 @@ class MenuButton extends StatelessWidget {
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppStyles.accent,
                 foregroundColor: AppStyles.cardBg,
-                side: const BorderSide(color: AppStyles.darkAccent, width: 2),
+                side: BorderSide(color: AppStyles.darkAccent, width: 2),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30),
                 ),
@@ -45,7 +45,7 @@ class MenuButton extends StatelessWidget {
               },
               style: OutlinedButton.styleFrom(
                 foregroundColor: AppStyles.darkAccent,
-                side: const BorderSide(color: AppStyles.accent, width: 2),
+                side: BorderSide(color: AppStyles.accent, width: 2),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30),
                 ),

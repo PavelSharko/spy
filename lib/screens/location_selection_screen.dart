@@ -5,7 +5,6 @@ import '../services/storage_service.dart';
 import '../utils/app_strings.dart';
 import '../utils/app_styles.dart';
 import '../utils/sound_service.dart';
-import '../widgets/animated_pattern_background.dart';
 import '../widgets/exit_game_button.dart';
 
 // ── Animated running-border painter ─────────────────────────────────────────
@@ -258,11 +257,12 @@ class _LocationSelectionScreenState extends State<LocationSelectionScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppStyles.bgColor,
       body: Stack(
         children: [
           Container(
             color: AppStyles.bgColor,
-            child: AnimatedPatternBackground(
+            child: Container(
               child: SafeArea(
               child: Column(
                 children: [
@@ -346,7 +346,7 @@ class _LocationSelectionScreenState extends State<LocationSelectionScreen>
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppStyles.accent,
                             foregroundColor: AppStyles.cardBg,
-                            side: const BorderSide(color: AppStyles.darkAccent, width: 2),
+                            side: BorderSide(color: AppStyles.darkAccent, width: 2),
                             minimumSize: const Size(double.infinity, 60),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(15),

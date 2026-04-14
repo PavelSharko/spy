@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'providers/game_provider.dart';
 import 'services/storage_service.dart';
 import 'utils/app_settings.dart'; // IMPORT SETTINGS
+import 'utils/app_styles.dart';
 
 // Import screens
 import 'screens/main_menu_screen.dart';
@@ -28,24 +29,29 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           // Design: Light, Blue tones
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+          colorScheme: ColorScheme.fromSeed(
+            seedColor: AppStyles.primaryAccent,
+            primary: AppStyles.primaryAccent,
+            surface: AppStyles.primaryBg,
+          ),
           useMaterial3: true,
-          scaffoldBackgroundColor: Colors.white,
+          scaffoldBackgroundColor: AppStyles.primaryBg,
           appBarTheme: const AppBarTheme(
-            backgroundColor: Colors.blue,
-            foregroundColor: Colors.white,
+            color: AppStyles.primaryBg,
+            foregroundColor: AppStyles.primaryAccent,
             centerTitle: true,
           ),
           elevatedButtonTheme: ElevatedButtonThemeData(
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.blue,
-              foregroundColor: Colors.white,
+              backgroundColor: AppStyles.primaryAccent,
+              foregroundColor: AppStyles.primaryBg,
               padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
               textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
           ),
         ),
-        home: const MainMenuScreen(), // Will fail until I create this file
+        home: const MainMenuScreen(),
+
       ),
     );
   }

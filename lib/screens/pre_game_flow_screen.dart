@@ -8,7 +8,6 @@ import '../utils/app_strings.dart';
 import '../utils/app_styles.dart';
 import '../utils/app_settings.dart';
 import '../utils/sound_service.dart';
-import '../widgets/animated_pattern_background.dart';
 import '../widgets/game_card.dart';
 import '../widgets/menu_button.dart';
 import '../widgets/exit_game_button.dart';
@@ -242,7 +241,7 @@ class _PreGameFlowScreenState extends State<PreGameFlowScreen> {
         children: [
           Container(
             color: AppStyles.bgColor,
-            child: AnimatedPatternBackground(
+            child: Container(
               child: SafeArea(
                 child: AnimatedSwitcher(
                   duration: const Duration(milliseconds: 300),
@@ -292,7 +291,7 @@ class _PreGameFlowScreenState extends State<PreGameFlowScreen> {
               Text(
                 '${AppStrings.passPhoneTo} ${_currentPlayerIndex + 1}${AppStrings.playerSuffix}',
                 textAlign: TextAlign.center,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
                   color: AppStyles.darkAccent,
@@ -385,7 +384,7 @@ class _PreGameFlowScreenState extends State<PreGameFlowScreen> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppStyles.accent,
                   foregroundColor: AppStyles.cardBg,
-                  side: const BorderSide(color: AppStyles.darkAccent, width: 2),
+                  side: BorderSide(color: AppStyles.darkAccent, width: 2),
                   minimumSize: const Size(double.infinity, 60),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15),
@@ -442,7 +441,7 @@ class _PreGameFlowScreenState extends State<PreGameFlowScreen> {
           children: [
             Text(
               widget.session.players[_currentPlayerIndex].name,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 28,
                 fontWeight: FontWeight.w900,
                 color: AppStyles.darkAccent,
@@ -471,11 +470,11 @@ class _PreGameFlowScreenState extends State<PreGameFlowScreen> {
       key: const ValueKey('roundReady'),
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Icon(Icons.timer, size: 100, color: AppStyles.accent),
+        Icon(Icons.timer, size: 100, color: AppStyles.accent),
         const SizedBox(height: 20),
         Text(
           '${widget.session.gameTime}:00',
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 60,
             fontWeight: FontWeight.bold,
             color: AppStyles.darkAccent,

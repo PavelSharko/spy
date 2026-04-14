@@ -116,3 +116,37 @@ bool developerFeaturesEnabled = false;
 *Промпт перенесён в agent_tasks/old_prompts_code_agent.md*
 
 
+
+---
+## 🟠 code-agent | Статус: ⏳ Ожидает выполнения
+
+### Задача: Централизация цветовой системы в AppStyles
+1. **Обновление AppStyles**: В файле `lib/utils/app_styles.dart` очисти старые хардкод-константы. Сделай два главных корня для дизайна:
+   - `static const Color primaryBg = Color(0xFF2C3E50);` (основной фон)
+   - `static const Color primaryAccent = Color(0xFFEBC462);` (основной текст и акценты)
+   Остальные цвета (например, `cardBg`, `darkAccent`, `textSecondary`) должны высчитываться как `getter`-ы на основе этих двух цветов (чуть светлее или темнее с помощью `HSLColor` или примешивания белого/черного). Если Flutter не позволит использовать геттеры с HSLColor там, где ожидается `const`, то вручную переведи жесткие цвета `(0xFF...)` в нужные HEX-оттенки `#2c3e50 / #ebc462`, но обязательно напиши к каждому цвету крутой **комментарий**, для чего он нужен (фон, текст, плашка) и от какого из двух главных цветов он произведен.
+2. **Абстракция AnimatedPatternBackground**: В файле `lib/widgets/animated_pattern_background.dart` убери отрисовку горизонтальных полосок (`_ScanLinePainter`). Данный виджет не должен больше накладывать полосатый паттерн. Можно просто убрать `CustomPaint` и возвращать оттуда `child`.
+3. **Глобальный поиск и замена**: Пройдись по всему коду командой поиска или вручную проанализируй основные экраны (Settings, PreGame, RoundScore и т.д.) и виджеты. Удали любые явные вызовы `Colors.white`, `Colors.black`, `Colors.grey`, `Color(0xFF...)` и направь их на новые переменные в `AppStyles`. Семантические (зеленый/красный для ошибок) оставь или переосмысли под новый стиль.
+4. **Обновление Memory Bank**: В `memory_bank/design_system.md` задокументируй новую концепцию дизайна: два управляющих цвета `#2c3e50` и `#ebc462`, от которых идут все остальные зависимые цвета.
+5. **Установка полезных скиллов**: Скачай и установи в папку `.agents/skills/` современные MCP-скиллы для Flutter, в частности `flutter-skill` (позволяет агентам "видеть" UI и тестировать без кода) и `composio-mcp`. Проверь их работоспособность и задокументируй их наличие в `MEMORY_BANK.md`, чтобы все агенты знали об этих новых возможностях.
+
+**После выполнения:** отметь ✅ и перенеси промпт в `agent_tasks/old_prompts_code-agent.md`.
+
+
+
+---
+## 🟠 code-agent | Статус: ⏳ Ожидает выполнения
+
+### Задача: Динамическая математика цветов и полное удаление старого мусора
+1. **Динамический `AppStyles` без хардкода оттенков**: Пользователь хочет задавать только **ДВА** цвета (`primaryBg` и `primaryAccent`), а всё остальное должно считаться математикой на лету (getter-ами). 
+   - Зайди в `lib/utils/app_styles.dart`. Оставь `const primaryBg = Color(0xFF2C3E50);` и `const primaryAccent = Color(0xFFEBC462);`.
+   - Настрой динамические геттеры! Например, светлые оттенки делай через смешивание с белым `Color.lerp(primaryBg, Colors.white, 0.1)`, темные — `Color.lerp(primaryBg, Colors.black, 0.2)`. Текст делай через полупрозрачность `primaryAccent.withValues(alpha: 0.7)`.
+   - Создай геттер `static Color get cardBg => Color.lerp(primaryBg, Colors.white, 0.05)!;`
+   - Создай геттер `static Color get darkAccent => Color.lerp(primaryBg, Colors.black, 0.2)!;`
+   - **САМОЕ ВАЖНОЕ:** Это сломает использование `const AppStyles.cardBg` в коде (например, в `BoxDecoration`). **ТВОЯ ЗАДАЧА — пройти по всем экранам и удалить слово `const` там, где компилятор начнет ругаться.** Не бойся убирать `const`, гибкость палитры сейчас важнее микрооптимизации.
+
+2. **Тотальное удаление `AnimatedPatternBackground`**: Не просто делай цвет `scanLineColor` прозрачным. **Полностью удали файл** `lib/widgets/animated_pattern_background.dart`. Пройдись по всем 13+ экранам (`main_menu_screen.dart`, `rules_screen.dart`, `voting_screen.dart` и т.д.) и удали обертку `AnimatedPatternBackground()`, оставив только её `child`, либо заменив на `Container(color: AppStyles.primaryBg)`. Проверь, чтобы не осталось ни одного упоминания в импортах.
+
+**После выполнения:** отметь ✅ и перенеси промпт в `agent_tasks/old_prompts_code-agent.md`.
+
+

@@ -112,7 +112,7 @@ class _GameCardState extends State<GameCard> with SingleTickerProviderStateMixin
       aspectRatio: 0.7,
       child: Container(
         width: double.infinity,
-        margin: const EdgeInsets.symmetric(horizontal: 20),
+        margin: EdgeInsets.symmetric(horizontal: 20),
       decoration: BoxDecoration(
         color: AppStyles.darkAccent,
         borderRadius: BorderRadius.circular(20),
@@ -131,12 +131,12 @@ class _GameCardState extends State<GameCard> with SingleTickerProviderStateMixin
       ),
       child: Center(
         child: Padding(
-          padding: const EdgeInsets.all(20.0),
+          padding: EdgeInsets.all(20.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(Icons.touch_app, size: 80, color: AppStyles.cardBg.withValues(alpha: 0.8)),
-              const SizedBox(height: 20),
+              SizedBox(height: 20),
               Stack(
                 children: [
                   Text(
@@ -152,7 +152,7 @@ class _GameCardState extends State<GameCard> with SingleTickerProviderStateMixin
                         ..color = AppStyles.darkAccent,
                     ),
                   ),
-                  const Text(
+                  Text(
                     AppStrings.tapCardToView,
                     textAlign: TextAlign.center,
                     style: TextStyle(
@@ -177,7 +177,7 @@ class _GameCardState extends State<GameCard> with SingleTickerProviderStateMixin
       aspectRatio: 0.7,
       child: Container(
         width: double.infinity,
-        margin: const EdgeInsets.symmetric(horizontal: 20),
+        margin: EdgeInsets.symmetric(horizontal: 20),
         decoration: BoxDecoration(
           color: AppStyles.darkAccent, // neutral dark base under the image
         borderRadius: BorderRadius.circular(20),
@@ -216,7 +216,7 @@ class _GameCardState extends State<GameCard> with SingleTickerProviderStateMixin
             ),
             // Content
             Padding(
-              padding: const EdgeInsets.all(20),
+              padding: EdgeInsets.all(20),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -225,17 +225,17 @@ class _GameCardState extends State<GameCard> with SingleTickerProviderStateMixin
                       child: isSpy ? _buildSpyContent() : _buildCivilianContent(),
                     ),
                   ),
-                  const SizedBox(height: 10),
+                  SizedBox(height: 10),
                   // Bottom hint text with icon
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(Icons.info_outline, color: Colors.white, size: 24),
-                      const SizedBox(width: 8),
+                      Icon(Icons.info_outline, color: Colors.white, size: 24),
+                      SizedBox(width: 8),
                       Expanded(
                         child: Text(
                           isSpy ? 'Угадайте в какой вы локации!' : 'Попробуйте отгадать шпиона!',
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: Colors.white,
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -257,8 +257,8 @@ class _GameCardState extends State<GameCard> with SingleTickerProviderStateMixin
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        const Icon(Icons.search, size: 60, color: Colors.white),
-        const SizedBox(height: 20),
+        Icon(Icons.search, size: 60, color: Colors.white),
+        SizedBox(height: 20),
         Stack(
           alignment: Alignment.center,
           children: [
@@ -291,7 +291,7 @@ class _GameCardState extends State<GameCard> with SingleTickerProviderStateMixin
 
   Widget _buildCivilianContent() {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white.withValues(alpha: 0.15),
         borderRadius: BorderRadius.circular(15),
@@ -300,11 +300,11 @@ class _GameCardState extends State<GameCard> with SingleTickerProviderStateMixin
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Text(
+          Text(
             'ВЫ НАХОДИТЕСЬ:',
             style: TextStyle(color: Colors.white70, fontSize: 16, fontWeight: FontWeight.bold),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           Text(
             widget.secretLocation,
             textAlign: TextAlign.center,
@@ -314,15 +314,15 @@ class _GameCardState extends State<GameCard> with SingleTickerProviderStateMixin
             ),
           ),
           if (widget.role != null) ...[
-            const Padding(
+            Padding(
               padding: EdgeInsets.symmetric(vertical: 12),
               child: Divider(color: Colors.white38, height: 1),
             ),
-            const Text(
+            Text(
               'ВАША РОЛЬ:',
               style: TextStyle(color: Colors.white70, fontSize: 16, fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: 8),
             Text(
               widget.role!,
               textAlign: TextAlign.center,

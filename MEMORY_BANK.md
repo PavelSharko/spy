@@ -24,10 +24,19 @@
 |---|---|
 | [project_structure.md](memory_bank/project_structure.md) | Карта директорий и ключевых файлов |
 | [code_patterns.md](memory_bank/code_patterns.md) | Паттерны кода: синглтоны, константные классы, навигация, стили |
+| [design_system.md](memory_bank/design_system.md) | Новая концепция дизайна, цветовая палитра (primaryBg: #2c3e50, primaryAccent: #ebc462) |
 | [business_logic.md](memory_bank/business_logic.md) | Бизнес-логика: раунды, роли, подсказки, голосование, очки |
 | [agent_instructions.md](memory_bank/agent_instructions.md) | Протокол для AI-агентов: как читать, менять и обновлять память |
 | [manager_protocol.md](memory_bank/manager_protocol.md) | Протокол для main_agent: оркестрация под-агентов, генерация промптов, декомпозиция |
 | [visual_config.dart](lib/utils/visual_config.dart) | Визуальные константы: прозрачности, оверлеи — меняй здесь для быстрой кастомизации |
+
+---
+
+## 🛠 Установленные умные скиллы (MCP)
+
+В папке `.agents/skills/` установлены специальные ресурсы для работы AI:
+- `flutter-skill`: набор инструкций для работы с деревом виджетов Flutter, тестирования и взаимодействия агента с UI в режиме реального времени.
+- `composio-mcp`: мощный инструмент для доступа агентов к интеграциям и внешним сервисам.
 
 ---
 

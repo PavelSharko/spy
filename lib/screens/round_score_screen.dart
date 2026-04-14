@@ -6,7 +6,6 @@ import '../models/player.dart';
 import '../utils/app_strings.dart';
 import '../utils/app_styles.dart';
 import '../utils/sound_service.dart';
-import '../widgets/animated_pattern_background.dart';
 import 'main_menu_screen.dart';
 import 'pre_game_flow_screen.dart';
 import '../widgets/exit_game_button.dart';
@@ -74,11 +73,12 @@ class _RoundScoreScreenState extends State<RoundScoreScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppStyles.bgColor,
       body: Stack(
         children: [
           Container(
             color: AppStyles.bgColor,
-            child: AnimatedPatternBackground(
+            child: Container(
               child: SafeArea(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -89,7 +89,7 @@ class _RoundScoreScreenState extends State<RoundScoreScreen> {
               Center(
                 child: Text(
                   _isLastRound ? "Итоги игры" : AppStrings.roundScoreTitle,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 26,
                     fontWeight: FontWeight.w900,
                     color: AppStyles.darkAccent,
@@ -125,7 +125,7 @@ class _RoundScoreScreenState extends State<RoundScoreScreen> {
                         Text(
                           '${AppStrings.winnerPrefix}${_sortedPlayers.first.name}!',
                           textAlign: TextAlign.center,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 26,
                             fontWeight: FontWeight.w900,
                             color: AppStyles.darkAccent,
@@ -236,7 +236,7 @@ class _RoundScoreScreenState extends State<RoundScoreScreen> {
                                 ? MemoryImage(player.photoBytes!)
                                 : null,
                             child: player.photoBytes == null
-                                ? const Icon(Icons.person, color: AppStyles.textSecondary, size: 18)
+                                ? Icon(Icons.person, color: AppStyles.textSecondary, size: 18)
                                 : null,
                           ),
                           const SizedBox(width: 10),
@@ -245,7 +245,7 @@ class _RoundScoreScreenState extends State<RoundScoreScreen> {
                           Expanded(
                             child: Text(
                               player.name,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
                                 color: AppStyles.darkAccent,

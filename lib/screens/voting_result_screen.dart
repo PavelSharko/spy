@@ -3,7 +3,6 @@ import '../models/game_session.dart';
 import '../utils/app_strings.dart';
 import '../utils/app_styles.dart';
 import '../utils/sound_service.dart';
-import '../widgets/animated_pattern_background.dart';
 import 'role_guess_screen.dart';
 import 'spy_last_word_screen.dart';
 import '../widgets/exit_game_button.dart';
@@ -44,8 +43,7 @@ class VotingResultScreen extends StatelessWidget {
       backgroundColor: bgColor,
       body: Stack(
         children: [
-          AnimatedPatternBackground(
-            lineColor: AppStyles.deriveStripeColor(bgColor),
+          Container(
             child: SafeArea(
               child: Column(
                 children: [

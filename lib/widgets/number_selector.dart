@@ -86,9 +86,9 @@ class _NumberSelectorState extends State<NumberSelector> {
           color: AppStyles.accent,
           borderRadius: const BorderRadius.vertical(bottom: Radius.circular(20)),
           border: Border(
-            bottom: BorderSide(color: AppStyles.deriveStripeColor(AppStyles.accent), width: 3),
-            left: BorderSide(color: AppStyles.deriveStripeColor(AppStyles.accent), width: 3),
-            right: BorderSide(color: AppStyles.deriveStripeColor(AppStyles.accent), width: 3),
+            bottom: BorderSide(color: Colors.transparent, width: 3),
+            left: BorderSide(color: Colors.transparent, width: 3),
+            right: BorderSide(color: Colors.transparent, width: 3),
           ),
           boxShadow: [
             BoxShadow(

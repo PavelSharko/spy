@@ -3,7 +3,6 @@ import '../models/game_session.dart';
 import '../utils/app_strings.dart';
 import '../utils/app_styles.dart';
 import '../utils/sound_service.dart';
-import '../widgets/animated_pattern_background.dart';
 import 'voting_result_screen.dart';
 import '../widgets/exit_game_button.dart';
 
@@ -125,6 +124,7 @@ class _VotingScreenState extends State<VotingScreen> {
   Widget build(BuildContext context) {
     if (_showTieNotification) {
       return Scaffold(
+      backgroundColor: AppStyles.bgColor,
         body: GestureDetector(
           onTap: () {
             if (_showTieNotification) {
@@ -136,8 +136,7 @@ class _VotingScreenState extends State<VotingScreen> {
           },
           child: Container(
             color: const Color(0xFF1565C0),
-            child: AnimatedPatternBackground(
-              lineColor: AppStyles.deriveStripeColor(const Color(0xFF1565C0)),
+            child: Container(
               child: const SizedBox.expand(
                 child: Center(
                   child: Padding(
@@ -167,18 +166,19 @@ class _VotingScreenState extends State<VotingScreen> {
     int currentVoter = _votingQueue[_currentVoterIndexInQueue];
 
     return Scaffold(
+      backgroundColor: AppStyles.bgColor,
       body: Stack(
         children: [
           Container(
             color: AppStyles.bgColor,
-            child: AnimatedPatternBackground(
+            child: Container(
               child: SafeArea(
               child: Column(
                 children: [
-                  const SizedBox(height: 20),
+                  SizedBox(height: 20),
               
               // Title
-              const Text(
+              Text(
                 AppStrings.votingTitle,
                 style: TextStyle(
                   fontSize: 24,
@@ -188,11 +188,11 @@ class _VotingScreenState extends State<VotingScreen> {
                 ),
               ),
 
-              const SizedBox(height: 30),
+              SizedBox(height: 30),
 
               // Current Voter
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                 decoration: BoxDecoration(
                   color: AppStyles.cardBg,
                   borderRadius: BorderRadius.circular(15),
@@ -215,10 +215,10 @@ class _VotingScreenState extends State<VotingScreen> {
                         color: AppStyles.textSecondary,
                       ),
                     ),
-                    const SizedBox(height: 5),
+                    SizedBox(height: 5),
                     Text(
                       widget.session.players[currentVoter].name,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 26,
                         fontWeight: FontWeight.w900,
                         color: AppStyles.darkAccent,
@@ -229,7 +229,7 @@ class _VotingScreenState extends State<VotingScreen> {
                 ),
               ),
 
-              const SizedBox(height: 40),
+              SizedBox(height: 40),
 
               // Prompt
               Text(
@@ -242,12 +242,12 @@ class _VotingScreenState extends State<VotingScreen> {
                 textAlign: TextAlign.center,
               ),
 
-              const SizedBox(height: 20),
+              SizedBox(height: 20),
 
               // Candidates Keyboard
               Expanded(
                 child: ListView.builder(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  padding: EdgeInsets.symmetric(horizontal: 20),
                   itemCount: widget.session.players.length,
                   itemBuilder: (context, index) {
                     if (index == currentVoter) return const SizedBox.shrink();
@@ -259,7 +259,7 @@ class _VotingScreenState extends State<VotingScreen> {
                     bool isSelected = _selectedCandidateIndex == index;
 
                     return Padding(
-                      padding: const EdgeInsets.only(bottom: 15),
+                      padding: EdgeInsets.only(bottom: 15),
                       child: GestureDetector(
                         onTap: () {
                           SoundService.instance.playClick();
@@ -269,7 +269,7 @@ class _VotingScreenState extends State<VotingScreen> {
                         },
                         child: AnimatedContainer(
                           duration: const Duration(milliseconds: 200),
-                          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                          padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
                           decoration: BoxDecoration(
                             color: isSelected ? AppStyles.warning : AppStyles.cardBg,
                             borderRadius: BorderRadius.circular(15),
@@ -297,7 +297,7 @@ class _VotingScreenState extends State<VotingScreen> {
                                       )
                                     : null,
                               ),
-                              const SizedBox(width: 12),
+                              SizedBox(width: 12),
                               Expanded(
                                 child: Text(
                                   widget.session.players[index].name,
@@ -319,7 +319,7 @@ class _VotingScreenState extends State<VotingScreen> {
 
               // Votes counter summary
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
+                padding: EdgeInsets.symmetric(horizontal: 20),
                 child: Wrap(
                   alignment: WrapAlignment.center,
                   spacing: 10,
@@ -328,31 +328,31 @@ class _VotingScreenState extends State<VotingScreen> {
                      if (_tieCandidates.isNotEmpty && !_tieCandidates.contains(index)) return const SizedBox.shrink();
                      return Text(
                        '${widget.session.players[index].name}: ${_votes[index]}',
-                       style: const TextStyle(color: AppStyles.textSecondary, fontSize: 12),
+                       style: TextStyle(color: AppStyles.textSecondary, fontSize: 12),
                      );
                   }),
                 ),
               ),
 
-              const SizedBox(height: 15),
+              SizedBox(height: 15),
 
               // Confirm Button
               Padding(
-                padding: const EdgeInsets.all(20),
+                padding: EdgeInsets.all(20),
                 child: ElevatedButton(
                   onPressed: _selectedCandidateIndex == null ? null : _onConfirmVote,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppStyles.accent,
                     foregroundColor: AppStyles.cardBg,
                     disabledBackgroundColor: Colors.grey.shade300,
-                    side: const BorderSide(color: AppStyles.darkAccent, width: 2),
+                    side: BorderSide(color: AppStyles.darkAccent, width: 2),
                     minimumSize: const Size(double.infinity, 60),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15),
                     ),
                     elevation: 5,
                   ),
-                  child: const Text(
+                  child: Text(
                     AppStrings.confirmVote,
                     style: TextStyle(
                       fontSize: 20,

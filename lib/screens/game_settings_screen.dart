@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import '../utils/app_strings.dart';
 import '../utils/app_styles.dart';
 import '../utils/sound_service.dart';
-import '../widgets/animated_pattern_background.dart';
 import '../widgets/settings_button.dart';
 import '../widgets/number_selector.dart';
 import '../models/game_session.dart';
@@ -202,14 +201,14 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
         body: Stack(
           children: [
             // Background covers everything including SafeArea areas
-            const AnimatedPatternBackground(child: SizedBox.expand()),
+            Container(child: const SizedBox.expand()),
             
             // Content
             SafeArea(
               child: Column(
                 children: [
                   const SizedBox(height: 10),
-                  const Center(
+                  Center(
                     child: Text(
                       AppStrings.gameSettingsTitle,
                       style: TextStyle(
@@ -293,7 +292,7 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                             onPressed: _onBackPressed,
                             style: OutlinedButton.styleFrom(
                               foregroundColor: AppStyles.darkAccent,
-                              side: const BorderSide(color: AppStyles.accent, width: 2),
+                              side: BorderSide(color: AppStyles.accent, width: 2),
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                             ),
                             child: const Text(AppStrings.backAction, style: TextStyle(fontWeight: FontWeight.bold)),
@@ -308,7 +307,7 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: AppStyles.accent,
                                 foregroundColor: AppStyles.cardBg,
-                                side: const BorderSide(color: AppStyles.darkAccent, width: 2),
+                                side: BorderSide(color: AppStyles.darkAccent, width: 2),
                                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                                 elevation: 0,
                               ),

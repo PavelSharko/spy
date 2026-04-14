@@ -30,7 +30,7 @@ class SettingsButton extends StatelessWidget {
           padding: const EdgeInsets.all(16),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20), // Rounded corners
-            side: BorderSide(color: AppStyles.deriveStripeColor(AppStyles.accent), width: 3), // Pattern outline
+            side: BorderSide(color: Colors.transparent, width: 3), // Pattern outline
           ),
           backgroundColor: AppStyles.accent, // Warm brown
           foregroundColor: Colors.white, // Text color

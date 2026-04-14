@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../utils/app_styles.dart';
 import '../utils/game_rules.dart';
-import '../widgets/animated_pattern_background.dart';
 import '../widgets/menu_button.dart';
 
 /// Rules screen — all numbers are read from [GameRules] dynamically.
@@ -11,16 +10,17 @@ class RulesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppStyles.bgColor,
       body: Container(
         color: AppStyles.bgColor,
-        child: AnimatedPatternBackground(
+        child: Container(
           child: SafeArea(
             child: Column(
               children: [
-                const SizedBox(height: 24),
+                SizedBox(height: 24),
 
                 // Title
-                const Text(
+                Text(
                   'ПРАВИЛА ИГРЫ',
                   style: TextStyle(
                     fontSize: 26,
@@ -31,12 +31,12 @@ class RulesScreen extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
 
-                const SizedBox(height: 16),
+                SizedBox(height: 16),
 
                 // Scrollable content
                 Expanded(
                   child: SingleChildScrollView(
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -45,7 +45,7 @@ class RulesScreen extends StatelessWidget {
                         _section('🕹️ Ход игры', _gameplayText),
                         _section('⭐ Очки', _scoringText),
                         _section('🏆 Победитель', _winnerText),
-                        const SizedBox(height: 20),
+                        SizedBox(height: 20),
                       ],
                     ),
                   ),
@@ -53,7 +53,7 @@ class RulesScreen extends StatelessWidget {
 
                 // Back button
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(30, 0, 30, 24),
+                  padding: EdgeInsets.fromLTRB(30, 0, 30, 24),
                   child: MenuButton(
                     text: '← НАЗАД',
                     onPressed: () => Navigator.of(context).pop(),
@@ -72,10 +72,10 @@ class RulesScreen extends StatelessWidget {
   // ── Section builder ─────────────────────────────────────────────────────
   static Widget _section(String title, String body) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 18),
+      padding: EdgeInsets.only(bottom: 18),
       child: Container(
         width: double.infinity,
-        padding: const EdgeInsets.all(18),
+        padding: EdgeInsets.all(18),
         decoration: BoxDecoration(
           color: AppStyles.cardBg,
           borderRadius: BorderRadius.circular(18),
@@ -86,17 +86,17 @@ class RulesScreen extends StatelessWidget {
           children: [
             Text(
               title,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w900,
                 color: AppStyles.accent,
                 letterSpacing: 1,
               ),
             ),
-            const SizedBox(height: 10),
+            SizedBox(height: 10),
             Text(
               body,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 15,
                 color: AppStyles.darkAccent,
                 height: 1.6,

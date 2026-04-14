@@ -32,8 +32,8 @@ class ExitGameButton extends StatelessWidget {
               return AlertDialog(
                 backgroundColor: AppStyles.cardBg,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                title: const Text('Внимание', style: TextStyle(color: AppStyles.darkAccent, fontWeight: FontWeight.bold)),
-                content: const Text('Вы действительно хотите выйти?', style: TextStyle(color: AppStyles.textSecondary)),
+                title: Text('Внимание', style: TextStyle(color: AppStyles.darkAccent, fontWeight: FontWeight.bold)),
+                content: Text('Вы действительно хотите выйти?', style: TextStyle(color: AppStyles.textSecondary)),
                 actions: [
                   TextButton(
                     onPressed: () {
@@ -41,7 +41,7 @@ class ExitGameButton extends StatelessWidget {
                       Navigator.of(ctx).pop();
                       onResume?.call();
                     },
-                    child: const Text('Нет', style: TextStyle(color: AppStyles.textSecondary, fontWeight: FontWeight.bold)),
+                    child: Text('Нет', style: TextStyle(color: AppStyles.textSecondary, fontWeight: FontWeight.bold)),
                   ),
                   TextButton(
                     onPressed: () {

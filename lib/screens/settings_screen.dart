@@ -3,7 +3,6 @@ import '../utils/app_settings.dart';
 import '../utils/app_styles.dart';
 import '../utils/dev_config.dart';
 import '../utils/sound_service.dart';
-import '../widgets/animated_pattern_background.dart';
 import '../widgets/menu_button.dart';
 
 /// System settings screen.
@@ -75,7 +74,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           child: Column(
             children: [
-              const Padding(
+              Padding(
                 padding: EdgeInsets.all(20),
                 child: Text(
                   'Стиль карточек',
@@ -102,7 +101,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         if (_soundEnabled) SoundService.instance.playClick();
                       },
                       child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                         color: isSelected ? AppStyles.accent.withValues(alpha: 0.1) : Colors.transparent,
                         child: Text(
                           style,
@@ -133,11 +132,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
     VoidCallback? onTap,
   }) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 30),
+      padding: EdgeInsets.symmetric(horizontal: 30),
       child: GestureDetector(
         onTap: onTap,
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 20),
           decoration: BoxDecoration(
             color: AppStyles.cardBg,
             borderRadius: BorderRadius.circular(20),
@@ -150,14 +149,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 color: iconColor,
                 size: 32,
               ),
-              const SizedBox(width: 16),
+              SizedBox(width: 16),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       title,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                         color: AppStyles.darkAccent,
@@ -165,7 +164,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     ),
                     Text(
                       subtitle,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 13,
                         color: AppStyles.textSecondary,
                       ),
@@ -199,14 +198,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return Scaffold(
       body: Container(
         color: AppStyles.bgColor,
-        child: AnimatedPatternBackground(
+        child: Container(
           child: SafeArea(
             child: Column(
               children: [
-                const SizedBox(height: 30),
+                SizedBox(height: 30),
 
                 // Title
-                const Text(
+                Text(
                   'НАСТРОЙКИ',
                   style: TextStyle(
                     fontSize: 28,
@@ -216,7 +215,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                 ),
 
-                const SizedBox(height: 30),
+                SizedBox(height: 30),
 
                 // Scrollable Settings List
                 Expanded(
@@ -236,7 +235,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         ),
                       ),
 
-                      const SizedBox(height: 16),
+                      SizedBox(height: 16),
 
                       // Developer features toggle card
                       if (DevConfig.developerFeaturesEnabled) ...[
@@ -250,7 +249,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             onChanged: null,
                           ),
                         ),
-                        const SizedBox(height: 16),
+                        SizedBox(height: 16),
                       ],
 
                       // Unique Cards Toggle
@@ -271,29 +270,29 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         curve: Curves.easeInOut,
                         child: _uniqueCardsEnabled
                             ? Padding(
-                                padding: const EdgeInsets.only(top: 16, bottom: 8),
+                                padding: EdgeInsets.only(top: 16, bottom: 8),
                                 child: Column(
                                   children: [
                                     // Card Style Button
                                     Padding(
-                                      padding: const EdgeInsets.only(left: 30), // Indent sub-settings
+                                      padding: EdgeInsets.only(left: 30), // Indent sub-settings
                                       child: _buildSettingsCard(
                                         icon: Icons.color_lens_rounded,
                                         iconColor: AppStyles.accent,
                                         title: 'Стиль карточек',
                                         subtitle: _cardStyle,
                                         onTap: _chooseCardStyle,
-                                        trailing: const Icon(
+                                        trailing: Icon(
                                           Icons.chevron_right_rounded,
                                           color: AppStyles.textSecondary,
                                         ),
                                       ),
                                     ),
-                                    const SizedBox(height: 16),
+                                    SizedBox(height: 16),
                                     
                                     // Player Faces Toggle
                                     Padding(
-                                      padding: const EdgeInsets.only(left: 30),
+                                      padding: EdgeInsets.only(left: 30),
                                       child: _buildSettingsCard(
                                         icon: Icons.face_retouching_natural_rounded,
                                         iconColor: _playerFacesEnabled ? AppStyles.accent : AppStyles.textSecondary,
@@ -311,14 +310,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             : const SizedBox.shrink(),
                       ),
                       
-                      const SizedBox(height: 30),
+                      SizedBox(height: 30),
                     ],
                   ),
                 ),
 
                 // Back button
                 Padding(
-                  padding: const EdgeInsets.all(30),
+                  padding: EdgeInsets.all(30),
                   child: MenuButton(
                     text: '← НАЗАД',
                     onPressed: () => Navigator.of(context).pop(),

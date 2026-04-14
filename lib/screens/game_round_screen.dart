@@ -13,7 +13,6 @@ import '../utils/sound_service.dart';
 
 import '../models/game_session.dart';
 import '../services/storage_service.dart';
-import '../widgets/animated_pattern_background.dart';
 import 'voting_screen.dart';
 import 'round_score_screen.dart';
 import '../widgets/exit_game_button.dart';
@@ -175,7 +174,7 @@ class _GameRoundScreenState extends State<GameRoundScreen> with SingleTickerProv
             borderRadius: BorderRadius.circular(20),
             side: BorderSide(color: AppStyles.darkAccent.withValues(alpha: 0.1), width: 2),
           ),
-          title: const Text(
+          title: Text(
             AppStrings.whatHappened,
             textAlign: TextAlign.center,
             style: TextStyle(fontWeight: FontWeight.bold, color: AppStyles.accent),
@@ -372,7 +371,7 @@ class _GameRoundScreenState extends State<GameRoundScreen> with SingleTickerProv
         children: [
           Container(
             color: AppStyles.bgColor,
-            child: AnimatedPatternBackground(
+            child: Container(
               child: SafeArea(
               child: Column(
                 children: [
@@ -451,7 +450,7 @@ class _GameRoundScreenState extends State<GameRoundScreen> with SingleTickerProv
                               color: AppStyles.accent.withValues(alpha: 0.1),
                               shape: BoxShape.circle,
                             ),
-                            child: const Column(
+                            child: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Icon(Icons.sync, color: AppStyles.accent, size: 80),
@@ -545,19 +544,19 @@ class _GameRoundScreenState extends State<GameRoundScreen> with SingleTickerProv
               children: [
                 Text(
                   widget.session.players[_currentAskerIndex].name,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                     color: AppStyles.darkAccent,
                   ),
                 ),
-                const Padding(
+                Padding(
                   padding: EdgeInsets.symmetric(vertical: 8),
                   child: Icon(Icons.arrow_downward, size: 30, color: AppStyles.accent),
                 ),
                 Text(
                   widget.session.players[_currentTargetIndex].name,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                     color: AppStyles.darkAccent,
@@ -627,7 +626,7 @@ class _GameRoundScreenState extends State<GameRoundScreen> with SingleTickerProv
                   child: Text(
                     hint,
                     textAlign: TextAlign.center,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 32,
                       color: AppStyles.darkAccent,
                       fontWeight: FontWeight.w900,

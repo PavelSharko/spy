@@ -8,7 +8,6 @@ import '../utils/app_strings.dart';
 import '../utils/app_styles.dart';
 import '../utils/game_rules.dart';
 import '../utils/sound_service.dart';
-import '../widgets/animated_pattern_background.dart';
 import '../widgets/exit_game_button.dart';
 import 'round_score_screen.dart';
 
@@ -233,11 +232,12 @@ class _RoleGuessScreenState extends State<RoleGuessScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppStyles.bgColor,
       body: Stack(
         children: [
           Container(
             color: AppStyles.bgColor,
-            child: AnimatedPatternBackground(
+            child: Container(
               child: SafeArea(
                 child: _isRevealPhase ? _buildRevealPhase() : _buildGuessPhase(),
               ),
@@ -255,10 +255,10 @@ class _RoleGuessScreenState extends State<RoleGuessScreen>
   Widget _buildGuessPhase() {
     return Column(
       children: [
-        const SizedBox(height: 16),
+        SizedBox(height: 16),
 
         // Title
-        const Text(
+        Text(
           AppStrings.whoIsWho,
           style: TextStyle(
             fontSize: 26,
@@ -268,13 +268,13 @@ class _RoleGuessScreenState extends State<RoleGuessScreen>
           ),
         ),
 
-        const SizedBox(height: 16),
+        SizedBox(height: 16),
 
         // Guesser → Target
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+          padding: EdgeInsets.symmetric(horizontal: 20),
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 14),
             decoration: BoxDecoration(
               color: AppStyles.cardBg.withOpacity(0.4),
               borderRadius: BorderRadius.circular(16),
@@ -284,7 +284,7 @@ class _RoleGuessScreenState extends State<RoleGuessScreen>
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Expanded(child: _playerChip(_guesser.name, AppStyles.accent.withOpacity(0.5))),
-                const Padding(
+                Padding(
                   padding: EdgeInsets.symmetric(horizontal: 10),
                   child: Icon(Icons.arrow_forward_rounded, color: AppStyles.textSecondary),
                 ),
@@ -294,10 +294,10 @@ class _RoleGuessScreenState extends State<RoleGuessScreen>
           ),
         ),
 
-        const SizedBox(height: 10),
+        SizedBox(height: 10),
 
         // Hint
-        const Padding(
+        Padding(
           padding: EdgeInsets.symmetric(horizontal: 20),
           child: Text(
             AppStrings.guessRoleHint,
@@ -306,7 +306,7 @@ class _RoleGuessScreenState extends State<RoleGuessScreen>
           ),
         ),
 
-        const SizedBox(height: 16),
+        SizedBox(height: 16),
 
         // Keyboard 2 × N
         Expanded(
@@ -315,7 +315,7 @@ class _RoleGuessScreenState extends State<RoleGuessScreen>
 
         // Confirm button
         Padding(
-          padding: const EdgeInsets.fromLTRB(20, 8, 20, 20),
+          padding: EdgeInsets.fromLTRB(20, 8, 20, 20),
           child: ElevatedButton(
             onPressed: _selectedRole != null ? _onConfirm : null,
             style: ElevatedButton.styleFrom(
@@ -325,11 +325,11 @@ class _RoleGuessScreenState extends State<RoleGuessScreen>
               minimumSize: const Size(double.infinity, 56),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(14),
-                side: BorderSide(color: AppStyles.deriveStripeColor(AppStyles.accent), width: 2),
+                side: BorderSide(color: Colors.transparent, width: 2),
               ),
               elevation: 4,
             ),
-            child: const Text(
+            child: Text(
               AppStrings.confirmAction,
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, letterSpacing: 1),
             ),
@@ -341,7 +341,7 @@ class _RoleGuessScreenState extends State<RoleGuessScreen>
 
   Widget _buildRoleGrid() {
     return GridView.builder(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: EdgeInsets.symmetric(horizontal: 16),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
         mainAxisSpacing: 10,
@@ -381,11 +381,11 @@ class _RoleGuessScreenState extends State<RoleGuessScreen>
             ),
             child: Center(
               child: Padding(
-                padding: const EdgeInsets.all(8),
+                padding: EdgeInsets.all(8),
                 child: Text(
                   role,
                   textAlign: TextAlign.center,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 16, // Task 13: Reduce font size
                     fontWeight: FontWeight.bold,
                     color: AppStyles.darkAccent,
@@ -410,15 +410,15 @@ class _RoleGuessScreenState extends State<RoleGuessScreen>
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text(
+            Text(
               AppStrings.revealingIn,
               style: TextStyle(
                   fontSize: 24, color: Colors.white70, fontWeight: FontWeight.w600),
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: 20),
             Text(
               '$_countdown',
-              style: const TextStyle(
+              style: TextStyle(
                   fontSize: 100,
                   color: AppStyles.darkAccent,
                   fontWeight: FontWeight.w900),
@@ -434,19 +434,19 @@ class _RoleGuessScreenState extends State<RoleGuessScreen>
 
     return Column(
       children: [
-        const SizedBox(height: 30),
+        SizedBox(height: 30),
 
         // "TARGET был РОЛЬ"
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+          padding: EdgeInsets.symmetric(horizontal: 20),
           child: RichText(
             textAlign: TextAlign.center,
             text: TextSpan(
-              style: const TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
               children: [
                 TextSpan(
                   text: '${_target.name}\n',
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: AppStyles.darkAccent,
                     shadows: [Shadow(color: Colors.white, blurRadius: 2, offset: Offset(1,1))],
                   ),
@@ -461,7 +461,7 @@ class _RoleGuessScreenState extends State<RoleGuessScreen>
                     color: (_target.role == 'Шпионить' || _target.role == 'Шпион') ? AppStyles.danger : AppStyles.success,
                     fontSize: 28,
                     fontWeight: FontWeight.w900,
-                    shadows: const [Shadow(color: Colors.black45, blurRadius: 4, offset: Offset(1,1))],
+                    shadows: [Shadow(color: Colors.black45, blurRadius: 4, offset: Offset(1,1))],
                   ),
                 ),
               ],
@@ -469,12 +469,12 @@ class _RoleGuessScreenState extends State<RoleGuessScreen>
           ),
         ),
 
-        const SizedBox(height: 30),
+        SizedBox(height: 30),
 
         // Verdict
         Container(
-          margin: const EdgeInsets.symmetric(horizontal: 20),
-          padding: const EdgeInsets.all(20),
+          margin: EdgeInsets.symmetric(horizontal: 20),
+          padding: EdgeInsets.all(20),
           decoration: BoxDecoration(
             color: (correct ? Colors.green : Colors.red).withOpacity(0.15),
             borderRadius: BorderRadius.circular(16),
@@ -493,12 +493,12 @@ class _RoleGuessScreenState extends State<RoleGuessScreen>
                   color: correct ? Colors.greenAccent : Colors.redAccent,
                 ),
               ),
-              const SizedBox(height: 8),
+              SizedBox(height: 8),
               Text(
                 '${_guesser.name} и ${_target.name} '
                 '${correct ? AppStrings.bothGetPoints : AppStrings.bothGetNothing}',
                 textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 15, color: Colors.white70),
+                style: TextStyle(fontSize: 15, color: Colors.white70),
               ),
             ],
           ),
@@ -508,7 +508,7 @@ class _RoleGuessScreenState extends State<RoleGuessScreen>
 
         // Next / Results button
         Padding(
-          padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
+          padding: EdgeInsets.fromLTRB(20, 0, 20, 24),
           child: ElevatedButton(
             onPressed: _onNext,
             style: ElevatedButton.styleFrom(
@@ -517,12 +517,12 @@ class _RoleGuessScreenState extends State<RoleGuessScreen>
               minimumSize: const Size(double.infinity, 56),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(14),
-                side: BorderSide(color: AppStyles.deriveStripeColor(AppStyles.accent), width: 2),
+                side: BorderSide(color: Colors.transparent, width: 2),
               ),
             ),
             child: Text(
               _isLastStep ? AppStrings.finalReveal : AppStrings.nextReveal,
-              style: const TextStyle(
+              style: TextStyle(
                   fontSize: 18, fontWeight: FontWeight.bold, letterSpacing: 1),
             ),
           ),
@@ -533,7 +533,7 @@ class _RoleGuessScreenState extends State<RoleGuessScreen>
 
   Widget _playerChip(String name, Color color) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+      padding: EdgeInsets.symmetric(horizontal: 14, vertical: 6),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.15),
         borderRadius: BorderRadius.circular(20),
