@@ -3,7 +3,7 @@ import '../utils/app_settings.dart';
 import '../utils/app_styles.dart';
 import '../config/app_environment.dart';
 import '../utils/sound_service.dart';
-import '../widgets/menu_button.dart';
+import '../widgets/common/game_button.dart';
 
 /// System settings screen.
 class SettingsScreen extends StatefulWidget {
@@ -305,10 +305,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 // Back button
                 Padding(
                   padding: EdgeInsets.all(30),
-                  child: MenuButton(
+                  child: GameButton(
                     text: '← НАЗАД',
+                    type: GameButtonType.secondary,
                     onPressed: () => Navigator.of(context).pop(),
-                    isPrimary: false,
                     width: 200,
                   ),
                 ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../utils/app_styles.dart';
 import '../utils/game_rules.dart';
-import '../widgets/menu_button.dart';
+import '../widgets/common/game_button.dart';
 
 /// Rules screen — all numbers are read from [GameRules] dynamically.
 class RulesScreen extends StatelessWidget {
@@ -25,7 +25,7 @@ class RulesScreen extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 26,
                     fontWeight: FontWeight.w900,
-                    color: AppStyles.darkAccent,
+                    color: AppStyles.accent,
                     letterSpacing: 3,
                   ),
                   textAlign: TextAlign.center,
@@ -54,10 +54,10 @@ class RulesScreen extends StatelessWidget {
                 // Back button
                 Padding(
                   padding: EdgeInsets.fromLTRB(30, 0, 30, 24),
-                  child: MenuButton(
+                  child: GameButton(
                     text: '← НАЗАД',
+                    type: GameButtonType.secondary,
                     onPressed: () => Navigator.of(context).pop(),
-                    isPrimary: false,
                     width: 200,
                   ),
                 ),
@@ -98,7 +98,7 @@ class RulesScreen extends StatelessWidget {
               body,
               style: TextStyle(
                 fontSize: 15,
-                color: AppStyles.darkAccent,
+                color: AppStyles.textSecondary,
                 height: 1.6,
               ),
             ),

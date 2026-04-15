@@ -361,7 +361,7 @@ class _GameRoundScreenState extends State<GameRoundScreen> with SingleTickerProv
   Color _getQuestionTimerColor() {
     if (_questionTimerRemaining <= 5) return Colors.red;
     if (_questionTimerRemaining <= 10) return Colors.orange; // yellow/orange
-    return Colors.green;
+    return Colors.white;
   }
 
   @override
@@ -372,152 +372,152 @@ class _GameRoundScreenState extends State<GameRoundScreen> with SingleTickerProv
           Container(
             color: AppStyles.bgColor,
             child: Container(
-              child: SafeArea(
+            child: SafeArea(
               child: Column(
                 children: [
                   const SizedBox(height: 10),
 
-                // 1. Main Timer
+                  // 1. Main Timer
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  decoration: BoxDecoration(
-                    color: AppStyles.darkAccent.withValues(alpha: 0.7),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Column(
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                      decoration: BoxDecoration(
+                        color: AppStyles.darkAccent.withValues(alpha: 0.7),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
-                          Text(
-                            '${AppStrings.roundPrefix}${widget.session.currentRound}',
-                            style: const TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.redAccent,
-                              letterSpacing: 1.5,
-                            ),
+                          Column(
+                            children: [
+                              Text(
+                                '${AppStrings.roundPrefix}${widget.session.currentRound}',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: AppStyles.accent,
+                                  letterSpacing: 1.5,
+                                ),
+                              ),
+                              Text(
+                                _formatTime(_mainTimerRemaining),
+                                style: const TextStyle(
+                                  fontSize: 32,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                  letterSpacing: 2,
+                                ),
+                              ),
+                            ],
                           ),
-                          Text(
-                            _formatTime(_mainTimerRemaining),
-                            style: const TextStyle(
-                              fontSize: 32,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                              letterSpacing: 2,
+                          if (AppEnvironment.showDeveloperFeatures) ...[
+                            const SizedBox(width: 20),
+                            ElevatedButton(
+                              onPressed: () {
+                                setState(() {
+                                  _mainTimerRemaining = 0;
+                                });
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.redAccent,
+                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                                textStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                              ),
+                              child: const Text('СКИП\nТАЙМЕРА', textAlign: TextAlign.center),
                             ),
-                          ),
+                          ],
                         ],
                       ),
-                      if (AppEnvironment.showDeveloperFeatures) ...[
-                        const SizedBox(width: 20),
-                        ElevatedButton(
-                          onPressed: () {
-                            setState(() {
-                              _mainTimerRemaining = 0;
-                            });
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.redAccent,
-                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                            textStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-                          ),
-                          child: const Text('СКИП\nТАЙМЕРА', textAlign: TextAlign.center),
-                        ),
-                      ],
-                    ],
-                  ),
-                ),
+                    ),
 
-              const SizedBox(height: 30),
+                  const SizedBox(height: 30),
 
-              // Transition animation or Content
-              Expanded(
-                child: AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 500),
-                  transitionBuilder: (Widget child, Animation<double> animation) {
-                    return RotationTransition(
-                      turns: Tween<double>(begin: -0.5, end: 0.0).animate(animation),
-                      child: FadeTransition(opacity: animation, child: child),
-                    );
-                  },
-                  child: _isTransitioning
-                      ? Center(
-                          key: const ValueKey('transition'),
-                          child: Container(
-                            padding: const EdgeInsets.all(30),
-                            decoration: BoxDecoration(
-                              color: AppStyles.accent.withValues(alpha: 0.1),
-                              shape: BoxShape.circle,
-                            ),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(Icons.sync, color: AppStyles.accent, size: 80),
-                                SizedBox(height: 20),
-                                Text(
-                                  AppStrings.transitionText,
-                                  style: TextStyle(
-                                    color: AppStyles.darkAccent,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                  textAlign: TextAlign.center,
+                  // Transition animation or Content
+                  Expanded(
+                    child: AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 500),
+                      transitionBuilder: (Widget child, Animation<double> animation) {
+                        return RotationTransition(
+                          turns: Tween<double>(begin: -0.5, end: 0.0).animate(animation),
+                          child: FadeTransition(opacity: animation, child: child),
+                        );
+                      },
+                      child: _isTransitioning
+                          ? Center(
+                              key: const ValueKey('transition'),
+                              child: Container(
+                                padding: const EdgeInsets.all(30),
+                                decoration: BoxDecoration(
+                                  color: AppStyles.accent.withValues(alpha: 0.1),
+                                  shape: BoxShape.circle,
                                 ),
-                              ],
-                            ),
-                          ),
-                        )
-                      : _buildRoundContent(context),
-                ),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(Icons.sync, color: AppStyles.accent, size: 80),
+                                SizedBox(height: 20),
+                                    Text(
+                                      AppStrings.transitionText,
+                                      style: TextStyle(
+                                        color: AppStyles.darkAccent,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            )
+                          : _buildRoundContent(context),
+                    ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
       ),
-      ),
-      // Penalty notification overlay
-      if (_showPenaltyNotification)
-        Positioned.fill(
-          child: IgnorePointer(
-            child: Align(
-              alignment: Alignment.center,
-              child: Container(
-                margin: const EdgeInsets.symmetric(horizontal: 30),
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 18),
-                decoration: BoxDecoration(
-                  color: AppStyles.danger.withValues(alpha: 0.95),
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: AppStyles.cardBg, width: 2),
+          // Penalty notification overlay
+          if (_showPenaltyNotification)
+            Positioned.fill(
+              child: IgnorePointer(
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 30),
+                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 18),
+                    decoration: BoxDecoration(
+                      color: AppStyles.danger.withValues(alpha: 0.95),
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(color: AppStyles.cardBg, width: 2),
                   boxShadow: [BoxShadow(color: AppStyles.darkAccent.withValues(alpha: 0.5), blurRadius: 20)],
-                ),
-                child: Text(
-                  '$_penaltyPlayerName − теряет часть своего очка 😭\n${GameRules.penaltyOvertime}',
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                    height: 1.5,
+                    ),
+                    child: Text(
+                      '$_penaltyPlayerName − теряет часть своего очка 😭\n${GameRules.penaltyOvertime}',
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        height: 1.5,
+                      ),
+                    ),
                   ),
                 ),
               ),
             ),
+          ExitGameButton(
+            onPause: () {
+              _mainTimer?.cancel();
+              _questionTimer?.cancel();
+            },
+            onResume: () {
+              _startTimers();
+            },
           ),
-        ),
-      ExitGameButton(
-        onPause: () {
-          _mainTimer?.cancel();
-          _questionTimer?.cancel();
-        },
-        onResume: () {
-          _startTimers();
-        },
+        ],
       ),
-    ],
-  ),
-);
-}
+    );
+  }
 
   Widget _buildRoundContent(BuildContext context) {
     return Column(
@@ -526,46 +526,46 @@ class _GameRoundScreenState extends State<GameRoundScreen> with SingleTickerProv
       children: [
         // 2. Current turn text
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Container(
-            padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              color: AppStyles.cardBg,
-              borderRadius: BorderRadius.circular(15),
-              boxShadow: [
-                BoxShadow(
-                  color: AppStyles.darkAccent.withValues(alpha: 0.1),
-                  blurRadius: 10,
-                  offset: const Offset(0, 5),
-                ),
-              ],
-            ),
-            child: Column(
-              children: [
-                Text(
-                  widget.session.players[_currentAskerIndex].name,
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: AppStyles.darkAccent,
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: AppStyles.cardBg,
+                borderRadius: BorderRadius.circular(15),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppStyles.darkAccent.withValues(alpha: 0.1),
+                    blurRadius: 10,
+                    offset: const Offset(0, 5),
                   ),
-                ),
-                Padding(
+                ],
+              ),
+              child: Column(
+                children: [
+                  Text(
+                    widget.session.players[_currentAskerIndex].name,
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: AppStyles.accent,
+                    ),
+                  ),
+                  Padding(
                   padding: EdgeInsets.symmetric(vertical: 8),
-                  child: Icon(Icons.arrow_downward, size: 30, color: AppStyles.accent),
-                ),
-                Text(
-                  widget.session.players[_currentTargetIndex].name,
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: AppStyles.darkAccent,
+                    child: Icon(Icons.arrow_downward, size: 45, color: AppStyles.accent),
                   ),
-                ),
-              ],
+                  Text(
+                    widget.session.players[_currentTargetIndex].name,
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: AppStyles.accent,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
 
         const Spacer(),
 
@@ -691,11 +691,10 @@ class _GameRoundScreenState extends State<GameRoundScreen> with SingleTickerProv
           ),
         ),
 
-        const SizedBox(height: 10),
+        const SizedBox(height: 100),
 
-        // 7. Stop Round Button (Only in developer mode)
-        if (AppEnvironment.showDeveloperFeatures)
-          Padding(
+        // 7. Stop Round Button
+        Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20).copyWith(bottom: 20),
             child: ElevatedButton(
               onPressed: _showStopRoundDialog,
