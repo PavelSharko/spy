@@ -167,7 +167,7 @@ class _SpyLastWordScreenState extends State<SpyLastWordScreen> {
                     onPressed: _onEndRound,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppStyles.accent,
-                      foregroundColor: AppStyles.cardBg,
+                      foregroundColor: AppStyles.bgColor,
                       side: BorderSide(color: AppStyles.darkAccent, width: 2),
                       minimumSize: const Size(double.infinity, 60),
                       shape: RoundedRectangleBorder(
