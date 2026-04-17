@@ -19,6 +19,10 @@ class AppStyles {
   static Color get darkAccent => Color.lerp(primaryBg, Colors.black, 0.35)!;
   /// Вторичный текст (полупрозрачный primaryAccent для приглушения)
   static Color get textSecondary => primaryAccent.withValues(alpha: 0.7);
+   /// Вторичный текст (полупрозрачный primaryAccent 2 для приглушения)
+  static Color get textSecondary2 => primaryAccent.withValues(alpha: 0.3);
+  /// Вторичный текст (воторичный текст более темнее)
+  static Color get textAccentDarker => Color.lerp(primaryAccent, Colors.black, 0.35)!;
 
   static Color get textBright => HSLColor.fromColor(primaryAccent)
     .withLightness((HSLColor.fromColor(primaryAccent).lightness + 0.15).clamp(0.0, 1.0))

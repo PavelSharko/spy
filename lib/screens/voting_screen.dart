@@ -210,9 +210,9 @@ class _VotingScreenState extends State<VotingScreen> {
                     Text(
                       AppStrings.votingPlayerPrefix.trim(),
                       style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: AppStyles.textSecondary,
+                        fontSize: 25,
+                        fontWeight: FontWeight.w800,
+                        color: AppStyles.textBright,
                       ),
                     ),
                     SizedBox(height: 5),
@@ -221,7 +221,7 @@ class _VotingScreenState extends State<VotingScreen> {
                       style: TextStyle(
                         fontSize: 26,
                         fontWeight: FontWeight.w900,
-                        color: AppStyles.darkAccent,
+                        color: AppStyles.textBright,
                       ),
                       textAlign: TextAlign.center,
                     ),
@@ -236,7 +236,7 @@ class _VotingScreenState extends State<VotingScreen> {
                 AppStrings.votePrompt,
                 style: TextStyle(
                   fontSize: 18,
-                  fontWeight: FontWeight.w500,
+                  fontWeight: FontWeight.w800,
                   color: AppStyles.textSecondary,
                 ),
                 textAlign: TextAlign.center,
@@ -271,7 +271,7 @@ class _VotingScreenState extends State<VotingScreen> {
                           duration: const Duration(milliseconds: 200),
                           padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
                           decoration: BoxDecoration(
-                            color: isSelected ? AppStyles.warning : AppStyles.cardBg,
+                            color: isSelected ? AppStyles.accent : AppStyles.cardBg,
                             borderRadius: BorderRadius.circular(15),
                             border: Border.all(
                               color: isSelected ? AppStyles.darkAccent : Colors.transparent,
@@ -304,7 +304,7 @@ class _VotingScreenState extends State<VotingScreen> {
                                   style: TextStyle(
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold,
-                                    color: isSelected ? Colors.white : AppStyles.darkAccent,
+                                    color: isSelected ? AppStyles.darkAccent: AppStyles.primaryAccent,
                                   ),
                                 ),
                               ),
@@ -328,7 +328,7 @@ class _VotingScreenState extends State<VotingScreen> {
                      if (_tieCandidates.isNotEmpty && !_tieCandidates.contains(index)) return const SizedBox.shrink();
                      return Text(
                        '${widget.session.players[index].name}: ${_votes[index]}',
-                       style: TextStyle(color: AppStyles.textSecondary, fontSize: 12),
+                       style: TextStyle(color: AppStyles.textSecondary, fontSize: 18),
                      );
                   }),
                 ),
@@ -344,7 +344,7 @@ class _VotingScreenState extends State<VotingScreen> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppStyles.accent,
                     foregroundColor: AppStyles.cardBg,
-                    disabledBackgroundColor: Colors.grey.shade300,
+                    disabledBackgroundColor: AppStyles.cardBg,
                     side: BorderSide(color: AppStyles.darkAccent, width: 2),
                     minimumSize: const Size(double.infinity, 60),
                     shape: RoundedRectangleBorder(
@@ -357,6 +357,9 @@ class _VotingScreenState extends State<VotingScreen> {
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
+                      color: _selectedCandidateIndex != null 
+                          ? AppStyles.primaryBg 
+                          : AppStyles.textSecondary2,
                       letterSpacing: 1.5,
                     ),
                   ),
