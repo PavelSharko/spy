@@ -183,7 +183,7 @@ class _VotingScreenState extends State<VotingScreen> {
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
-                  color: AppStyles.darkAccent,
+                  color: AppStyles.accent,
                   letterSpacing: 2,
                 ),
               ),

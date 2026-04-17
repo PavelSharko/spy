@@ -90,9 +90,9 @@ class _RoundScoreScreenState extends State<RoundScoreScreen> {
                 child: Text(
                   _isLastRound ? "Итоги игры" : AppStrings.roundScoreTitle,
                   style: TextStyle(
-                    fontSize: 26,
+                    fontSize: 32,
                     fontWeight: FontWeight.w900,
-                    color: AppStyles.darkAccent,
+                    color: AppStyles.accent,
                     letterSpacing: 2,
                   ),
                 ),
@@ -103,16 +103,16 @@ class _RoundScoreScreenState extends State<RoundScoreScreen> {
               // Winner display if last round
               if (_isLastRound && _sortedPlayers.isNotEmpty)
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10).copyWith(bottom: 30),
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 1).copyWith(bottom: 30),
                   child: Container(
                     padding: const EdgeInsets.all(20),
                     decoration: BoxDecoration(
                       color: AppStyles.warning.withOpacity(0.15),
                       borderRadius: BorderRadius.circular(20),
-                      border: Border.all(color: AppStyles.warning, width: 2),
+                      border: Border.all(color: AppStyles.accent, width: 2),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.3),
+                          color: Colors.black.withOpacity(0.2),
                           blurRadius: 10,
                           offset: const Offset(0, 5),
                         )
@@ -123,12 +123,12 @@ class _RoundScoreScreenState extends State<RoundScoreScreen> {
                         const Icon(Icons.emoji_events, size: 60, color: AppStyles.warning),
                         const SizedBox(height: 10),
                         Text(
-                          '${AppStrings.winnerPrefix}${_sortedPlayers.first.name}!',
+                          '${AppStrings.winnerPrefix}\n${_sortedPlayers.first.name}!',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 26,
                             fontWeight: FontWeight.w900,
-                            color: AppStyles.darkAccent,
+                            color: AppStyles.accent,
                           ),
                         ),
                       ],
@@ -190,19 +190,19 @@ class _RoundScoreScreenState extends State<RoundScoreScreen> {
                       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                       decoration: BoxDecoration(
                         color: isFirst 
-                            ? AppStyles.warning.withOpacity(0.15) 
+                            ? AppStyles.accent.withOpacity(0.45)
                             : AppStyles.cardBg,
                         borderRadius: BorderRadius.circular(15),
                         boxShadow: [
                           BoxShadow(
-                            color: AppStyles.darkAccent.withOpacity(0.1),
+                            color: AppStyles.darkAccent.withOpacity(0.45),
                             blurRadius: 5,
                             offset: const Offset(0, 3),
                           ),
                         ],
                         border: Border.all(
-                          color: isFirst ? AppStyles.warning : AppStyles.accent.withOpacity(0.2),
-                          width: isFirst ? 2 : 1,
+                          color: isFirst ? AppStyles.accent : AppStyles.accent.withOpacity(0.4),
+                          width: isFirst ? 3 : 1,
                         ),
                       ),
                       child: Row(
@@ -212,16 +212,16 @@ class _RoundScoreScreenState extends State<RoundScoreScreen> {
                             width: 30,
                             height: 30,
                             decoration: BoxDecoration(
-                              color: isFirst ? AppStyles.warning : AppStyles.accent,
+                              color: isFirst ? AppStyles.textBright : AppStyles.accent,
                               shape: BoxShape.circle,
                             ),
                             child: Center(
                               child: Text(
                                 '${index + 1}',
                                 style: TextStyle(
-                                  color: isFirst ? AppStyles.darkAccent : Colors.white,
+                                  color: isFirst ? AppStyles.darkAccent : AppStyles.darkAccent,
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 14,
+                                  fontSize: 16,
                                 ),
                               ),
                             ),
@@ -229,17 +229,14 @@ class _RoundScoreScreenState extends State<RoundScoreScreen> {
                           const SizedBox(width: 10),
 
                           // Player Avatar
-                          CircleAvatar(
-                            radius: 18,
-                            backgroundColor: AppStyles.accent.withOpacity(0.15),
-                            backgroundImage: player.photoBytes != null
-                                ? MemoryImage(player.photoBytes!)
-                                : null,
-                            child: player.photoBytes == null
-                                ? Icon(Icons.person, color: AppStyles.textSecondary, size: 18)
-                                : null,
-                          ),
-                          const SizedBox(width: 10),
+                          if (player.photoBytes != null) ...[
+                            CircleAvatar(
+                              radius: 18,
+                              backgroundColor: AppStyles.accent.withOpacity(0.45),
+                              backgroundImage: MemoryImage(player.photoBytes!),
+                            ),
+                            const SizedBox(width: 10),
+                          ],
                           
                           // Name
                           Expanded(
@@ -247,8 +244,8 @@ class _RoundScoreScreenState extends State<RoundScoreScreen> {
                               player.name,
                               style: TextStyle(
                                 fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: AppStyles.darkAccent,
+                                fontWeight: isFirst ? FontWeight.w900 : FontWeight.w500,
+                                color: isFirst ? AppStyles.darkAccent : AppStyles.accent,
                               ),
                               overflow: TextOverflow.ellipsis,
                             ),
@@ -279,7 +276,7 @@ class _RoundScoreScreenState extends State<RoundScoreScreen> {
                             style: TextStyle(
                               fontSize: 22,
                               fontWeight: isFirst ? FontWeight.w900 : FontWeight.bold,
-                              color: isFirst ? AppStyles.warning : AppStyles.darkAccent,
+                              color: isFirst ? AppStyles.darkAccent : AppStyles.textBright,
                             ),
                           ),
                         ],
@@ -295,7 +292,7 @@ class _RoundScoreScreenState extends State<RoundScoreScreen> {
                 child: ElevatedButton(
                   onPressed: _onNextAction,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: _isLastRound ? AppStyles.danger : AppStyles.accent,
+                    backgroundColor: _isLastRound ? AppStyles.accent : AppStyles.accent,
                     foregroundColor: AppStyles.cardBg,
                     minimumSize: const Size(double.infinity, 60),
                     shape: RoundedRectangleBorder(

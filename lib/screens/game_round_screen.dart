@@ -42,6 +42,7 @@ class _GameRoundScreenState extends State<GameRoundScreen> with SingleTickerProv
 
   late AnimationController _pulseController;
   late Animation<double> _pulseAnimation;
+  late Animation<double> _fadeAnimation;
 
   Timer? _mainTimer;
   Timer? _questionTimer;
@@ -50,6 +51,7 @@ class _GameRoundScreenState extends State<GameRoundScreen> with SingleTickerProv
   late int _currentTargetIndex;
 
   bool _isLastQuestion = false;
+  bool _showLastQuestionText = false;
   bool _isTimeUp = false;
   bool _isTransitioning = false;
 
@@ -68,6 +70,7 @@ class _GameRoundScreenState extends State<GameRoundScreen> with SingleTickerProv
           _pulseController.reverse();
         }
       });
+    _fadeAnimation = Tween<double>(begin: 0.2, end: 1.0).animate(CurvedAnimation(parent: _pulseController, curve: Curves.easeInOut));
 
     _mainTimerRemaining = widget.session.gameTime * 60;
     
@@ -111,10 +114,15 @@ class _GameRoundScreenState extends State<GameRoundScreen> with SingleTickerProv
 
           if (_additionalTimerRemaining == 0) {
             _isAdditionalTime = false;
+            _isTimeUp = true; // Отключаем кнопку "ДАЛЬШЕ!" для предотвращения нажатий во время показа штрафа
             final penalisedPlayer = widget.session.players[_currentAskerIndex];
             penalisedPlayer.addScore(GameRules.penaltyOvertime);
-            _showPenalty(penalisedPlayer.name);
-            _onQuestionTimeUp();
+            
+            // Сначала показываем штраф, затем запускаем логику окончания времени
+            Future.microtask(() async {
+              await _showPenalty(penalisedPlayer.name);
+              _onQuestionTimeUp();
+            });
           }
         }
       });
@@ -122,13 +130,9 @@ class _GameRoundScreenState extends State<GameRoundScreen> with SingleTickerProv
   }
 
   void _onQuestionTimeUp() async {
-    setState(() {
-      _isTimeUp = true;
-    });
-
-    // Wait 2 seconds showing "ВРЕМЯ ВЫШЛО!"
-    await Future.delayed(const Duration(seconds: 2));
-
+    // Текст "ВРЕМЯ ВЫШЛО!" уже показывался в течение 3 сек (во время _isAdditionalTime).
+    // Штраф тоже уже был показан (2 сек). 
+    // Теперь сразу переходим к следующему игроку.
     if (!mounted) return;
 
     if (_isLastQuestion) {
@@ -169,15 +173,15 @@ class _GameRoundScreenState extends State<GameRoundScreen> with SingleTickerProv
       barrierDismissible: false,
       builder: (ctx) {
         return AlertDialog(
-          backgroundColor: AppStyles.bgColor,
+          backgroundColor: AppStyles.bgColor, // Фоновый цвет диалога
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
-            side: BorderSide(color: AppStyles.darkAccent.withValues(alpha: 0.1), width: 2),
+            side: BorderSide(color: AppStyles.darkAccent.withValues(alpha: 0.1), width: 2), // Цвет рамки диалога
           ),
           title: Text(
             AppStrings.whatHappened,
             textAlign: TextAlign.center,
-            style: TextStyle(fontWeight: FontWeight.bold, color: AppStyles.accent),
+            style: TextStyle(fontWeight: FontWeight.bold, color: AppStyles.accent), // Цвет заголовка диалога
           ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
@@ -191,9 +195,9 @@ class _GameRoundScreenState extends State<GameRoundScreen> with SingleTickerProv
                   _navigateToScores();
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppStyles.success,
-                  foregroundColor: Colors.white,
-                  side: BorderSide(color: Colors.green.shade900, width: 2),
+                  backgroundColor: AppStyles.success, // Цвет кнопки "Шпион угадал локацию" (зеленый)
+                  foregroundColor: Colors.white, // Цвет текста кнопки
+                  side: BorderSide(color: Colors.green.shade900, width: 2), // Цвет рамки кнопки
                 ),
                 child: const Text(AppStrings.spyGuessedLoc, textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold)),
               ),
@@ -207,9 +211,9 @@ class _GameRoundScreenState extends State<GameRoundScreen> with SingleTickerProv
                   _navigateToScores();
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppStyles.danger,
-                  foregroundColor: Colors.white,
-                  side: BorderSide(color: Colors.red.shade900, width: 2),
+                  backgroundColor: AppStyles.danger, // Цвет кнопки "Шпион пойман" (красный)
+                  foregroundColor: Colors.white, // Цвет текста кнопки
+                  side: BorderSide(color: Colors.red.shade900, width: 2), // Цвет рамки кнопки
                 ),
                 child: const Text(AppStrings.spyCaught, textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold)),
               ),
@@ -221,9 +225,9 @@ class _GameRoundScreenState extends State<GameRoundScreen> with SingleTickerProv
                   _startTimers();
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppStyles.warning,
-                  foregroundColor: Colors.white,
-                  side: BorderSide(color: Colors.orange.shade900, width: 2),
+                  backgroundColor: AppStyles.warning, // Цвет кнопки "Продолжить игру" (оранжевый)
+                  foregroundColor: Colors.white, // Цвет текста кнопки
+                  side: BorderSide(color: Colors.orange.shade900, width: 2), // Цвет рамки кнопки
                 ),
                 child: const Text(AppStrings.continueGame, textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold)),
               ),
@@ -253,8 +257,8 @@ class _GameRoundScreenState extends State<GameRoundScreen> with SingleTickerProv
       _additionalTimerRemaining = 0;
     });
 
-    // Simulate transition delay (1 second) for the rotation animation (which will be in the build method)
-    await Future.delayed(const Duration(seconds: 1));
+    // Simulate transition delay (2 seconds) for the rotation animation (which will be in the build method)
+    await Future.delayed(const Duration(seconds: 2));
 
     if (!mounted) return;
 
@@ -270,7 +274,16 @@ class _GameRoundScreenState extends State<GameRoundScreen> with SingleTickerProv
       // Check if it's the last question based on the main timer
       if (_mainTimerRemaining <= 20) {
         _isLastQuestion = true;
-        _showLastQuestionToast();
+        _showLastQuestionText = true;
+        
+        Future.delayed(const Duration(seconds: 5), () {
+          if (mounted) {
+            setState(() {
+              _showLastQuestionText = false;
+            });
+          }
+        });
+        // _showLastQuestionToast(); // Выключено: теперь отображается над кнопкой "Завершить раунд" вместо всплывающего окна
       }
 
       _isTransitioning = false;
@@ -285,7 +298,7 @@ class _GameRoundScreenState extends State<GameRoundScreen> with SingleTickerProv
           textAlign: TextAlign.center,
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
-        backgroundColor: AppStyles.danger,
+        backgroundColor: AppStyles.danger, // Цвет фона уведомления о последнем вопросе
         duration: const Duration(seconds: 3),
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -293,14 +306,22 @@ class _GameRoundScreenState extends State<GameRoundScreen> with SingleTickerProv
     );
   }
 
-  void _showPenalty(String playerName) {
+  Future<void> _showPenalty(String playerName) async {
+    if (!mounted) return;
     setState(() {
       _penaltyPlayerName = playerName;
       _showPenaltyNotification = true;
     });
-    Future.delayed(const Duration(seconds: 3), () {
-      if (mounted) setState(() => _showPenaltyNotification = false);
-    });
+    
+    // Показываем уведомление ровно 2 секунды
+    await Future.delayed(const Duration(seconds: 2));
+    
+    if (mounted) {
+      setState(() => _showPenaltyNotification = false);
+    }
+    
+    // Даем окну полностью исчезнуть до начала анимации вращения экрана (избегаем наслоения)
+    await Future.delayed(const Duration(milliseconds: 400));
   }
 
   void _onHintPressed() {
@@ -359,9 +380,9 @@ class _GameRoundScreenState extends State<GameRoundScreen> with SingleTickerProv
   }
 
   Color _getQuestionTimerColor() {
-    if (_questionTimerRemaining <= 5) return Colors.red;
-    if (_questionTimerRemaining <= 10) return Colors.orange; // yellow/orange
-    return Colors.white;
+    if (_questionTimerRemaining <= 5) return Colors.red; // Цвет таймера вопроса, когда осталось мало времени
+    if (_questionTimerRemaining <= 10) return Colors.orange; // Цвет таймера вопроса (желтый/оранжевый)
+    return Colors.white; // Обычный цвет таймера вопроса
   }
 
   @override
@@ -370,7 +391,7 @@ class _GameRoundScreenState extends State<GameRoundScreen> with SingleTickerProv
       body: Stack(
         children: [
           Container(
-            color: AppStyles.bgColor,
+            color: AppStyles.bgColor, // Основной фоновый цвет экрана
             child: Container(
             child: SafeArea(
               child: Column(
@@ -379,10 +400,10 @@ class _GameRoundScreenState extends State<GameRoundScreen> with SingleTickerProv
 
                   // 1. Main Timer
                 Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                      padding: const EdgeInsets.symmetric(horizontal: 80, vertical: 10),
                       decoration: BoxDecoration(
-                        color: AppStyles.darkAccent.withValues(alpha: 0.7),
-                        borderRadius: BorderRadius.circular(20),
+                        color: AppStyles.darkAccent.withValues(alpha: 0.01), // Цвет фона плашки таймера (с прозрачностью)
+                        borderRadius: BorderRadius.circular(10),
                       ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
@@ -394,7 +415,7 @@ class _GameRoundScreenState extends State<GameRoundScreen> with SingleTickerProv
                                 style: TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
-                                  color: AppStyles.accent,
+                                  color: AppStyles.accent, // Цвет текста номера раунда
                                   letterSpacing: 1.5,
                                 ),
                               ),
@@ -403,7 +424,7 @@ class _GameRoundScreenState extends State<GameRoundScreen> with SingleTickerProv
                                 style: const TextStyle(
                                   fontSize: 32,
                                   fontWeight: FontWeight.bold,
-                                  color: Colors.white,
+                                  color: Colors.white, // Цвет цифр главного таймера
                                   letterSpacing: 2,
                                 ),
                               ),
@@ -418,7 +439,7 @@ class _GameRoundScreenState extends State<GameRoundScreen> with SingleTickerProv
                                 });
                               },
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.redAccent,
+                                backgroundColor: Colors.redAccent, // Цвет кнопки "СКИП ТАЙМЕРА" (только для разработчиков)
                                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                                 textStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                               ),
@@ -444,28 +465,21 @@ class _GameRoundScreenState extends State<GameRoundScreen> with SingleTickerProv
                       child: _isTransitioning
                           ? Center(
                               key: const ValueKey('transition'),
-                              child: Container(
-                                padding: const EdgeInsets.all(30),
-                                decoration: BoxDecoration(
-                                  color: AppStyles.accent.withValues(alpha: 0.1),
-                                  shape: BoxShape.circle,
-                                ),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Icon(Icons.sync, color: AppStyles.accent, size: 80),
-                                SizedBox(height: 20),
-                                    Text(
-                                      AppStrings.transitionText,
-                                      style: TextStyle(
-                                        color: AppStyles.darkAccent,
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                      textAlign: TextAlign.center,
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(Icons.sync, color: AppStyles.accent, size: 140), // Цвет иконки синхронизации
+                                  const SizedBox(height: 20),
+                                  Text(
+                                    AppStrings.transitionText,
+                                    style: TextStyle(
+                                      color: AppStyles.accent, // Цвет текста "Передайте телефон"
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.bold,
                                     ),
-                                  ],
-                                ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ],
                               ),
                             )
                           : _buildRoundContent(context),
@@ -486,16 +500,16 @@ class _GameRoundScreenState extends State<GameRoundScreen> with SingleTickerProv
                     margin: const EdgeInsets.symmetric(horizontal: 30),
                     padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 18),
                     decoration: BoxDecoration(
-                      color: AppStyles.danger.withValues(alpha: 0.95),
+                      color: AppStyles.danger.withValues(alpha: 0.25), // Цвет фона штрафного окна
                       borderRadius: BorderRadius.circular(20),
-                      border: Border.all(color: AppStyles.cardBg, width: 2),
-                  boxShadow: [BoxShadow(color: AppStyles.darkAccent.withValues(alpha: 0.5), blurRadius: 20)],
+                      border: Border.all(color: AppStyles.cardBg, width: 2), // Цвет рамки штрафного окна
+                  boxShadow: [BoxShadow(color: AppStyles.darkAccent.withValues(alpha: 0.5), blurRadius: 20)], // Цвет тени штрафного окна
                     ),
                     child: Text(
                       '$_penaltyPlayerName − теряет часть своего очка 😭\n${GameRules.penaltyOvertime}',
                       textAlign: TextAlign.center,
                       style: const TextStyle(
-                        color: Colors.white,
+                        color: Colors.white, // Цвет текста в штрафном окне
                         fontSize: 22,
                         fontWeight: FontWeight.bold,
                         height: 1.5,
@@ -530,11 +544,11 @@ class _GameRoundScreenState extends State<GameRoundScreen> with SingleTickerProv
             child: Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: AppStyles.cardBg,
+                color: AppStyles.cardBg, // Фоновый цвет карточки с именами игроков
                 borderRadius: BorderRadius.circular(15),
                 boxShadow: [
                   BoxShadow(
-                    color: AppStyles.darkAccent.withValues(alpha: 0.1),
+                    color: AppStyles.darkAccent.withValues(alpha: 0.1), // Цвет тени карточки
                     blurRadius: 10,
                     offset: const Offset(0, 5),
                   ),
@@ -547,19 +561,19 @@ class _GameRoundScreenState extends State<GameRoundScreen> with SingleTickerProv
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
-                      color: AppStyles.accent,
+                      color: AppStyles.accent, // Цвет имени первого игрока (акцентный)
                     ),
                   ),
                   Padding(
                   padding: EdgeInsets.symmetric(vertical: 8),
-                    child: Icon(Icons.arrow_downward, size: 45, color: AppStyles.accent),
+                    child: Icon(Icons.arrow_downward, size: 45, color: AppStyles.accent), // Цвет стрелочки между игроками
                   ),
                   Text(
                     widget.session.players[_currentTargetIndex].name,
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
-                      color: AppStyles.accent,
+                      color: AppStyles.accent, // Цвет имени второго игрока (акцентный)
                     ),
                   ),
                 ],
@@ -567,22 +581,70 @@ class _GameRoundScreenState extends State<GameRoundScreen> with SingleTickerProv
             ),
           ),
 
-        const Spacer(),
+        const SizedBox(height: 12),
+
+        // 5. Hint Button (перемещено под карточку)
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 40),
+          child: ElevatedButton.icon(
+            onPressed: (_hintsUsed >= 2) ? null : _onHintPressed,
+            icon: const Icon(Icons.lightbulb_outline),
+            label: Text('${AppStrings.hintButton} (${2 - _hintsUsed})'),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppStyles.warning, // Цвет кнопки подсказки (предупреждающий/желтый)
+              foregroundColor: AppStyles.darkAccent, // Цвет текста и иконки кнопки подсказки
+              disabledBackgroundColor: AppStyles.cardBg, // Цвет фона кнопки при (0)
+              disabledForegroundColor: AppStyles.accent.withOpacity(0.5), // Цвет текста при (0)
+              padding: const EdgeInsets.symmetric(vertical: 15),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30),
+              ),
+              elevation: 4,
+            ),
+          ),
+        ),
+
+        // Expanded space 1: Текст подсказки
+        Expanded(
+          child: Center(
+            child: (_currentHintsText.isNotEmpty && !_isTimeUp)
+                ? Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: _currentHintsText.map((hint) {
+                        return Container(
+                          margin: const EdgeInsets.only(bottom: 8),
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          decoration: BoxDecoration(
+                            color: AppStyles.accent.withOpacity(0.75),
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(color: AppStyles.warning, width: 2),
+                          ),
+                          child: Text(
+                            hint,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 22,
+                              color: AppStyles.bgColor,
+                              fontWeight: FontWeight.w800,
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  )
+                : const SizedBox(),
+          ),
+        ),
 
         // 3. Question Timer (20s)
-        if (_isTimeUp)
-          Text(
-            AppStrings.timeIsUp,
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              fontSize: 40,
-              fontWeight: FontWeight.w900,
-              color: Colors.redAccent,
-              letterSpacing: 2,
-            ),
-          )
-        else
-          Center(
+        Visibility(
+          visible: !_isTimeUp,
+          maintainSize: true,
+          maintainAnimation: true,
+          maintainState: true,
+          child: Center(
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 300),
               width: 150,
@@ -606,57 +668,28 @@ class _GameRoundScreenState extends State<GameRoundScreen> with SingleTickerProv
               ),
             ),
           ),
-
-        const Spacer(),
-
-        // 4. Hints Display
-        if (_currentHintsText.isNotEmpty)
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            child: Column(
-              children: _currentHintsText.map((hint) {
-                return Container(
-                  margin: const EdgeInsets.only(bottom: 8),
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: AppStyles.warning.withOpacity(0.15),
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: AppStyles.warning, width: 2),
-                  ),
-                  child: Text(
-                    hint,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 32,
-                      color: AppStyles.darkAccent,
-                      fontWeight: FontWeight.w900,
-                    ),
-                  ),
-                );
-              }).toList(),
-            ),
-          ),
-
-        // 5. Hint Button
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 40),
-          child: ElevatedButton.icon(
-            onPressed: (_hintsUsed >= 2) ? null : _onHintPressed,
-            icon: const Icon(Icons.lightbulb_outline),
-            label: Text('${AppStrings.hintButton} (${2 - _hintsUsed})'),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppStyles.warning,
-              foregroundColor: AppStyles.darkAccent,
-              padding: const EdgeInsets.symmetric(vertical: 15),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30),
-              ),
-              elevation: 4,
-            ),
-          ),
         ),
 
-        const SizedBox(height: 20),
+        // Expanded space 2: ВРЕМЯ ВЫШЛО текст
+        Expanded(
+          child: Center(
+            child: (_isTimeUp || _isAdditionalTime)
+                ? FadeTransition(
+                    opacity: _fadeAnimation,
+                    child: Text(
+                      AppStrings.timeIsUp,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontSize: 32,
+                        fontWeight: FontWeight.w900,
+                        color: Colors.redAccent, // Цвет текста "ВРЕМЯ ВЫШЛО!"
+                        letterSpacing: 2,
+                      ),
+                    ),
+                  )
+                : const SizedBox(),
+          ),
+        ),
 
         // 6. Action Button ("ДАЛЬШЕ!" / "Завершить раунд")
         Padding(
@@ -668,9 +701,11 @@ class _GameRoundScreenState extends State<GameRoundScreen> with SingleTickerProv
               style: ElevatedButton.styleFrom(
                 // Red during overtime flash, otherwise normal colour
                 backgroundColor: _isAdditionalTime
-                    ? Colors.red.shade700
-                    : (_isLastQuestion ? Colors.red.shade600 : AppStyles.accent),
-                foregroundColor: Colors.white,
+                    ? Colors.red.shade700 // Цвет кнопки "Дальше" во время овертайма (темно-красный)
+                    : (_isLastQuestion ? Colors.red.shade600 : AppStyles.accent), // Цвет кнопки в обычном режиме (темный) или в конце раунда (красный)
+                foregroundColor: (_isAdditionalTime || _isLastQuestion)
+                    ? Colors.white // Белый текст для красных состояний
+                    : AppStyles.darkAccent, // Акцентный (желтый) текст для обычного времени
                 padding: const EdgeInsets.symmetric(vertical: 20),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15),
@@ -691,32 +726,54 @@ class _GameRoundScreenState extends State<GameRoundScreen> with SingleTickerProv
           ),
         ),
 
-        const SizedBox(height: 100),
+        const SizedBox(height: 20),
 
         // 7. Stop Round Button
-        Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20).copyWith(bottom: 20),
-            child: ElevatedButton(
-              onPressed: _showStopRoundDialog,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppStyles.danger,
-                foregroundColor: Colors.white,
-                side: BorderSide(color: Colors.red.shade900, width: 3),
-                padding: const EdgeInsets.symmetric(vertical: 15),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15),
+        Stack(
+          clipBehavior: Clip.none,
+          alignment: Alignment.bottomCenter,
+          children: [
+            if (_showLastQuestionText)
+              Positioned(
+                top: -120, // Поднял чуть выше над кнопкой
+                left: 0,
+                right: 0,
+                child: Text(
+                  AppStrings.lastQuestionToast,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: AppStyles.danger,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-                elevation: 4,
               ),
-              child: const Text(
-                AppStrings.stopRound,
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20).copyWith(bottom: 20),
+              child: ElevatedButton(
+                onPressed: _showStopRoundDialog,
+                style: ElevatedButton.styleFrom(
+                  minimumSize: const Size(double.infinity, 68), // Обеспечивает растягивание на всю ширину внутри Stack
+                  backgroundColor: AppStyles.danger, // Цвет кнопки "Завершить раунд" (красный)
+                  foregroundColor: Colors.white, // Цвет текста кнопки
+                  side: BorderSide(color: Colors.red.shade900, width: 3), // Цвет рамки кнопки
+                  padding: const EdgeInsets.symmetric(vertical: 20),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  elevation: 4,
+                ),
+                child: const Text(
+                  AppStrings.stopRound,
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ),
-          ),
+          ],
+        ),
       ],
     );
   }

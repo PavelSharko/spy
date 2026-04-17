@@ -20,6 +20,10 @@ class AppStyles {
   /// Вторичный текст (полупрозрачный primaryAccent для приглушения)
   static Color get textSecondary => primaryAccent.withValues(alpha: 0.7);
 
+  static Color get textBright => HSLColor.fromColor(primaryAccent)
+    .withLightness((HSLColor.fromColor(primaryAccent).lightness + 0.15).clamp(0.0, 1.0))
+    .toColor();
+
   // Псевдонимы для совместимости и плавного перехода
   static Color get bgColor => primaryBg;
   static Color get accent => primaryAccent;

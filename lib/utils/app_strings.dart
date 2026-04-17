@@ -50,11 +50,11 @@ class AppStrings {
   // Game Round Strings
   static const String timeIsUp = 'ВРЕМЯ ВЫШЛО!';
   static const String nextPlayer = 'ДАЛЬШЕ!';
-  static const String endRound = 'Завершить раунд';
+  static const String endRound = 'Остановить раунд';
   static const String lastQuestionToast = 'Это последний вопрос в этом раунде!';
   static const String hintButton = 'Подсказка';
   static const String transitionText = 'переход к следующему игроку';
-  static const String stopRound = 'Стоп-раунд';
+  static const String stopRound = 'Закончить-раунд';
   static const String whatHappened = 'Укажите причину:';
   static const String spyGuessedLoc = 'Шпион уже отгадал локацию';
   static const String spyFailed = 'Провал шпиона';
