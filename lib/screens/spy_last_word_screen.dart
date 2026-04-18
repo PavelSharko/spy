@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../models/game_session.dart';
 import '../utils/app_strings.dart';
 import '../utils/app_styles.dart';
@@ -58,42 +59,43 @@ class _SpyLastWordScreenState extends State<SpyLastWordScreen> {
                   SizedBox(height: 20),
 
               // Title
-              Center(
-                child: Text(
-                  AppStrings.spyLastWordTitle,
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: AppStyles.accent,
-                    letterSpacing: 2,
+              Transform.translate(
+                offset: const Offset(0, 110),
+                child: Center(
+                  child: Text(
+                    AppStrings.SpyWas,
+                    style: TextStyle(
+                      fontSize: 24,
+                      color: AppStyles.accent,
+                      letterSpacing: 1,
+                    ),
                   ),
                 ),
               ),
 
-              SizedBox(height: 30),
+              SizedBox(height: 120),
 
               // Spy Name
               Center(
                 child: Container(
-                  margin: EdgeInsets.symmetric(horizontal: 20),
-                  padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                  margin: EdgeInsets.symmetric(horizontal: 40),
+                  padding: EdgeInsets.symmetric(horizontal: 40, vertical: 30),
                   decoration: BoxDecoration(
-                    color: AppStyles.danger,
-                    borderRadius: BorderRadius.circular(15),
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppStyles.danger.withValues(alpha: 0.3),
-                        blurRadius: 10,
-                        offset: const Offset(0, 5),
-                      )
-                    ],
+                    color: AppStyles.cardBg,
+                    borderRadius: BorderRadius.circular(40),
                   ),
                   child: Text(
                     widget.session.players[widget.session.currentSpyIndex].name,
-                    style: TextStyle(
+                    style: GoogleFonts.russoOne(
                       fontSize: 32,
                       fontWeight: FontWeight.w900,
-                      color: Colors.white,
+                      color: AppStyles.textBright,
+                      shadows: [
+                        const Shadow(offset: Offset(-1.5, -1.5), color: Colors.black),
+                        const Shadow(offset: Offset(1.5, -1.5), color: Colors.black),
+                        const Shadow(offset: Offset(1.5, 1.5), color: Colors.black),
+                        const Shadow(offset: Offset(-1.5, 1.5), color: Colors.black),
+                      ],
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -102,9 +104,22 @@ class _SpyLastWordScreenState extends State<SpyLastWordScreen> {
 
               SizedBox(height: 40),
 
+               Padding(
+                padding: const EdgeInsets.only(left: 20, right: 20, top: 30),
+                child: Text(
+                  AppStrings.spyLastWord,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 22,
+                    color: AppStyles.accent,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+              ),
+
               // Subtitle
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20),
+                padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
                 child: Text(
                   AppStrings.spyMustGuess,
                   textAlign: TextAlign.center,

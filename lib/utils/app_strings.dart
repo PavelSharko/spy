@@ -68,9 +68,11 @@ class AppStrings {
   static const String confirmVote = 'ПОДТВЕРДИТЬ';
   static const String spyFound = 'ШПИОН НАЙДЕН!';
   static const String spyNotFound = 'ШПИОН НЕ НАЙДЕН!';
-  static const String spyLastWordTitle = 'ПОСЛЕДНЕЕ СЛОВО ШПИОНА';
+  static const String spyLastWordTitle = 'ПОСЛЕДНЕЕ СЛОВО...';
+  static const String SpyWas = 'Шпионом был:';
   static const String spyMustGuess = 'ШПИОН ДОЛЖЕН ПРЕДПОЛОЖИТЬ ЛОКАЦИЮ\nГДЕ ОН НАХОДИЛСЯ';
-  static const String spyGuessedQuestion = 'ШПИОН УГАДАЛ ЛОКАЦИЮ?';
+  static const String spyGuessedQuestion = 'УГАДАЛ ЛОКАЦИЮ?';
+  static const String spyLastWord = 'ПОСЛЕДНЕЕ СЛОВО...';
   static const String guessedYes = 'Угадал';
   static const String guessedNo = 'Не угадал';
   static const String endRoundVotes = 'ЗАКОНЧИТЬ РАУНД';
