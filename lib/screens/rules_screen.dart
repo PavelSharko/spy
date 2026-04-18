@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../utils/app_styles.dart';
 import '../utils/game_rules.dart';
 import '../widgets/common/game_button.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 /// Rules screen — all numbers are read from [GameRules] dynamically.
 class RulesScreen extends StatelessWidget {
@@ -22,8 +23,8 @@ class RulesScreen extends StatelessWidget {
                 // Title
                 Text(
                   'ПРАВИЛА ИГРЫ',
-                  style: TextStyle(
-                    fontSize: 26,
+                  style: GoogleFonts.russoOne(
+                    fontSize: 28,
                     fontWeight: FontWeight.w900,
                     color: AppStyles.accent,
                     letterSpacing: 3,

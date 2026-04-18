@@ -4,6 +4,7 @@ import '../utils/app_styles.dart';
 import '../config/app_environment.dart';
 import '../utils/sound_service.dart';
 import '../widgets/common/game_button.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 /// System settings screen.
 class SettingsScreen extends StatefulWidget {
@@ -207,10 +208,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 // Title
                 Text(
                   'НАСТРОЙКИ',
-                  style: TextStyle(
+                  style: GoogleFonts.russoOne(
                     fontSize: 28,
                     fontWeight: FontWeight.w900,
-                    color: AppStyles.darkAccent,
+                    color: AppStyles.accent,
                     letterSpacing: 3,
                   ),
                 ),
