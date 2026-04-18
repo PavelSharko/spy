@@ -452,8 +452,8 @@ class _RoleGuessScreenState extends State<RoleGuessScreen>
                   ),
                 ),
                 TextSpan(
-                  text: 'был ',
-                  style: TextStyle(color: AppStyles.accent, fontSize: 18),
+                  text: 'был\n',
+                  style: TextStyle(color: AppStyles.textSecondary, fontSize: 24),
                 ),
                 TextSpan(
                   text: (_target.role ?? '—').toUpperCase(),
