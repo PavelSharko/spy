@@ -263,7 +263,7 @@ class _RoleGuessScreenState extends State<RoleGuessScreen>
           style: TextStyle(
             fontSize: 26,
             fontWeight: FontWeight.w900,
-            color: AppStyles.darkAccent,
+            color: AppStyles.accent,
             letterSpacing: 3,
           ),
         ),
@@ -274,21 +274,21 @@ class _RoleGuessScreenState extends State<RoleGuessScreen>
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 20),
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
             decoration: BoxDecoration(
-              color: AppStyles.cardBg.withOpacity(0.4),
+              color: AppStyles.cardBg.withOpacity(0),
               borderRadius: BorderRadius.circular(16),
               border: Border.all(color: AppStyles.darkAccent.withOpacity(0.1)),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Expanded(child: _playerChip(_guesser.name, AppStyles.accent.withOpacity(0.5))),
+                Expanded(child: _playerChip(_guesser.name, AppStyles.textBright.withOpacity(0.8))),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 10),
                   child: Icon(Icons.arrow_forward_rounded, color: AppStyles.textSecondary),
                 ),
-                Expanded(child: _playerChip(_target.name, AppStyles.warning.withOpacity(0.6))),
+                Expanded(child: _playerChip(_target.name, AppStyles.textBright.withOpacity(0.8))),
               ],
             ),
           ),
@@ -331,7 +331,7 @@ class _RoleGuessScreenState extends State<RoleGuessScreen>
             ),
             child: Text(
               AppStrings.confirmAction,
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, letterSpacing: 1),
+              style: TextStyle(fontSize: 18, color: _selectedRole != null ? AppStyles.bgColor : AppStyles.textSecondary2, fontWeight: FontWeight.bold, letterSpacing: 1),
             ),
           ),
         ),
@@ -371,11 +371,11 @@ class _RoleGuessScreenState extends State<RoleGuessScreen>
             duration: const Duration(milliseconds: 200),
             decoration: BoxDecoration(
               color: selected
-                  ? AppStyles.warning.withOpacity(0.3)
+                  ? AppStyles.accent.withOpacity(0.3)
                   : AppStyles.cardBg,
               borderRadius: BorderRadius.circular(14),
               border: Border.all(
-                color: selected ? AppStyles.warning : AppStyles.accent.withOpacity(0.2),
+                color: selected ? AppStyles.accent : AppStyles.accent.withOpacity(0.2),
                 width: 1.5,
               ),
             ),
@@ -388,7 +388,7 @@ class _RoleGuessScreenState extends State<RoleGuessScreen>
                   style: TextStyle(
                     fontSize: 16, // Task 13: Reduce font size
                     fontWeight: FontWeight.bold,
-                    color: AppStyles.darkAccent,
+                    color: selected ? AppStyles.darkAccent : AppStyles.textSecondary,
                     letterSpacing: 1,
                   ),
                 ),
@@ -447,19 +447,19 @@ class _RoleGuessScreenState extends State<RoleGuessScreen>
                 TextSpan(
                   text: '${_target.name}\n',
                   style: TextStyle(
-                    color: AppStyles.darkAccent,
-                    shadows: [Shadow(color: Colors.white, blurRadius: 2, offset: Offset(1,1))],
+                    color: AppStyles.accent,
+                    shadows: [Shadow(color: Colors.black45, blurRadius: 4, offset: Offset(1,1))],
                   ),
                 ),
-                const TextSpan(
+                TextSpan(
                   text: 'был ',
-                  style: TextStyle(color: Colors.white, fontSize: 18),
+                  style: TextStyle(color: AppStyles.accent, fontSize: 18),
                 ),
                 TextSpan(
-                  text: _target.role ?? '—',
+                  text: (_target.role ?? '—').toUpperCase(),
                   style: TextStyle(
-                    color: (_target.role == 'Шпионить' || _target.role == 'Шпион') ? AppStyles.danger : AppStyles.success,
-                    fontSize: 28,
+                    color: (_target.role == 'Шпионить' || _target.role == 'Шпион') ? AppStyles.danger : AppStyles.accent,
+                    fontSize: 34,
                     fontWeight: FontWeight.w900,
                     shadows: [Shadow(color: Colors.black45, blurRadius: 4, offset: Offset(1,1))],
                   ),
@@ -469,7 +469,7 @@ class _RoleGuessScreenState extends State<RoleGuessScreen>
           ),
         ),
 
-        SizedBox(height: 30),
+        const Spacer(),
 
         // Verdict
         Container(
@@ -484,7 +484,7 @@ class _RoleGuessScreenState extends State<RoleGuessScreen>
           child: Column(
             children: [
               Text(
-                '${_guesser.name.toUpperCase()} — '
+                '${_guesser.name.toUpperCase()} — \n'
                 '${correct ? AppStrings.guessedCorrectly : AppStrings.guessedWrong}',
                 textAlign: TextAlign.center,
                 style: TextStyle(
@@ -523,7 +523,7 @@ class _RoleGuessScreenState extends State<RoleGuessScreen>
             child: Text(
               _isLastStep ? AppStrings.finalReveal : AppStrings.nextReveal,
               style: TextStyle(
-                  fontSize: 18, fontWeight: FontWeight.bold, letterSpacing: 1),
+                  fontSize: 18, color: AppStyles.bgColor, fontWeight: FontWeight.bold, letterSpacing: 1),
             ),
           ),
         ),
@@ -533,20 +533,20 @@ class _RoleGuessScreenState extends State<RoleGuessScreen>
 
   Widget _playerChip(String name, Color color) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+      padding: EdgeInsets.symmetric(horizontal: 14, vertical: 30),
       decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.15),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: color.withValues(alpha: 0.5)),
+        color: AppStyles.accent.withValues(alpha: 0.15),
+        borderRadius: BorderRadius.circular(30),
+        border: Border.all(color: AppStyles.accent.withValues(alpha: 0.5)),
       ),
-      child: FittedBox(
-        fit: BoxFit.scaleDown,
+      child: Center(
         child: Text(
-          name,
+          name.toUpperCase(),
+          textAlign: TextAlign.center,
           style: TextStyle(
             color: color,
-            fontWeight: FontWeight.bold,
-            fontSize: 16,
+            fontWeight: FontWeight.w900,
+            fontSize: 15,
           ),
         ),
       ),
