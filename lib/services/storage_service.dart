@@ -25,7 +25,10 @@ class StorageService {
   /// Call once at app start (before using hints/selection).
   Future<void> init() async {
     _data = await _loadData(_statsFileName, 'assets/data/$_statsFileName');
-    _universalData = await _loadData(_universalFileName, 'assets/data/$_universalFileName');
+    _universalData = await _loadData(
+      _universalFileName,
+      'assets/data/$_universalFileName',
+    );
   }
 
   // ─── Location stats ──────────────────────────────────────────────
@@ -77,10 +80,9 @@ class StorageService {
 
     // Candidates: after picking, their count won't exceed min+2
     // i.e. current_count <= min + 1  (so current_count+1 <= min+2)
-    List<String> candidates = locationPool
-        .where((n) => (counts[n] ?? 0) <= minCount + 1)
-        .toList()
-      ..shuffle();
+    List<String> candidates =
+        locationPool.where((n) => (counts[n] ?? 0) <= minCount + 1).toList()
+          ..shuffle();
 
     // Safety: if not enough candidates (small pool), expand to full pool
     if (candidates.length < count) {
@@ -159,7 +161,9 @@ class StorageService {
     if (hints.isEmpty) return 'Придумайте свой вопрос!';
 
     // Check if all hints are at the same count → full cycle completed → reset all
-    final counts = hints.map((h) => (h['hint_choosed_times'] as num?)?.toInt() ?? 0).toList();
+    final counts = hints
+        .map((h) => (h['hint_choosed_times'] as num?)?.toInt() ?? 0)
+        .toList();
     final minCount = counts.reduce((a, b) => a < b ? a : b);
     final maxCount = counts.reduce((a, b) => a > b ? a : b);
 
@@ -173,9 +177,11 @@ class StorageService {
 
     // Reload after possible reset and pick the one with lowest count
     final freshHints = _universalHints();
-    freshHints.sort((a, b) =>
-        ((a['hint_choosed_times'] as num?)?.toInt() ?? 0)
-            .compareTo((b['hint_choosed_times'] as num?)?.toInt() ?? 0));
+    freshHints.sort(
+      (a, b) => ((a['hint_choosed_times'] as num?)?.toInt() ?? 0).compareTo(
+        (b['hint_choosed_times'] as num?)?.toInt() ?? 0,
+      ),
+    );
 
     final chosen = freshHints.first;
     final chosenText = chosen['text'] as String;
@@ -185,7 +191,9 @@ class StorageService {
     final idx = rawList.indexWhere((h) => (h as Map)['text'] == chosenText);
     if (idx != -1) {
       (rawList[idx] as Map)['hint_choosed_times'] =
-          (((rawList[idx] as Map)['hint_choosed_times'] as num?)?.toInt() ?? 0) + 1;
+          (((rawList[idx] as Map)['hint_choosed_times'] as num?)?.toInt() ??
+              0) +
+          1;
       await _saveUniversal();
     }
 
@@ -207,7 +215,10 @@ class StorageService {
     return raw as Map<String, dynamic>;
   }
 
-  Future<Map<String, dynamic>> _loadData(String fileName, String assetPath) async {
+  Future<Map<String, dynamic>> _loadData(
+    String fileName,
+    String assetPath,
+  ) async {
     if (kIsWeb) {
       return _loadAsset(assetPath);
     }

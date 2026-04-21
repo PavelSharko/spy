@@ -25,7 +25,7 @@ class SoundService {
     if (!AppSettings.instance.soundEnabled) return;
     await _whooshPlayer.stop();
     // Lowered from 0.4 to 0.2 (the "whoosh" was too loud)
-    await _whooshPlayer.setVolume(0.2); 
+    await _whooshPlayer.setVolume(0.2);
     await _whooshPlayer.play(AssetSource(GameSounds.cardFlip));
   }
 

@@ -7,7 +7,10 @@ class AppEnvironment {
   AppEnvironment._();
 
   // Флаг тестового режима
-  static const bool isTestMode = bool.fromEnvironment('TEST_MODE', defaultValue: false);
+  static const bool isTestMode = bool.fromEnvironment(
+    'TEST_MODE',
+    defaultValue: false,
+  );
 
   // ==========================================
   // ТЕСТОВЫЕ НАСТРОЙКИ (Test Mode = true)
@@ -26,12 +29,14 @@ class AppEnvironment {
   // ==========================================
   // АКТУАЛЬНЫЙ КОНФИГ
   // ==========================================
-  static Map<String, dynamic> get _currentConfig => isTestMode ? _testConfig : _prodConfig;
+  static Map<String, dynamic> get _currentConfig =>
+      isTestMode ? _testConfig : _prodConfig;
 
   // ==========================================
   // ГЕТТЕРЫ КОНКРЕТНЫХ ПАРАМЕТРОВ
   // ==========================================
 
   /// Показывать ли "Секретные функции" на экране настроек
-  static bool get showDeveloperFeatures => _currentConfig['showDeveloperFeatures'] as bool;
+  static bool get showDeveloperFeatures =>
+      _currentConfig['showDeveloperFeatures'] as bool;
 }

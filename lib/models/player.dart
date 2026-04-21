@@ -28,4 +28,3 @@ class Player {
     roundScore = 0;
   }
 }
-

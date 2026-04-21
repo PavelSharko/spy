@@ -6,6 +6,7 @@ import 'rules_screen.dart';
 import 'settings_screen.dart';
 import '../utils/app_styles.dart';
 import '../widgets/common/game_button.dart';
+import '../utils/context_extensions.dart';
 
 class MainMenuScreen extends StatelessWidget {
   const MainMenuScreen({super.key});
@@ -19,41 +20,50 @@ class MainMenuScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppStyles.bgColor,
-      body: Container(
-        color: _bgColor,
-        child: Container(
-          color: _bgColor,
-          child: Center(
+      body: SafeArea(
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(
+              maxWidth: 800,
+            ), // Ограничение для планшетов
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 // ── Cartoonish title with stroke ──────────────────────
-                Stack(
-                  children: [
-                    // Stroke / outline layer
-                    Text(
-                      'ШПИОН',
-                      style: GoogleFonts.russoOne(
-                        fontSize: 64,
-                        fontWeight: FontWeight.bold,
-                        foreground: Paint()
-                          ..style = PaintingStyle.stroke
-                          ..strokeWidth = 5
-                          ..color = _darkAccent,
-                      ),
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: context.horizontalMargin,
+                  ),
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Stack(
+                      children: [
+                        // Stroke / outline layer
+                        Text(
+                          'ШПИОН',
+                          style: GoogleFonts.russoOne(
+                            fontSize: 72,
+                            fontWeight: FontWeight.bold,
+                            foreground: Paint()
+                              ..style = PaintingStyle.stroke
+                              ..strokeWidth = 6
+                              ..color = _darkAccent,
+                          ),
+                        ),
+                        // Fill layer on top
+                        Text(
+                          'ШПИОН',
+                          style: GoogleFonts.russoOne(
+                            fontSize: 72,
+                            fontWeight: FontWeight.bold,
+                            color: _accent,
+                          ),
+                        ),
+                      ],
                     ),
-                    // Fill layer on top
-                    Text(
-                      'ШПИОН',
-                      style: GoogleFonts.russoOne(
-                        fontSize: 64,
-                        fontWeight: FontWeight.bold,
-                        color: _accent,
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
-                const SizedBox(height: 50),
+                SizedBox(height: context.screenHeight * 0.08),
 
                 // ── PLAY button ──────────────────────────────────────
                 GameButton(
@@ -63,11 +73,12 @@ class MainMenuScreen extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const GameSettingsScreen()),
+                        builder: (context) => const GameSettingsScreen(),
+                      ),
                     );
                   },
                 ),
-                const SizedBox(height: 18),
+                SizedBox(height: context.padding2),
 
                 GameButton(
                   text: 'ПРАВИЛА ИГРЫ',
@@ -77,11 +88,12 @@ class MainMenuScreen extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const RulesScreen()),
+                        builder: (context) => const RulesScreen(),
+                      ),
                     );
                   },
                 ),
-                const SizedBox(height: 14),
+                SizedBox(height: context.padding2),
 
                 GameButton(
                   text: 'НАСТРОЙКИ',
@@ -91,11 +103,11 @@ class MainMenuScreen extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const SettingsScreen()),
+                        builder: (context) => const SettingsScreen(),
+                      ),
                     );
                   },
                 ),
-
               ],
             ),
           ),

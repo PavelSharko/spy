@@ -46,9 +46,9 @@ class GameSession {
     required this.secretLocationsQueue,
     required this.currentSpyIndex,
     Map<String, Uint8List>? locationImages,
-  })  : assert(secretLocationsQueue.isNotEmpty),
-        id = id ?? const Uuid().v4(),
-        locationImages = locationImages ?? {} {
+  }) : assert(secretLocationsQueue.isNotEmpty),
+       id = id ?? const Uuid().v4(),
+       locationImages = locationImages ?? {} {
     // Pre-populate roles for all locations in the queue to ensure consistency
     for (final location in secretLocationsQueue) {
       _populateRolesForLocation(location);
@@ -90,31 +90,35 @@ class GameSession {
     }
 
     final shuffled = List<String>.from(pool)..shuffle(Random());
-    // Civilians count = total players - 1 spy. 
+    // Civilians count = total players - 1 spy.
     // If players list is empty yet (initialization), we use a safe fallback or wait.
     // However, players are not yet added in PreGameFlowScreen until name selection.
     // Let's use a logic that works even with empty players list initially.
-    
+
     // We'll leave it empty and populate on first access if needed, but with a fix.
   }
 
   /// Returns the pre-selected random roles for a location, ensuring consistent generation.
-  List<String> getSelectedRolesForLocation(String location, {int? playerCount}) {
-    if (_selectedRoles.containsKey(location) && _selectedRoles[location]!.isNotEmpty) {
+  List<String> getSelectedRolesForLocation(
+    String location, {
+    int? playerCount,
+  }) {
+    if (_selectedRoles.containsKey(location) &&
+        _selectedRoles[location]!.isNotEmpty) {
       return _selectedRoles[location]!;
     }
-    
+
     final pool = LocationsData.roles[location];
     if (pool == null || pool.isEmpty) return [];
 
     final shuffled = List<String>.from(pool)..shuffle(Random());
-    
+
     // Determine how many roles we actually need.
     // If playerCount is passed, use it. Otherwise use current players list.
     int count = playerCount ?? players.length;
     int civiliansCount = count - 1;
     if (civiliansCount < 1) civiliansCount = 1;
-    
+
     final selected = shuffled.take(civiliansCount).toList();
     _selectedRoles[location] = selected;
     return selected;
@@ -134,7 +138,8 @@ class GameSession {
       if (i == currentSpyIndex) {
         players[i].role = null; // spy has no role
       } else {
-        players[i].role = randomizedAssignment[roleIndex % randomizedAssignment.length];
+        players[i].role =
+            randomizedAssignment[roleIndex % randomizedAssignment.length];
         roleIndex++;
       }
     }

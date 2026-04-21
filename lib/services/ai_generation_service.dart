@@ -44,10 +44,15 @@ class AiGenerationService {
 
   /// Fetches a single location card image via JSON POST.
   /// Returns image bytes or null on failure.
-  static Future<Uint8List?> fetchLocationImage(String locationText, {List<String>? roles}) async {
+  static Future<Uint8List?> fetchLocationImage(
+    String locationText, {
+    List<String>? roles,
+  }) async {
     final settings = AppSettings.instance;
     if (!settings.uniqueCardsEnabled) {
-      debugPrint('[AiGenerationService] uniqueCardsEnabled is false, skipping fetch for: $locationText');
+      debugPrint(
+        '[AiGenerationService] uniqueCardsEnabled is false, skipping fetch for: $locationText',
+      );
       return null;
     }
 
@@ -74,7 +79,9 @@ class AiGenerationService {
     if (locations.isEmpty) return;
 
     if (!AppSettings.instance.uniqueCardsEnabled) {
-      debugPrint('[AiGenerationService] prefetchAllLocations aborted (uniqueCardsEnabled is false)');
+      debugPrint(
+        '[AiGenerationService] prefetchAllLocations aborted (uniqueCardsEnabled is false)',
+      );
       return;
     }
 
@@ -122,7 +129,9 @@ class AiGenerationService {
   }) {
     final settings = AppSettings.instance;
     if (!settings.uniqueCardsEnabled) {
-      debugPrint('[AiGenerationService] fetchEndGameCards skipped (uniqueCardsEnabled is false)');
+      debugPrint(
+        '[AiGenerationService] fetchEndGameCards skipped (uniqueCardsEnabled is false)',
+      );
       return;
     }
 
@@ -142,27 +151,43 @@ class AiGenerationService {
 
     // ── Request 1: spy wins ──────────────────────────────────────────────
     Future.delayed(delayWin, () async {
-      debugPrint('[AiGenerationService] Sending finish-round card (spy_is_win=true) for round $roundNumber');
+      debugPrint(
+        '[AiGenerationService] Sending finish-round card (spy_is_win=true) for round $roundNumber',
+      );
       final payload = buildPayload(true);
-      final Uint8List? result = await _postMultipartWithFallback(payload, spyPhoto, civilianPhotos);
+      final Uint8List? result = await _postMultipartWithFallback(
+        payload,
+        spyPhoto,
+        civilianPhotos,
+      );
 
       if (result != null) {
         targetMap.putIfAbsent(roundNumber, () => {});
         targetMap[roundNumber]!['win'] = result;
-        debugPrint('[AiGenerationService] finish-round "win" card received for round $roundNumber');
+        debugPrint(
+          '[AiGenerationService] finish-round "win" card received for round $roundNumber',
+        );
       }
     });
 
     // ── Request 2: spy loses ─────────────────────────────────────────────
     Future.delayed(delayLoss, () async {
-      debugPrint('[AiGenerationService] Sending finish-round card (spy_is_win=false) for round $roundNumber');
+      debugPrint(
+        '[AiGenerationService] Sending finish-round card (spy_is_win=false) for round $roundNumber',
+      );
       final payload = buildPayload(false);
-      final Uint8List? result = await _postMultipartWithFallback(payload, spyPhoto, civilianPhotos);
+      final Uint8List? result = await _postMultipartWithFallback(
+        payload,
+        spyPhoto,
+        civilianPhotos,
+      );
 
       if (result != null) {
         targetMap.putIfAbsent(roundNumber, () => {});
         targetMap[roundNumber]!['loss'] = result;
-        debugPrint('[AiGenerationService] finish-round "loss" card received for round $roundNumber');
+        debugPrint(
+          '[AiGenerationService] finish-round "loss" card received for round $roundNumber',
+        );
       }
     });
   }
@@ -180,7 +205,9 @@ class AiGenerationService {
       final response = await http
           .post(Uri.parse(_primaryUrl), headers: headers, body: body)
           .timeout(_generationTimeout);
-      debugPrint('[AiGenerationService] Primary → status=${response.statusCode}');
+      debugPrint(
+        '[AiGenerationService] Primary → status=${response.statusCode}',
+      );
       if (response.statusCode == 200 && response.bodyBytes.isNotEmpty) {
         return response.bodyBytes;
       }
@@ -196,7 +223,9 @@ class AiGenerationService {
       final response = await http
           .post(Uri.parse(_fallbackUrl), headers: headers, body: body)
           .timeout(_generationTimeout);
-      debugPrint('[AiGenerationService] Fallback → status=${response.statusCode}');
+      debugPrint(
+        '[AiGenerationService] Fallback → status=${response.statusCode}',
+      );
       if (response.statusCode == 200 && response.bodyBytes.isNotEmpty) {
         return response.bodyBytes;
       }
@@ -236,14 +265,20 @@ class AiGenerationService {
         if (value is List) {
           for (int j = 0; j < value.length; j++) {
             buf.addAll(utf8.encode('--$boundary\r\n'));
-            buf.addAll(utf8.encode('content-disposition: form-data; name="$key[$j]"\r\n'));
+            buf.addAll(
+              utf8.encode(
+                'content-disposition: form-data; name="$key[$j]"\r\n',
+              ),
+            );
             buf.addAll(utf8.encode('\r\n'));
             buf.addAll(utf8.encode(value[j].toString()));
             buf.addAll(utf8.encode('\r\n'));
           }
         } else {
           buf.addAll(utf8.encode('--$boundary\r\n'));
-          buf.addAll(utf8.encode('content-disposition: form-data; name="$key"\r\n'));
+          buf.addAll(
+            utf8.encode('content-disposition: form-data; name="$key"\r\n'),
+          );
           buf.addAll(utf8.encode('\r\n'));
           buf.addAll(utf8.encode(value.toString()));
           buf.addAll(utf8.encode('\r\n'));
@@ -253,8 +288,11 @@ class AiGenerationService {
       // ── Photo files (WITH content-type + filename → n8n binary) ───────
       if (spyPhoto != null) {
         buf.addAll(utf8.encode('--$boundary\r\n'));
-        buf.addAll(utf8.encode(
-            'content-disposition: form-data; name="spy_photo"; filename="spy.jpg"\r\n'));
+        buf.addAll(
+          utf8.encode(
+            'content-disposition: form-data; name="spy_photo"; filename="spy.jpg"\r\n',
+          ),
+        );
         buf.addAll(utf8.encode('content-type: image/jpeg\r\n'));
         buf.addAll(utf8.encode('\r\n'));
         buf.addAll(spyPhoto);
@@ -263,8 +301,11 @@ class AiGenerationService {
 
       for (int i = 0; i < civilianPhotos.length; i++) {
         buf.addAll(utf8.encode('--$boundary\r\n'));
-        buf.addAll(utf8.encode(
-            'content-disposition: form-data; name="photo_$i"; filename="player_$i.jpg"\r\n'));
+        buf.addAll(
+          utf8.encode(
+            'content-disposition: form-data; name="photo_$i"; filename="player_$i.jpg"\r\n',
+          ),
+        );
         buf.addAll(utf8.encode('content-type: image/jpeg\r\n'));
         buf.addAll(utf8.encode('\r\n'));
         buf.addAll(civilianPhotos[i]);
@@ -288,7 +329,9 @@ class AiGenerationService {
           )
           .timeout(_generationTimeout);
 
-      debugPrint('[AiGenerationService] Multipart → $url status=${response.statusCode}');
+      debugPrint(
+        '[AiGenerationService] Multipart → $url status=${response.statusCode}',
+      );
       if (response.statusCode == 200 && response.bodyBytes.isNotEmpty) {
         return response.bodyBytes;
       }
@@ -303,7 +346,9 @@ class AiGenerationService {
       debugPrint('[AiGenerationService] Multipart Primary timed out');
       return null;
     } catch (e) {
-      debugPrint('[AiGenerationService] Multipart Primary failed ($e) — trying fallback');
+      debugPrint(
+        '[AiGenerationService] Multipart Primary failed ($e) — trying fallback',
+      );
     }
 
     // Fallback

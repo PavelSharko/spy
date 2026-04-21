@@ -21,9 +21,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => GameProvider()),
-      ],
+      providers: [ChangeNotifierProvider(create: (_) => GameProvider())],
       child: MaterialApp(
         title: 'Spy Game',
         debugShowCheckedModeBanner: false,
@@ -46,17 +44,18 @@ class MyApp extends StatelessWidget {
               backgroundColor: AppStyles.primaryAccent,
               foregroundColor: AppStyles.primaryBg,
               padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-              textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              textStyle: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
         ),
         home: const MainMenuScreen(),
-
       ),
     );
   }
 }
-
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});

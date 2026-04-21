@@ -15,7 +15,8 @@ class AppStrings {
   static const String pleaseSelectPlayerCount = 'Выберите количество игроков!';
   static const String pleaseSelectGameTime = 'Выберите время игры!';
   static const String pleaseSelectRoundCount = 'Выберите количество раундов!';
-  static const String pleaseSelectRoundsFirst = 'Сначала выберите количество раундов!';
+  static const String pleaseSelectRoundsFirst =
+      'Сначала выберите количество раундов!';
   static const String randomGroupDisplay = 'Случайно';
   static const String locationProgressHint = 'Раундов: {r} · Выбрано: {n}';
 
@@ -23,7 +24,8 @@ class AppStrings {
   static const String passPhoneTo = 'ПЕРЕДАЙТЕ ТЕЛЕФОН';
   static const String playerSuffix = '-МУ ИГРОКУ';
   static const String chooseNameWarning = 'Выберете имя!';
-  static const String tapCardToView = 'Чтобы посмотреть карточку\nтапните по экрану\n\nне показывайте другим игрокам!';
+  static const String tapCardToView =
+      'Чтобы посмотреть карточку\nтапните по экрану\n\nне показывайте другим игрокам!';
   static const String youAreSpy = 'ТЫ ШПИОН';
   static const String guessLocation = 'угадайте где вы';
   static const String locationLabel = 'ЛОКАЦИЯ:\n';
@@ -34,7 +36,8 @@ class AppStrings {
   // Role-guess mini-game
   static const String whoIsWho = 'КТО ЕСТЬ КТО?';
   static const String revealingIn = 'Разоблачение через';
-  static const String guessRoleHint = 'Угадайте какая роль была у этого игрока?';
+  static const String guessRoleHint =
+      'Угадайте какая роль была у этого игрока?';
   static const String guessedCorrectly = 'УГАДАЛ ПРАВИЛЬНО!';
   static const String guessedWrong = 'УГАДАЛ НЕВЕРНО!';
   static const String bothGetPoints = 'получают по +1 очку';
@@ -42,7 +45,7 @@ class AppStrings {
   static const String wasRole = 'был';
   static const String nextReveal = 'ДАЛЬШЕ';
   static const String finalReveal = 'ИТОГИ';
-  
+
   // Action Buttons
   static const String playAction = 'ПОГНАЛИ!';
   static const String backAction = 'НАЗАД';
@@ -70,13 +73,14 @@ class AppStrings {
   static const String spyNotFound = 'ШПИОН НЕ НАЙДЕН!';
   static const String spyLastWordTitle = 'ПОСЛЕДНЕЕ СЛОВО...';
   static const String SpyWas = 'Шпионом был:';
-  static const String spyMustGuess = 'ШПИОН ДОЛЖЕН ПРЕДПОЛОЖИТЬ ЛОКАЦИЮ\nГДЕ ОН НАХОДИЛСЯ';
+  static const String spyMustGuess =
+      'ШПИОН ДОЛЖЕН ПРЕДПОЛОЖИТЬ ЛОКАЦИЮ\nГДЕ ОН НАХОДИЛСЯ';
   static const String spyGuessedQuestion = 'УГАДАЛ ЛОКАЦИЮ?';
   static const String spyLastWord = 'ПОСЛЕДНЕЕ СЛОВО...';
   static const String guessedYes = 'Угадал';
   static const String guessedNo = 'Не угадал';
   static const String endRoundVotes = 'ЗАКОНЧИТЬ РАУНД';
-  
+
   // Score / Rating Screen
   static const String roundScoreTitle = 'РЕЗУЛЬТАТЫ';
   static const String nextRound = 'СЛЕДУЮЩИЙ РАУНД';

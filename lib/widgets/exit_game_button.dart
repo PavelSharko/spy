@@ -7,11 +7,7 @@ class ExitGameButton extends StatelessWidget {
   final VoidCallback? onPause;
   final VoidCallback? onResume;
 
-  const ExitGameButton({
-    super.key,
-    this.onPause,
-    this.onResume,
-  });
+  const ExitGameButton({super.key, this.onPause, this.onResume});
 
   @override
   Widget build(BuildContext context) {
@@ -31,9 +27,23 @@ class ExitGameButton extends StatelessWidget {
             builder: (BuildContext ctx) {
               return AlertDialog(
                 backgroundColor: AppStyles.cardBg,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                title: Text('Внимание', style: TextStyle(color: AppStyles.accent, fontWeight: FontWeight.w900)),
-                content: Text('Вы действительно хотите выйти?', style: TextStyle(color: AppStyles.accent, fontWeight: FontWeight.w500)),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                title: Text(
+                  'Внимание',
+                  style: TextStyle(
+                    color: AppStyles.accent,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+                content: Text(
+                  'Вы действительно хотите выйти?',
+                  style: TextStyle(
+                    color: AppStyles.accent,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
                 actions: [
                   TextButton(
                     onPressed: () {
@@ -41,7 +51,13 @@ class ExitGameButton extends StatelessWidget {
                       Navigator.of(ctx).pop();
                       onResume?.call();
                     },
-                    child: Text('Нет', style: TextStyle(color: AppStyles.accent, fontWeight: FontWeight.bold)),
+                    child: Text(
+                      'Нет',
+                      style: TextStyle(
+                        color: AppStyles.accent,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
                   TextButton(
                     onPressed: () {
@@ -54,7 +70,13 @@ class ExitGameButton extends StatelessWidget {
                         (Route<dynamic> route) => false,
                       );
                     },
-                    child: const Text('Да', style: TextStyle(color: AppStyles.danger, fontWeight: FontWeight.bold)),
+                    child: const Text(
+                      'Да',
+                      style: TextStyle(
+                        color: AppStyles.danger,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
                 ],
               );

@@ -51,8 +51,8 @@ class _NumberSelectorState extends State<NumberSelector> {
       _currentValue = widget.maxValue;
       changed = true;
     }
-    
-    // We shouldn't call widget.onChanged here during build/init to avoid loops, 
+
+    // We shouldn't call widget.onChanged here during build/init to avoid loops,
     // the parent state already handles its bounds validation internally.
   }
 
@@ -84,7 +84,9 @@ class _NumberSelectorState extends State<NumberSelector> {
         padding: const EdgeInsets.all(16.0),
         decoration: BoxDecoration(
           color: AppStyles.accent,
-          borderRadius: const BorderRadius.vertical(bottom: Radius.circular(20)),
+          borderRadius: const BorderRadius.vertical(
+            bottom: Radius.circular(20),
+          ),
           border: Border(
             bottom: BorderSide(color: Colors.transparent, width: 3),
             left: BorderSide(color: Colors.transparent, width: 3),
@@ -104,10 +106,17 @@ class _NumberSelectorState extends State<NumberSelector> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 IconButton(
-                  onPressed: _currentValue > widget.minValue ? _decrement : null,
-                  icon: const Icon(Icons.remove_circle_outline, size: 36), // Increased size
+                  onPressed: _currentValue > widget.minValue
+                      ? _decrement
+                      : null,
+                  icon: const Icon(
+                    Icons.remove_circle_outline,
+                    size: 36,
+                  ), // Increased size
                   color: AppStyles.settings_game_text_colors,
-                  disabledColor: AppStyles.settings_game_text_colors.withValues(alpha: 0.38),
+                  disabledColor: AppStyles.settings_game_text_colors.withValues(
+                    alpha: 0.38,
+                  ),
                 ),
                 Text(
                   '$_currentValue',
@@ -118,10 +127,17 @@ class _NumberSelectorState extends State<NumberSelector> {
                   ),
                 ),
                 IconButton(
-                  onPressed: _currentValue < widget.maxValue ? _increment : null,
-                  icon: const Icon(Icons.add_circle_outline, size: 36), // Increased size
+                  onPressed: _currentValue < widget.maxValue
+                      ? _increment
+                      : null,
+                  icon: const Icon(
+                    Icons.add_circle_outline,
+                    size: 36,
+                  ), // Increased size
                   color: AppStyles.settings_game_text_colors,
-                  disabledColor: AppStyles.settings_game_text_colors.withValues(alpha: 0.38),
+                  disabledColor: AppStyles.settings_game_text_colors.withValues(
+                    alpha: 0.38,
+                  ),
                 ),
               ],
             ),

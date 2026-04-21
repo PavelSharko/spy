@@ -51,10 +51,13 @@ class _RunningBorderPainter extends CustomPainter {
       Radius.circular(borderRadius),
     );
 
-    canvas.drawRRect(rrect, Paint()
-      ..color = Colors.amberAccent.withOpacity(0.3)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 2);
+    canvas.drawRRect(
+      rrect,
+      Paint()
+        ..color = Colors.amberAccent.withOpacity(0.3)
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 2,
+    );
 
     final spotPaint = Paint()
       ..color = Colors.amberAccent
@@ -73,13 +76,17 @@ class _RunningBorderPainter extends CustomPainter {
     void addPoint(double d) {
       double px, py;
       if (d < size.width) {
-        px = d; py = 0;
+        px = d;
+        py = 0;
       } else if (d < size.width + size.height) {
-        px = size.width; py = d - size.width;
+        px = size.width;
+        py = d - size.width;
       } else if (d < 2 * size.width + size.height) {
-        px = size.width - (d - size.width - size.height); py = size.height;
+        px = size.width - (d - size.width - size.height);
+        py = size.height;
       } else {
-        px = 0; py = size.height - (d - 2 * size.width - size.height);
+        px = 0;
+        py = size.height - (d - 2 * size.width - size.height);
       }
       path.lineTo(px, py);
     }
@@ -137,7 +144,7 @@ class _RoleGuessScreenState extends State<RoleGuessScreen>
     // Build non-spy list in session order
     _nonSpyPlayers = [
       for (int i = 0; i < widget.session.players.length; i++)
-        if (i != widget.session.currentSpyIndex) widget.session.players[i]
+        if (i != widget.session.currentSpyIndex) widget.session.players[i],
     ];
     _startIndex = Random().nextInt(_nonSpyPlayers.length);
 
@@ -187,7 +194,10 @@ class _RoleGuessScreenState extends State<RoleGuessScreen>
   void _startCountdown() {
     _countdownTimer?.cancel();
     _countdownTimer = Timer.periodic(const Duration(seconds: 1), (t) {
-      if (!mounted) { t.cancel(); return; }
+      if (!mounted) {
+        t.cancel();
+        return;
+      }
       if (_countdown > 1) {
         setState(() => _countdown--);
       } else {
@@ -215,7 +225,9 @@ class _RoleGuessScreenState extends State<RoleGuessScreen>
     if (_isLastStep) {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (_) => RoundScoreScreen(session: widget.session)),
+        MaterialPageRoute(
+          builder: (_) => RoundScoreScreen(session: widget.session),
+        ),
       );
       return;
     }
@@ -239,11 +251,18 @@ class _RoleGuessScreenState extends State<RoleGuessScreen>
             color: AppStyles.bgColor,
             child: Container(
               child: SafeArea(
-                child: _isRevealPhase ? _buildRevealPhase() : _buildGuessPhase(),
+                child: Center(
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 800),
+                    child: _isRevealPhase
+                        ? _buildRevealPhase()
+                        : _buildGuessPhase(),
+                  ),
+                ),
               ),
             ),
           ),
-        const ExitGameButton(),
+          const ExitGameButton(),
         ],
       ),
     );
@@ -283,12 +302,25 @@ class _RoleGuessScreenState extends State<RoleGuessScreen>
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Expanded(child: _playerChip(_guesser.name, AppStyles.textBright.withOpacity(0.8))),
+                Expanded(
+                  child: _playerChip(
+                    _guesser.name,
+                    AppStyles.textBright.withOpacity(0.8),
+                  ),
+                ),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 10),
-                  child: Icon(Icons.arrow_forward_rounded, color: AppStyles.textSecondary),
+                  child: Icon(
+                    Icons.arrow_forward_rounded,
+                    color: AppStyles.textSecondary,
+                  ),
                 ),
-                Expanded(child: _playerChip(_target.name, AppStyles.textBright.withOpacity(0.8))),
+                Expanded(
+                  child: _playerChip(
+                    _target.name,
+                    AppStyles.textBright.withOpacity(0.8),
+                  ),
+                ),
               ],
             ),
           ),
@@ -309,9 +341,7 @@ class _RoleGuessScreenState extends State<RoleGuessScreen>
         SizedBox(height: 16),
 
         // Keyboard 2 × N
-        Expanded(
-          child: _buildRoleGrid(),
-        ),
+        Expanded(child: _buildRoleGrid()),
 
         // Confirm button
         Padding(
@@ -331,7 +361,14 @@ class _RoleGuessScreenState extends State<RoleGuessScreen>
             ),
             child: Text(
               AppStrings.confirmAction,
-              style: TextStyle(fontSize: 18, color: _selectedRole != null ? AppStyles.bgColor : AppStyles.textSecondary2, fontWeight: FontWeight.bold, letterSpacing: 1),
+              style: TextStyle(
+                fontSize: 18,
+                color: _selectedRole != null
+                    ? AppStyles.bgColor
+                    : AppStyles.textSecondary2,
+                fontWeight: FontWeight.bold,
+                letterSpacing: 1,
+              ),
             ),
           ),
         ),
@@ -340,16 +377,26 @@ class _RoleGuessScreenState extends State<RoleGuessScreen>
   }
 
   Widget _buildRoleGrid() {
-    return GridView.builder(
-      padding: EdgeInsets.symmetric(horizontal: 16),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        mainAxisSpacing: 10,
-        crossAxisSpacing: 10,
-        childAspectRatio: 2.2, // Task 13: Reduce height significantly
-      ),
-      itemCount: _locationRoles.length,
-      itemBuilder: (_, i) => _buildRoleTile(_locationRoles[i]),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final double width = constraints.maxWidth;
+        final double itemWidth =
+            (width - 32 - 10) / 2; // padding 16*2, spacing 10
+        final double itemHeight = (itemWidth / 2.2).clamp(50.0, 70.0);
+        final double aspectRatio = itemWidth / itemHeight;
+
+        return GridView.builder(
+          padding: EdgeInsets.symmetric(horizontal: 16),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            mainAxisSpacing: 10,
+            crossAxisSpacing: 10,
+            childAspectRatio: aspectRatio,
+          ),
+          itemCount: _locationRoles.length,
+          itemBuilder: (_, i) => _buildRoleTile(_locationRoles[i]),
+        );
+      },
     );
   }
 
@@ -365,7 +412,9 @@ class _RoleGuessScreenState extends State<RoleGuessScreen>
         builder: (_, __) => CustomPaint(
           painter: selected
               ? _RunningBorderPainter(
-                  progress: _borderController.value, borderRadius: 14)
+                  progress: _borderController.value,
+                  borderRadius: 14,
+                )
               : null,
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 200),
@@ -375,21 +424,28 @@ class _RoleGuessScreenState extends State<RoleGuessScreen>
                   : AppStyles.cardBg,
               borderRadius: BorderRadius.circular(14),
               border: Border.all(
-                color: selected ? AppStyles.accent : AppStyles.accent.withOpacity(0.2),
+                color: selected
+                    ? AppStyles.accent
+                    : AppStyles.accent.withOpacity(0.2),
                 width: 1.5,
               ),
             ),
             child: Center(
               child: Padding(
                 padding: EdgeInsets.all(8),
-                child: Text(
-                  role,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 16, // Task 13: Reduce font size
-                    fontWeight: FontWeight.bold,
-                    color: selected ? AppStyles.darkAccent : AppStyles.textSecondary,
-                    letterSpacing: 1,
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    role,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 16, // Task 13: Reduce font size
+                      fontWeight: FontWeight.bold,
+                      color: selected
+                          ? AppStyles.darkAccent
+                          : AppStyles.textSecondary,
+                      letterSpacing: 1,
+                    ),
                   ),
                 ),
               ),
@@ -413,15 +469,19 @@ class _RoleGuessScreenState extends State<RoleGuessScreen>
             Text(
               AppStrings.revealingIn,
               style: TextStyle(
-                  fontSize: 24, color: Colors.white70, fontWeight: FontWeight.w600),
+                fontSize: 24,
+                color: Colors.white70,
+                fontWeight: FontWeight.w600,
+              ),
             ),
             SizedBox(height: 20),
             Text(
               '$_countdown',
               style: TextStyle(
-                  fontSize: 100,
-                  color: AppStyles.darkAccent,
-                  fontWeight: FontWeight.w900),
+                fontSize: 100,
+                color: AppStyles.darkAccent,
+                fontWeight: FontWeight.w900,
+              ),
             ),
           ],
         ),
@@ -448,20 +508,38 @@ class _RoleGuessScreenState extends State<RoleGuessScreen>
                   text: '${_target.name}\n',
                   style: TextStyle(
                     color: AppStyles.accent,
-                    shadows: [Shadow(color: Colors.black45, blurRadius: 4, offset: Offset(1,1))],
+                    shadows: [
+                      Shadow(
+                        color: Colors.black45,
+                        blurRadius: 4,
+                        offset: Offset(1, 1),
+                      ),
+                    ],
                   ),
                 ),
                 TextSpan(
                   text: 'был\n',
-                  style: TextStyle(color: AppStyles.textSecondary, fontSize: 24),
+                  style: TextStyle(
+                    color: AppStyles.textSecondary,
+                    fontSize: 24,
+                  ),
                 ),
                 TextSpan(
                   text: (_target.role ?? '—').toUpperCase(),
                   style: TextStyle(
-                    color: (_target.role == 'Шпионить' || _target.role == 'Шпион') ? AppStyles.danger : AppStyles.accent,
+                    color:
+                        (_target.role == 'Шпионить' || _target.role == 'Шпион')
+                        ? AppStyles.danger
+                        : AppStyles.accent,
                     fontSize: 34,
                     fontWeight: FontWeight.w900,
-                    shadows: [Shadow(color: Colors.black45, blurRadius: 4, offset: Offset(1,1))],
+                    shadows: [
+                      Shadow(
+                        color: Colors.black45,
+                        blurRadius: 4,
+                        offset: Offset(1, 1),
+                      ),
+                    ],
                   ),
                 ),
               ],
@@ -479,7 +557,9 @@ class _RoleGuessScreenState extends State<RoleGuessScreen>
             color: (correct ? Colors.green : Colors.red).withOpacity(0.15),
             borderRadius: BorderRadius.circular(16),
             border: Border.all(
-                color: correct ? Colors.greenAccent : Colors.redAccent, width: 1.5),
+              color: correct ? Colors.greenAccent : Colors.redAccent,
+              width: 1.5,
+            ),
           ),
           child: Column(
             children: [
@@ -523,7 +603,11 @@ class _RoleGuessScreenState extends State<RoleGuessScreen>
             child: Text(
               _isLastStep ? AppStrings.finalReveal : AppStrings.nextReveal,
               style: TextStyle(
-                  fontSize: 18, color: AppStyles.bgColor, fontWeight: FontWeight.bold, letterSpacing: 1),
+                fontSize: 18,
+                color: AppStyles.bgColor,
+                fontWeight: FontWeight.bold,
+                letterSpacing: 1,
+              ),
             ),
           ),
         ),
@@ -540,13 +624,16 @@ class _RoleGuessScreenState extends State<RoleGuessScreen>
         border: Border.all(color: AppStyles.accent.withValues(alpha: 0.5)),
       ),
       child: Center(
-        child: Text(
-          name.toUpperCase(),
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            color: color,
-            fontWeight: FontWeight.w900,
-            fontSize: 15,
+        child: FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Text(
+            name.toUpperCase(),
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: color,
+              fontWeight: FontWeight.w900,
+              fontSize: 15,
+            ),
           ),
         ),
       ),

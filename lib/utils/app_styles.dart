@@ -9,24 +9,32 @@ class AppStyles {
   // ── Color palette ───────────────────────────────────────────────────
   /// Основной фон экрана (тёмно-синий)
   static const Color primaryBg = Color(0xFF2C3E50);
+
   /// Главный акцентный цвет и основной цвет текста (теплый золотисто-желтый)
   static const Color primaryAccent = Color(0xFFEBC462);
 
   // ── Зависимые цвета (высчитаны с помощью Color.lerp) ──
   /// Фон для карточек и контейнеров (осветленный primaryBg)
   static Color get cardBg => Color.lerp(primaryBg, Colors.white, 0.08)!;
+
   /// Темный акцент для теней и нижних границ (затемненный primaryBg)
   static Color get darkAccent => Color.lerp(primaryBg, Colors.black, 0.35)!;
+
   /// Вторичный текст (полупрозрачный primaryAccent для приглушения)
   static Color get textSecondary => primaryAccent.withValues(alpha: 0.7);
-   /// Вторичный текст (полупрозрачный primaryAccent 2 для приглушения)
+
+  /// Вторичный текст (полупрозрачный primaryAccent 2 для приглушения)
   static Color get textSecondary2 => primaryAccent.withValues(alpha: 0.3);
+
   /// Вторичный текст (воторичный текст более темнее)
-  static Color get textAccentDarker => Color.lerp(primaryAccent, Colors.black, 0.35)!;
+  static Color get textAccentDarker =>
+      Color.lerp(primaryAccent, Colors.black, 0.35)!;
 
   static Color get textBright => HSLColor.fromColor(primaryAccent)
-    .withLightness((HSLColor.fromColor(primaryAccent).lightness + 0.15).clamp(0.0, 1.0))
-    .toColor();
+      .withLightness(
+        (HSLColor.fromColor(primaryAccent).lightness + 0.15).clamp(0.0, 1.0),
+      )
+      .toColor();
 
   // Псевдонимы для совместимости и плавного перехода
   static Color get bgColor => primaryBg;
@@ -40,34 +48,33 @@ class AppStyles {
 
   // ── Semantic colors ──────────────────────────────────────────────────
   static const Color success = Color(0xFF388E3C); // green
-  static const Color danger  = Color(0xFFC62828); // red
+  static const Color danger = Color(0xFFC62828); // red
   static const Color warning = Color(0xFFFFA000); // amber/orange
 
   // ── Text Styles ──────────────────────────────────────────────────────
   static TextStyle get titleStyle => GoogleFonts.russoOne(
-        fontSize: 26,
-        fontWeight: FontWeight.w900,
-        color: darkAccent,
-        letterSpacing: 3,
-      );
+    fontSize: 26,
+    fontWeight: FontWeight.w900,
+    color: darkAccent,
+    letterSpacing: 3,
+  );
 
   static TextStyle get buttonTextStyle => const TextStyle(
-        fontSize: 20,
-        fontWeight: FontWeight.bold,
-        letterSpacing: 1,
-      );
+    fontSize: 20,
+    fontWeight: FontWeight.bold,
+    letterSpacing: 1,
+  );
 
   // ── Card Visual Config ──────────────────────────────────────────────
   /// Непрозрачность картинки-рубашки на карточке (0.0 - 1.0).
   static const double cardBgImageOpacity = 0.99;
-  
+
   /// Непрозрачность белого оверлея поверх картинки (0.0 - 1.0).
   static const double cardWhiteOverlayOpacity = 0.25;
 
   /// Непрозрачность фонового изображения рубашки карты (0.0 - 1.0).
   static const double cardBackBgImageOpacity = 0.99;
-  
+
   /// Непрозрачность белого оверлея поверх картинки на рубашке карты (0.0 - 1.0).
   static const double cardBackWhiteOverlayOpacity = 0.55;
 }
-

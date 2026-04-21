@@ -3,6 +3,7 @@ import '../utils/app_styles.dart';
 import '../utils/game_rules.dart';
 import '../widgets/common/game_button.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../utils/context_extensions.dart';
 
 /// Rules screen — all numbers are read from [GameRules] dynamically.
 class RulesScreen extends StatelessWidget {
@@ -16,53 +17,68 @@ class RulesScreen extends StatelessWidget {
         color: AppStyles.bgColor,
         child: Container(
           child: SafeArea(
-            child: Column(
-              children: [
-                SizedBox(height: 24),
+            child: Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 800),
+                child: Column(
+                  children: [
+                    SizedBox(height: context.topPadding5),
 
-                // Title
-                Text(
-                  'ПРАВИЛА ИГРЫ',
-                  style: GoogleFonts.russoOne(
-                    fontSize: 28,
-                    fontWeight: FontWeight.w900,
-                    color: AppStyles.accent,
-                    letterSpacing: 3,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-
-                SizedBox(height: 16),
-
-                // Scrollable content
-                Expanded(
-                  child: SingleChildScrollView(
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _section('🎯 Цель игры', _goalText),
-                        _section('👥 Роли', _rolesText),
-                        _section('🕹️ Ход игры', _gameplayText),
-                        _section('⭐ Очки', _scoringText),
-                        _section('🏆 Победитель', _winnerText),
-                        SizedBox(height: 20),
-                      ],
+                    // Title
+                    FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        'ПРАВИЛА ИГРЫ',
+                        style: GoogleFonts.russoOne(
+                          fontSize: 28,
+                          fontWeight: FontWeight.w900,
+                          color: AppStyles.accent,
+                          letterSpacing: 3,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
                     ),
-                  ),
-                ),
 
-                // Back button
-                Padding(
-                  padding: EdgeInsets.fromLTRB(30, 0, 30, 24),
-                  child: GameButton(
-                    text: '← НАЗАД',
-                    type: GameButtonType.secondary,
-                    onPressed: () => Navigator.of(context).pop(),
-                    width: 200,
-                  ),
+                    SizedBox(height: context.padding2),
+
+                    // Scrollable content
+                    Expanded(
+                      child: SingleChildScrollView(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: context.horizontalMargin,
+                          vertical: context.padding1,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _section('🎯 Цель игры', _goalText),
+                            _section('👥 Роли', _rolesText),
+                            _section('🕹️ Ход игры', _gameplayText),
+                            _section('⭐ Очки', _scoringText),
+                            _section('🏆 Победитель', _winnerText),
+                            SizedBox(height: 20),
+                          ],
+                        ),
+                      ),
+                    ),
+
+                    // Back button
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(
+                        context.horizontalMargin * 1.5,
+                        0,
+                        context.horizontalMargin * 1.5,
+                        context.padding4,
+                      ),
+                      child: GameButton(
+                        text: '← НАЗАД',
+                        type: GameButtonType.secondary,
+                        onPressed: () => Navigator.of(context).pop(),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
         ),
@@ -80,7 +96,10 @@ class RulesScreen extends StatelessWidget {
         decoration: BoxDecoration(
           color: AppStyles.cardBg,
           borderRadius: BorderRadius.circular(18),
-          border: Border.all(color: AppStyles.accent.withValues(alpha: 0.2), width: 1),
+          border: Border.all(
+            color: AppStyles.accent.withValues(alpha: 0.2),
+            width: 1,
+          ),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

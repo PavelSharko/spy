@@ -95,10 +95,7 @@ class _CameraOverlayState extends State<CameraOverlay> {
 
         Text(
           'Сделай фото мордахи 📸',
-          style: TextStyle(
-            fontSize: 16,
-            color: AppStyles.textSecondary,
-          ),
+          style: TextStyle(fontSize: 16, color: AppStyles.textSecondary),
         ),
 
         SizedBox(height: 20),
@@ -109,9 +106,7 @@ class _CameraOverlayState extends State<CameraOverlay> {
             child: AspectRatio(
               aspectRatio: 3 / 4,
               child: Container(
-                margin: EdgeInsets.symmetric(
-                  horizontal: size.width * 0.10,
-                ),
+                margin: EdgeInsets.symmetric(horizontal: size.width * 0.10),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(20),
                   child: Stack(
@@ -133,9 +128,7 @@ class _CameraOverlayState extends State<CameraOverlay> {
                         ),
 
                       // Oval overlay frame
-                      CustomPaint(
-                        painter: _OvalFramePainter(),
-                      ),
+                      CustomPaint(painter: _OvalFramePainter()),
                     ],
                   ),
                 ),
@@ -179,7 +172,10 @@ class _CameraOverlayState extends State<CameraOverlay> {
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppStyles.accent,
                           foregroundColor: AppStyles.cardBg,
-                          side: BorderSide(color: AppStyles.darkAccent, width: 2),
+                          side: BorderSide(
+                            color: AppStyles.darkAccent,
+                            width: 2,
+                          ),
                           minimumSize: const Size(0, 55),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(15),
@@ -195,11 +191,17 @@ class _CameraOverlayState extends State<CameraOverlay> {
                   onPressed: _isCapturing ? null : _takePhoto,
                   icon: _isCapturing
                       ? SizedBox(
-                          width: 20, height: 20,
-                          child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: Colors.white,
+                          ),
                         )
                       : Icon(Icons.camera_alt_rounded),
-                  label: Text(_isCapturing ? 'Открываем камеру...' : 'Сфоткать мордаху'),
+                  label: Text(
+                    _isCapturing ? 'Открываем камеру...' : 'Сфоткать мордаху',
+                  ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppStyles.accent,
                     foregroundColor: AppStyles.cardBg,
@@ -256,4 +258,3 @@ class _OvalFramePainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
-

@@ -7,14 +7,12 @@ import '../utils/game_rules.dart';
 import '../utils/sound_service.dart';
 import 'round_score_screen.dart';
 import '../widgets/exit_game_button.dart';
+import '../utils/context_extensions.dart';
 
 class SpyLastWordScreen extends StatefulWidget {
   final GameSession session;
 
-  const SpyLastWordScreen({
-    super.key,
-    required this.session,
-  });
+  const SpyLastWordScreen({super.key, required this.session});
 
   @override
   State<SpyLastWordScreen> createState() => _SpyLastWordScreenState();
@@ -36,10 +34,12 @@ class _SpyLastWordScreenState extends State<SpyLastWordScreen> {
     if (_didGuessRight == true) {
       widget.session.addScoreToSpy(GameRules.spyGuessedAfterFound);
     }
-    
+
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => RoundScoreScreen(session: widget.session)),
+      MaterialPageRoute(
+        builder: (context) => RoundScoreScreen(session: widget.session),
+      ),
     );
   }
 
@@ -53,165 +53,210 @@ class _SpyLastWordScreenState extends State<SpyLastWordScreen> {
             color: AppStyles.bgColor,
             child: Container(
               child: SafeArea(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  SizedBox(height: 20),
-
-              // Title
-              Transform.translate(
-                offset: const Offset(0, 110),
                 child: Center(
-                  child: Text(
-                    AppStrings.SpyWas,
-                    style: TextStyle(
-                      fontSize: 24,
-                      color: AppStyles.accent,
-                      letterSpacing: 1,
-                    ),
-                  ),
-                ),
-              ),
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 800),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        const Spacer(flex: 2),
 
-              SizedBox(height: 120),
+                        // Title
+                        Center(
+                          child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              AppStrings.SpyWas,
+                              style: TextStyle(
+                                fontSize: 24,
+                                color: AppStyles.accent,
+                                letterSpacing: 1,
+                              ),
+                            ),
+                          ),
+                        ),
 
-              // Spy Name
-              Center(
-                child: Container(
-                  margin: EdgeInsets.symmetric(horizontal: 40),
-                  padding: EdgeInsets.symmetric(horizontal: 40, vertical: 30),
-                  decoration: BoxDecoration(
-                    color: AppStyles.cardBg,
-                    borderRadius: BorderRadius.circular(40),
-                  ),
-                  child: Text(
-                    widget.session.players[widget.session.currentSpyIndex].name,
-                    style: GoogleFonts.russoOne(
-                      fontSize: 32,
-                      fontWeight: FontWeight.w900,
-                      color: AppStyles.textBright,
-                      shadows: [
-                        const Shadow(offset: Offset(-1.5, -1.5), color: Colors.black),
-                        const Shadow(offset: Offset(1.5, -1.5), color: Colors.black),
-                        const Shadow(offset: Offset(1.5, 1.5), color: Colors.black),
-                        const Shadow(offset: Offset(-1.5, 1.5), color: Colors.black),
+                        SizedBox(height: context.padding2),
+
+                        // Spy Name
+                        Center(
+                          child: Container(
+                            margin: EdgeInsets.symmetric(horizontal: 40),
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 40,
+                              vertical: 30,
+                            ),
+                            decoration: BoxDecoration(
+                              color: AppStyles.cardBg,
+                              borderRadius: BorderRadius.circular(40),
+                            ),
+                            child: FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Text(
+                                widget
+                                    .session
+                                    .players[widget.session.currentSpyIndex]
+                                    .name,
+                                style: GoogleFonts.russoOne(
+                                  fontSize: 32,
+                                  fontWeight: FontWeight.w900,
+                                  color: AppStyles.textBright,
+                                  shadows: [
+                                    const Shadow(
+                                      offset: Offset(-1.5, -1.5),
+                                      color: Colors.black,
+                                    ),
+                                    const Shadow(
+                                      offset: Offset(1.5, -1.5),
+                                      color: Colors.black,
+                                    ),
+                                    const Shadow(
+                                      offset: Offset(1.5, 1.5),
+                                      color: Colors.black,
+                                    ),
+                                    const Shadow(
+                                      offset: Offset(-1.5, 1.5),
+                                      color: Colors.black,
+                                    ),
+                                  ],
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        SizedBox(height: 40),
+
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            left: 20,
+                            right: 20,
+                            top: 30,
+                          ),
+                          child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              AppStrings.spyLastWord,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 22,
+                                color: AppStyles.accent,
+                                fontWeight: FontWeight.w800,
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        // Subtitle
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            left: 20,
+                            right: 20,
+                            top: 20,
+                          ),
+                          child: Text(
+                            AppStrings.spyMustGuess,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: AppStyles.textSecondary,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+
+                        const Spacer(),
+
+                        // Question
+                        Center(
+                          child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              AppStrings.spyGuessedQuestion,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 26,
+                                fontWeight: FontWeight.bold,
+                                color: AppStyles.accent,
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        SizedBox(height: 30),
+
+                        // Buttons Yes/No
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 20),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: _buildAnswerButton(
+                                  text: AppStrings.guessedNo,
+                                  isYes: false,
+                                  isSelected: _didGuessRight == false,
+                                ),
+                              ),
+                              SizedBox(width: 15),
+                              Expanded(
+                                child: _buildAnswerButton(
+                                  text: AppStrings.guessedYes,
+                                  isYes: true,
+                                  isSelected: _didGuessRight == true,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        const Spacer(),
+
+                        // Complete Round Button (appears after selection)
+                        if (_didGuessRight != null)
+                          Padding(
+                            padding: EdgeInsets.all(20),
+                            child: ElevatedButton(
+                              onPressed: _onEndRound,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppStyles.accent,
+                                foregroundColor: AppStyles.bgColor,
+                                side: BorderSide(
+                                  color: AppStyles.darkAccent,
+                                  width: 2,
+                                ),
+                                minimumSize: const Size(double.infinity, 60),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                elevation: 5,
+                              ),
+                              child: Text(
+                                AppStrings.endRoundVotes,
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  letterSpacing: 1.5,
+                                ),
+                              ),
+                            ),
+                          ),
+
+                        if (_didGuessRight == null)
+                          SizedBox(height: context.padding5),
+                        const Spacer(),
                       ],
                     ),
-                    textAlign: TextAlign.center,
                   ),
                 ),
               ),
-
-              SizedBox(height: 40),
-
-               Padding(
-                padding: const EdgeInsets.only(left: 20, right: 20, top: 30),
-                child: Text(
-                  AppStrings.spyLastWord,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 22,
-                    color: AppStyles.accent,
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
-              ),
-
-              // Subtitle
-              Padding(
-                padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
-                child: Text(
-                  AppStrings.spyMustGuess,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: AppStyles.textSecondary,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-
-              const Spacer(),
-
-              // Question
-              Center(
-                child: Text(
-                  AppStrings.spyGuessedQuestion,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 26,
-                    fontWeight: FontWeight.bold,
-                    color: AppStyles.accent,
-                  ),
-                ),
-              ),
-
-              SizedBox(height: 30),
-
-              // Buttons Yes/No
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: _buildAnswerButton(
-                        text: AppStrings.guessedNo,
-                        isYes: false,
-                        isSelected: _didGuessRight == false,
-                      ),
-                    ),
-                    SizedBox(width: 15),
-                    Expanded(
-                      child: _buildAnswerButton(
-                        text: AppStrings.guessedYes,
-                        isYes: true,
-                        isSelected: _didGuessRight == true,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-
-              const Spacer(),
-
-              // Complete Round Button (appears after selection)
-              if (_didGuessRight != null)
-                Padding(
-                  padding: EdgeInsets.all(20),
-                  child: ElevatedButton(
-                    onPressed: _onEndRound,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppStyles.accent,
-                      foregroundColor: AppStyles.bgColor,
-                      side: BorderSide(color: AppStyles.darkAccent, width: 2),
-                      minimumSize: const Size(double.infinity, 60),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      elevation: 5,
-                    ),
-                    child: Text(
-                      AppStrings.endRoundVotes,
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 1.5,
-                      ),
-                    ),
-                  ),
-                ),
-
-                if (_didGuessRight == null) SizedBox(height: 100),
-              ],
             ),
           ),
-        ),
+          const ExitGameButton(),
+        ],
       ),
-      const ExitGameButton(),
-      ],
-    ),
-  );
-}
+    );
+  }
 
   Widget _buildAnswerButton({
     required String text,
@@ -219,7 +264,7 @@ class _SpyLastWordScreenState extends State<SpyLastWordScreen> {
     required bool isSelected,
   }) {
     final Color baseColor = isYes ? Colors.green.shade600 : Colors.red.shade600;
-    
+
     return GestureDetector(
       onTap: () => _onAnswerPressed(isYes),
       child: AnimatedContainer(
@@ -233,12 +278,12 @@ class _SpyLastWordScreenState extends State<SpyLastWordScreen> {
             width: 3,
           ),
           boxShadow: [
-            if (isSelected) 
+            if (isSelected)
               BoxShadow(
                 color: baseColor.withOpacity(0.6),
                 blurRadius: 10,
                 spreadRadius: 2,
-              )
+              ),
           ],
         ),
         child: Center(

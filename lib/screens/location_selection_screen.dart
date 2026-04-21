@@ -6,6 +6,7 @@ import '../utils/app_strings.dart';
 import '../utils/app_styles.dart';
 import '../utils/sound_service.dart';
 import '../widgets/exit_game_button.dart';
+import '../utils/context_extensions.dart';
 
 // ── Animated running-border painter ─────────────────────────────────────────
 
@@ -57,11 +58,9 @@ class _RunningBorderPainter extends CustomPainter {
   }
 
   Path _buildRoundedRectPath(Size size) {
-    return Path()
-      ..addRRect(RRect.fromRectAndRadius(
-        Offset.zero & size,
-        Radius.circular(radius),
-      ));
+    return Path()..addRRect(
+      RRect.fromRectAndRadius(Offset.zero & size, Radius.circular(radius)),
+    );
   }
 
   @override
@@ -224,8 +223,10 @@ class _LocationSelectionScreenState extends State<LocationSelectionScreen>
     }
 
     // Smart pick using StorageService
-    final List<String> queue =
-        await storageService.pickSmartLocations(pool, needed);
+    final List<String> queue = await storageService.pickSmartLocations(
+      pool,
+      needed,
+    );
 
     if (!mounted) return;
     Navigator.pop(context, {
@@ -246,7 +247,9 @@ class _LocationSelectionScreenState extends State<LocationSelectionScreen>
   // ── Progress hint text ─────────────────────────────────────────────
 
   String _progressText() {
-    final int selected = _isRandomAll ? widget.roundCount : _selectedIndexes.length;
+    final int selected = _isRandomAll
+        ? widget.roundCount
+        : _selectedIndexes.length;
     return AppStrings.locationProgressHint
         .replaceAll('{r}', '${widget.roundCount}')
         .replaceAll('{n}', '$selected');
@@ -262,109 +265,133 @@ class _LocationSelectionScreenState extends State<LocationSelectionScreen>
         children: [
           Container(
             color: AppStyles.bgColor,
-            child: Container(
-              child: SafeArea(
-              child: Column(
-                children: [
-                  const SizedBox(height: 20),
+            child: SafeArea(
+              child: Center(
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 800),
+                  child: Column(
+                    children: [
+                      SizedBox(height: context.topPadding5),
 
-                  // Random button
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: _buildGroupButton(
-                      key: -1,
-                      title: AppStrings.randomSelection,
-                      isSelected: _isRandomAll,
-                      onTap: _onRandomPressed,
-                      isRandom: true,
-                    ),
-                  ),
+                      // Random button
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: context.horizontalMargin,
+                        ),
+                        child: _buildGroupButton(
+                          key: -1,
+                          title: AppStrings.randomSelection,
+                          isSelected: _isRandomAll,
+                          onTap: _onRandomPressed,
+                          isRandom: true,
+                        ),
+                      ),
 
-                  const SizedBox(height: 16),
+                      const SizedBox(height: 16),
 
-                  // Scrollable group list
-                  Expanded(
-                    child: ListView.builder(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      itemCount: LocationsData.groups.length,
-                      itemBuilder: (context, index) {
-                        final isDisabled = _isRandomAll;
-                        final isSelected = _selectedIndexes.contains(index);
-                        return Padding(
-                          padding: const EdgeInsets.only(bottom: 12),
-                          child: _buildGroupButton(
-                            key: index,
-                            title: LocationsData.groups[index]['groupName'] as String,
-                            isSelected: isSelected,
-                            isDisabled: isDisabled,
-                            onTap: () => _onGroupPressed(index),
+                      // Scrollable group list
+                      Expanded(
+                        child: ListView.builder(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: context.horizontalMargin,
                           ),
-                        );
-                      },
-                    ),
-                  ),
-
-                  // Progress hint + Confirm button
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 8, 20, 20),
-                    child: Column(
-                      children: [
-                        // Shake + colour hint
-                        AnimatedBuilder(
-                          animation: _shakeAnimation,
-                          builder: (_, child) {
-                            final double offset = _shakeController.isAnimating
-                                ? sin(_shakeAnimation.value * pi * 6) * 8
-                                : 0;
-                            return Transform.translate(
-                              offset: Offset(offset, 0),
-                              child: child,
+                          itemCount: LocationsData.groups.length,
+                          itemBuilder: (context, index) {
+                            final isDisabled = _isRandomAll;
+                            final isSelected = _selectedIndexes.contains(index);
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 12),
+                              child: _buildGroupButton(
+                                key: index,
+                                title:
+                                    LocationsData.groups[index]['groupName']
+                                        as String,
+                                isSelected: isSelected,
+                                isDisabled: isDisabled,
+                                onTap: () => _onGroupPressed(index),
+                              ),
                             );
                           },
-                          child: AnimatedDefaultTextStyle(
-                            duration: const Duration(milliseconds: 200),
-                            style: TextStyle(
-                              fontSize: 13,
-                              color: _showRedHint
-                                  ? Colors.red.shade300
-                                  : AppStyles.textSecondary,
-                              fontWeight: FontWeight.w500,
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.only(bottom: 8),
-                              child: Text(
-                                _progressText(),
-                                textAlign: TextAlign.center,
+                        ),
+                      ),
+
+                      // Progress hint + Confirm button
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(
+                          context.horizontalMargin,
+                          8,
+                          context.horizontalMargin,
+                          20,
+                        ),
+                        child: Column(
+                          children: [
+                            // Shake + colour hint
+                            AnimatedBuilder(
+                              animation: _shakeAnimation,
+                              builder: (_, child) {
+                                final double offset =
+                                    _shakeController.isAnimating
+                                    ? sin(_shakeAnimation.value * pi * 6) * 8
+                                    : 0;
+                                return Transform.translate(
+                                  offset: Offset(offset, 0),
+                                  child: child,
+                                );
+                              },
+                              child: AnimatedDefaultTextStyle(
+                                duration: const Duration(milliseconds: 200),
+                                style: TextStyle(
+                                  fontSize: 26, // Увеличено в 2 раза
+                                  color: _showRedHint
+                                      ? Colors.red.shade300
+                                      : AppStyles.textSecondary,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(bottom: 8),
+                                  child: FittedBox(
+                                    fit: BoxFit.scaleDown,
+                                    child: Text(
+                                      _progressText(),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                ),
                               ),
                             ),
-                          ),
-                        ),
 
-                        // Confirm button
-                        ElevatedButton(
-                          onPressed: _onConfirm,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppStyles.accent,
-                            foregroundColor: AppStyles.cardBg,
-                            side: BorderSide(color: AppStyles.darkAccent, width: 2),
-                            minimumSize: const Size(double.infinity, 60),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15),
+                            // Confirm button
+                            ElevatedButton(
+                              onPressed: _onConfirm,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppStyles.accent,
+                                foregroundColor: AppStyles.cardBg,
+                                side: BorderSide(
+                                  color: AppStyles.darkAccent,
+                                  width: 2,
+                                ),
+                                minimumSize: const Size(double.infinity, 60),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                elevation: 5,
+                              ),
+                              child: const Text(
+                                AppStrings.confirmAction,
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  letterSpacing: 1.5,
+                                ),
+                              ),
                             ),
-                            elevation: 5,
-                          ),
-                          child: const Text(
-                            AppStrings.confirmAction,
-                            style: TextStyle(fontSize: 20, letterSpacing: 1.5),
-                          ),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
             ),
-          ),
           ),
           const ExitGameButton(),
         ],
@@ -387,7 +414,9 @@ class _LocationSelectionScreenState extends State<LocationSelectionScreen>
         : AppStyles.cardBg.withValues(alpha: isDisabled ? 0.5 : 1.0);
     final Color textColor = isSelected
         ? Colors.white
-        : AppStyles.location_menu_button_text_color.withValues(alpha: isDisabled ? 0.4 : 1.0);
+        : AppStyles.location_menu_button_text_color.withValues(
+            alpha: isDisabled ? 0.4 : 1.0,
+          );
 
     final border = Border.all(
       color: isSelected ? Colors.transparent : Colors.transparent,

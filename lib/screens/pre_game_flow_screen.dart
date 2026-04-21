@@ -14,6 +14,7 @@ import '../widgets/exit_game_button.dart';
 import '../widgets/camera_overlay.dart';
 import '../services/ai_generation_service.dart';
 import 'game_round_screen.dart';
+import '../utils/context_extensions.dart';
 
 enum FlowStep { nameSelection, photoCapture, cardReveal, roundReady }
 
@@ -31,11 +32,13 @@ class PreGameFlowScreen extends StatefulWidget {
   State<PreGameFlowScreen> createState() => _PreGameFlowScreenState();
 }
 
-class _PreGameFlowScreenState extends State<PreGameFlowScreen> with SingleTickerProviderStateMixin {
+class _PreGameFlowScreenState extends State<PreGameFlowScreen>
+    with SingleTickerProviderStateMixin {
   FlowStep _currentStep = FlowStep.nameSelection;
   int _currentPlayerIndex = 0;
-  bool _isFirstImageLoading = true; // hides once the first prefetched image arrives
-  
+  bool _isFirstImageLoading =
+      true; // hides once the first prefetched image arrives
+
   // Name Selection State
   final TextEditingController _nameController = TextEditingController();
   List<String> _randomNames = [];
@@ -47,12 +50,15 @@ class _PreGameFlowScreenState extends State<PreGameFlowScreen> with SingleTicker
   @override
   void initState() {
     super.initState();
-    
+
     _clockBlinkController = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 1),
     )..repeat(reverse: true);
-    _clockBlinkAnimation = Tween<double>(begin: 0.1, end: 1.0).animate(_clockBlinkController);
+    _clockBlinkAnimation = Tween<double>(
+      begin: 0.1,
+      end: 1.0,
+    ).animate(_clockBlinkController);
 
     if (widget.session.currentRound == 1) {
       widget.session.currentSpyIndex = Random().nextInt(widget.playerCount);
@@ -72,13 +78,15 @@ class _PreGameFlowScreenState extends State<PreGameFlowScreen> with SingleTicker
       if (mounted) setState(() => _isFirstImageLoading = false);
       return;
     }
-    
+
     final locations = widget.session.secretLocationsQueue;
     final cache = widget.session.locationImages;
 
     // Deduplicate — same location may appear in multiple rounds
-    final toFetch =
-        locations.toSet().where((loc) => !cache.containsKey(loc)).toList();
+    final toFetch = locations
+        .toSet()
+        .where((loc) => !cache.containsKey(loc))
+        .toList();
 
     if (toFetch.isEmpty) {
       if (mounted) setState(() => _isFirstImageLoading = false);
@@ -93,9 +101,15 @@ class _PreGameFlowScreenState extends State<PreGameFlowScreen> with SingleTicker
 
   /// Fetches a single location image and updates state when done.
   Future<void> _fetchAndCache(String location) async {
-    final roles = widget.session.getSelectedRolesForLocation(location, playerCount: widget.playerCount);
+    final roles = widget.session.getSelectedRolesForLocation(
+      location,
+      playerCount: widget.playerCount,
+    );
     debugPrint('[PreGameFlow] Fetching $location with roles: $roles');
-    final bytes = await AiGenerationService.fetchLocationImage(location, roles: roles);
+    final bytes = await AiGenerationService.fetchLocationImage(
+      location,
+      roles: roles,
+    );
     if (bytes != null && mounted) {
       setState(() {
         widget.session.locationImages[location] = bytes;
@@ -104,7 +118,6 @@ class _PreGameFlowScreenState extends State<PreGameFlowScreen> with SingleTicker
       });
     }
   }
-
 
   @override
   void dispose() {
@@ -128,7 +141,8 @@ class _PreGameFlowScreenState extends State<PreGameFlowScreen> with SingleTicker
   void _onNameChanged(String val) {
     if (_selectedRandomName != null && val != _selectedRandomName) {
       setState(() {
-        _selectedRandomName = null; // User typing means discarding button selection
+        _selectedRandomName =
+            null; // User typing means discarding button selection
       });
     }
   }
@@ -136,15 +150,20 @@ class _PreGameFlowScreenState extends State<PreGameFlowScreen> with SingleTicker
   void _onConfirmName() {
     SoundService.instance.playClick();
     String finalName = _nameController.text.trim();
-    
+
     if (_selectedRandomName == null) {
       if (finalName.isEmpty || finalName.length > 20) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: const Text('Имя должно быть от 1 до 20 символов!', textAlign: TextAlign.center),
+            content: const Text(
+              'Имя должно быть от 1 до 20 символов!',
+              textAlign: TextAlign.center,
+            ),
             backgroundColor: AppStyles.danger,
             behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
             duration: const Duration(seconds: 2),
           ),
         );
@@ -157,7 +176,8 @@ class _PreGameFlowScreenState extends State<PreGameFlowScreen> with SingleTicker
     widget.session.players.add(Player(name: finalName));
 
     // If unique cards AND faces are enabled, go to photo capture for this player
-    if (AppSettings.instance.uniqueCardsEnabled && AppSettings.instance.playerFacesEnabled) {
+    if (AppSettings.instance.uniqueCardsEnabled &&
+        AppSettings.instance.playerFacesEnabled) {
       setState(() {
         _currentStep = FlowStep.photoCapture;
       });
@@ -194,7 +214,6 @@ class _PreGameFlowScreenState extends State<PreGameFlowScreen> with SingleTicker
     _advanceAfterPhoto();
   }
 
-
   void _onCardTappedToNext() {
     if (_currentPlayerIndex < widget.playerCount - 1) {
       // Next reveal
@@ -224,13 +243,18 @@ class _PreGameFlowScreenState extends State<PreGameFlowScreen> with SingleTicker
   void _launchEndGameCardGeneration() {
     final session = widget.session;
     final location = session.currentSecretLocation;
-    final roles = session.getSelectedRolesForLocation(location, playerCount: widget.playerCount);
+    final roles = session.getSelectedRolesForLocation(
+      location,
+      playerCount: widget.playerCount,
+    );
 
     // Separate spy photo from civilian photos
-    final Uint8List? spyPhoto = session.players[session.currentSpyIndex].photoBytes;
+    final Uint8List? spyPhoto =
+        session.players[session.currentSpyIndex].photoBytes;
     final List<Uint8List> civilianPhotos = [];
     for (int i = 0; i < session.players.length; i++) {
-      if (i != session.currentSpyIndex && session.players[i].photoBytes != null) {
+      if (i != session.currentSpyIndex &&
+          session.players[i].photoBytes != null) {
         civilianPhotos.add(session.players[i].photoBytes!);
       }
     }
@@ -254,9 +278,14 @@ class _PreGameFlowScreenState extends State<PreGameFlowScreen> with SingleTicker
             color: AppStyles.bgColor,
             child: Container(
               child: SafeArea(
-                child: AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 300),
-                  child: _buildCurrentStep(),
+                child: Center(
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 800),
+                    child: AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 300),
+                      child: _buildCurrentStep(),
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -294,23 +323,29 @@ class _PreGameFlowScreenState extends State<PreGameFlowScreen> with SingleTicker
       key: ValueKey('nameSelection_$_currentPlayerIndex'),
       children: [
         SingleChildScrollView(
-          padding: const EdgeInsets.all(20),
+          padding: EdgeInsets.symmetric(
+            horizontal: context.horizontalMargin,
+            vertical: context.topPadding5,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const SizedBox(height: 20),
-              Text(
-                '${AppStrings.passPhoneTo} ${_currentPlayerIndex + 1}${AppStrings.playerSuffix}',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                  color: AppStyles.primaryAccent,
-                  letterSpacing: 1.2,
+              SizedBox(height: context.padding2),
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  '${AppStrings.passPhoneTo} ${_currentPlayerIndex + 1}${AppStrings.playerSuffix}',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    color: AppStyles.primaryAccent,
+                    letterSpacing: 1.2,
+                  ),
                 ),
               ),
-              const SizedBox(height: 40),
-              
+              SizedBox(height: context.padding4),
+
               // Input field
               Container(
                 decoration: BoxDecoration(
@@ -330,15 +365,16 @@ class _PreGameFlowScreenState extends State<PreGameFlowScreen> with SingleTicker
                   maxLength: 20,
                   decoration: InputDecoration(
                     hintText: 'Введите имя...',
-                    hintStyle: TextStyle(
-                      color: AppStyles.textSecondary,
-                    ),
+                    hintStyle: TextStyle(color: AppStyles.textSecondary),
                     counterText: "",
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15),
                       borderSide: BorderSide.none,
                     ),
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 15,
+                    ),
                   ),
                   style: TextStyle(
                     fontSize: 18,
@@ -347,9 +383,9 @@ class _PreGameFlowScreenState extends State<PreGameFlowScreen> with SingleTicker
                   ),
                 ),
               ),
-              
-              const SizedBox(height: 30),
-              
+
+              SizedBox(height: context.padding3),
+
               // Random Name Options
               ..._randomNames.map((name) {
                 bool isSelected = name == _selectedRandomName;
@@ -361,10 +397,14 @@ class _PreGameFlowScreenState extends State<PreGameFlowScreen> with SingleTicker
                       duration: const Duration(milliseconds: 200),
                       padding: const EdgeInsets.symmetric(vertical: 15),
                       decoration: BoxDecoration(
-                        color: isSelected ? AppStyles.warning : AppStyles.cardBg,
+                        color: isSelected
+                            ? AppStyles.warning
+                            : AppStyles.cardBg,
                         borderRadius: BorderRadius.circular(15),
                         border: Border.all(
-                          color: isSelected ? AppStyles.primaryAccent : Colors.transparent,
+                          color: isSelected
+                              ? AppStyles.primaryAccent
+                              : Colors.transparent,
                           width: 2,
                         ),
                         boxShadow: [
@@ -373,16 +413,21 @@ class _PreGameFlowScreenState extends State<PreGameFlowScreen> with SingleTicker
                               color: AppStyles.warning.withValues(alpha: 0.4),
                               blurRadius: 8,
                               spreadRadius: 2,
-                            )
+                            ),
                         ],
                       ),
                       child: Center(
-                        child: Text(
-                          name,
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: isSelected ? AppStyles.bgColor : AppStyles.location_menu_button_text_color,
+                        child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Text(
+                            name,
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: isSelected
+                                  ? AppStyles.bgColor
+                                  : AppStyles.location_menu_button_text_color,
+                            ),
                           ),
                         ),
                       ),
@@ -391,7 +436,7 @@ class _PreGameFlowScreenState extends State<PreGameFlowScreen> with SingleTicker
                 );
               }),
 
-              const SizedBox(height: 40),
+              SizedBox(height: context.padding4),
 
               // Confirm Button
               ElevatedButton(
@@ -406,12 +451,15 @@ class _PreGameFlowScreenState extends State<PreGameFlowScreen> with SingleTicker
                   ),
                   elevation: 5,
                 ),
-                child: const Text(
-                  AppStrings.confirmAction,
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 1.5,
+                child: const FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    AppStrings.confirmAction,
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 1.5,
+                    ),
                   ),
                 ),
               ),
@@ -446,32 +494,42 @@ class _PreGameFlowScreenState extends State<PreGameFlowScreen> with SingleTicker
 
   Widget _buildCardReveal() {
     bool isSpy = _currentPlayerIndex == widget.session.currentSpyIndex;
-    
+
     return SingleChildScrollView(
       key: ValueKey('cardReveal_$_currentPlayerIndex'),
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 40.0),
+        padding: EdgeInsets.symmetric(
+          vertical: context.topPadding5 * 2,
+          horizontal: context.horizontalMargin,
+        ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              widget.session.players[_currentPlayerIndex].name,
-              style: TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.w900,
-                color: AppStyles.accent,
-                letterSpacing: 2,
+            FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                widget.session.players[_currentPlayerIndex].name,
+                style: TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.w900,
+                  color: AppStyles.accent,
+                  letterSpacing: 2,
+                ),
               ),
             ),
-            const SizedBox(height: 40),
+            SizedBox(height: context.padding4),
             GameCard(
               isSpy: isSpy,
               secretLocation: widget.session.currentSecretLocation,
-              role: isSpy ? null : widget.session.players[_currentPlayerIndex].role,
+              role: isSpy
+                  ? null
+                  : widget.session.players[_currentPlayerIndex].role,
               // Spy always sees the default card back — never the location image
               bgImageBytes: isSpy
                   ? null
-                  : widget.session.locationImages[widget.session.currentSecretLocation],
+                  : widget.session.locationImages[widget
+                        .session
+                        .currentSecretLocation],
               onCardTapped: _onCardTappedToNext,
             ),
           ],
@@ -484,7 +542,7 @@ class _PreGameFlowScreenState extends State<PreGameFlowScreen> with SingleTicker
     return Container(
       width: double.infinity,
       color: AppStyles.bgColor,
-      padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.1),
+      padding: EdgeInsets.symmetric(horizontal: context.horizontalMargin),
       child: Column(
         key: const ValueKey('roundReady'),
         mainAxisAlignment: MainAxisAlignment.center,
@@ -494,33 +552,41 @@ class _PreGameFlowScreenState extends State<PreGameFlowScreen> with SingleTicker
             opacity: _clockBlinkAnimation,
             child: Icon(Icons.timer, size: 100, color: AppStyles.accent),
           ),
-          const SizedBox(height: 20),
-          Text(
-            '${widget.session.gameTime}:00',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 60,
-              fontWeight: FontWeight.bold,
-              color: AppStyles.accent,
+          SizedBox(height: context.padding2),
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              '${widget.session.gameTime}:00',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 60,
+                fontWeight: FontWeight.bold,
+                color: AppStyles.accent,
+              ),
             ),
           ),
-          const SizedBox(height: 50),
+          SizedBox(height: context.padding5),
           SizedBox(
             height: 90,
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppStyles.accent,
                 foregroundColor: AppStyles.bgColor,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
                 elevation: 4,
               ),
               onPressed: _onStartRound,
-              child: Text(
-                AppStrings.startRound.toUpperCase(),
-                style: const TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.w900,
-                  letterSpacing: 2.0,
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  AppStrings.startRound.toUpperCase(),
+                  style: const TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: 2.0,
+                  ),
                 ),
               ),
             ),

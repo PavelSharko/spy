@@ -24,9 +24,7 @@ class GameScreenTitle extends StatelessWidget {
         // Fill layer
         Text(
           title,
-          style: AppStyles.titleStyle.copyWith(
-            color: AppStyles.accent,
-          ),
+          style: AppStyles.titleStyle.copyWith(color: AppStyles.accent),
           textAlign: TextAlign.center,
         ),
       ],
