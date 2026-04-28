@@ -633,229 +633,198 @@ class _GameRoundScreenState extends State<GameRoundScreen>
       key: const ValueKey('content'),
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        // Гибкая скроллируемая центральная часть
+        // Зафиксированная область, адаптивная под экран
         Expanded(
-          child: LayoutBuilder(
-            builder: (context, constraints) {
-              return SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(minHeight: constraints.maxHeight),
-                  child: IntrinsicHeight(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        // 2. Current turn text
-                        Padding(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              // 2. Current turn text
+              Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: context.horizontalMargin,
+                ),
+                child: Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: AppStyles.cardBg,
+                    borderRadius: BorderRadius.circular(15),
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppStyles.darkAccent.withValues(alpha: 0.1),
+                        blurRadius: 10,
+                        offset: const Offset(0, 5),
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    children: [
+                      FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text(
+                          widget.session.players[_currentAskerIndex].name,
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: AppStyles.accent,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        child: Icon(
+                          Icons.arrow_downward,
+                          size: 45,
+                          color: AppStyles.accent,
+                        ),
+                      ),
+                      FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text(
+                          widget.session.players[_currentTargetIndex].name,
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: AppStyles.accent,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 12),
+
+              // 5. Hint Button
+              Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: context.horizontalMargin * 2,
+                ),
+                child: ElevatedButton.icon(
+                  onPressed: (_hintsUsed >= 2) ? null : _onHintPressed,
+                  icon: const Icon(Icons.lightbulb_outline),
+                  label: Text('${AppStrings.hintButton} (${2 - _hintsUsed})'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppStyles.warning,
+                    foregroundColor: AppStyles.darkAccent,
+                    disabledBackgroundColor: AppStyles.cardBg,
+                    disabledForegroundColor: AppStyles.accent.withOpacity(0.5),
+                    padding: const EdgeInsets.symmetric(vertical: 15),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    elevation: 4,
+                  ),
+                ),
+              ),
+
+              // Expanded space 1: Текст подсказки
+              Expanded(
+                flex: 3,
+                child: Center(
+                  child: (_currentHintsText.isNotEmpty && !_isTimeUp)
+                      ? Padding(
                           padding: EdgeInsets.symmetric(
                             horizontal: context.horizontalMargin,
+                            vertical: 10,
                           ),
-                          child: Container(
-                            padding: const EdgeInsets.all(20),
-                            decoration: BoxDecoration(
-                              color: AppStyles.cardBg,
-                              borderRadius: BorderRadius.circular(15),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: AppStyles.darkAccent.withValues(
-                                    alpha: 0.1,
-                                  ),
-                                  blurRadius: 10,
-                                  offset: const Offset(0, 5),
-                                ),
-                              ],
-                            ),
+                          child: SingleChildScrollView(
                             child: Column(
-                              children: [
-                                FittedBox(
-                                  fit: BoxFit.scaleDown,
-                                  child: Text(
-                                    widget
-                                        .session
-                                        .players[_currentAskerIndex]
-                                        .name,
-                                    style: TextStyle(
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.bold,
-                                      color: AppStyles.accent,
-                                    ),
-                                  ),
-                                ),
-                                Padding(
+                              mainAxisSize: MainAxisSize.min,
+                              children: _currentHintsText.map((hint) {
+                                return Container(
+                                  margin: const EdgeInsets.only(bottom: 8),
                                   padding: const EdgeInsets.symmetric(
+                                    horizontal: 16,
                                     vertical: 8,
                                   ),
-                                  child: Icon(
-                                    Icons.arrow_downward,
-                                    size: 45,
-                                    color: AppStyles.accent,
+                                  decoration: BoxDecoration(
+                                    color: AppStyles.accent.withOpacity(0.75),
+                                    borderRadius: BorderRadius.circular(10),
+                                    border: Border.all(
+                                      color: AppStyles.warning,
+                                      width: 2,
+                                    ),
                                   ),
-                                ),
-                                FittedBox(
-                                  fit: BoxFit.scaleDown,
                                   child: Text(
-                                    widget
-                                        .session
-                                        .players[_currentTargetIndex]
-                                        .name,
+                                    hint,
+                                    textAlign: TextAlign.center,
                                     style: TextStyle(
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.bold,
-                                      color: AppStyles.accent,
+                                      fontSize:
+                                          20, // чуть уменьшил для вместимости
+                                      color: AppStyles.bgColor,
+                                      fontWeight: FontWeight.w800,
                                     ),
                                   ),
-                                ),
-                              ],
+                                );
+                              }).toList(),
                             ),
                           ),
-                        ),
+                        )
+                      : const SizedBox(),
+                ),
+              ),
 
-                        const SizedBox(height: 12),
-
-                        // 5. Hint Button
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: context.horizontalMargin * 2,
-                          ),
-                          child: ElevatedButton.icon(
-                            onPressed: (_hintsUsed >= 2)
-                                ? null
-                                : _onHintPressed,
-                            icon: const Icon(Icons.lightbulb_outline),
-                            label: Text(
-                              '${AppStrings.hintButton} (${2 - _hintsUsed})',
-                            ),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppStyles.warning,
-                              foregroundColor: AppStyles.darkAccent,
-                              disabledBackgroundColor: AppStyles.cardBg,
-                              disabledForegroundColor: AppStyles.accent
-                                  .withOpacity(0.5),
-                              padding: const EdgeInsets.symmetric(vertical: 15),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30),
-                              ),
-                              elevation: 4,
-                            ),
-                          ),
-                        ),
-
-                        // Expanded space 1: Текст подсказки
-                        Expanded(
-                          flex: 3,
-                          child: Center(
-                            child: (_currentHintsText.isNotEmpty && !_isTimeUp)
-                                ? Padding(
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: context.horizontalMargin,
-                                      vertical: 10,
-                                    ),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: _currentHintsText.map((hint) {
-                                        return Container(
-                                          margin: const EdgeInsets.only(
-                                            bottom: 8,
-                                          ),
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 16,
-                                            vertical: 8,
-                                          ),
-                                          decoration: BoxDecoration(
-                                            color: AppStyles.accent.withOpacity(
-                                              0.75,
-                                            ),
-                                            borderRadius: BorderRadius.circular(
-                                              10,
-                                            ),
-                                            border: Border.all(
-                                              color: AppStyles.warning,
-                                              width: 2,
-                                            ),
-                                          ),
-                                          child: Text(
-                                            hint,
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              fontSize:
-                                                  20, // чуть уменьшил для вместимости
-                                              color: AppStyles.bgColor,
-                                              fontWeight: FontWeight.w800,
-                                            ),
-                                          ),
-                                        );
-                                      }).toList(),
-                                    ),
-                                  )
-                                : const SizedBox(),
+              // 3. Question Timer
+              Visibility(
+                visible: !_isTimeUp,
+                maintainSize: true,
+                maintainAnimation: true,
+                maintainState: true,
+                child: Center(
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 300),
+                    width: circleSize,
+                    height: circleSize,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: _getQuestionTimerColor(),
+                        width: 8,
+                      ),
+                    ),
+                    child: Center(
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text(
+                          _questionTimerRemaining.toString(),
+                          style: TextStyle(
+                            fontSize: circleSize * 0.4,
+                            fontWeight: FontWeight.bold,
+                            color: _getQuestionTimerColor(),
                           ),
                         ),
-
-                        // 3. Question Timer
-                        Visibility(
-                          visible: !_isTimeUp,
-                          maintainSize: true,
-                          maintainAnimation: true,
-                          maintainState: true,
-                          child: Center(
-                            child: AnimatedContainer(
-                              duration: const Duration(milliseconds: 300),
-                              width: circleSize,
-                              height: circleSize,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                border: Border.all(
-                                  color: _getQuestionTimerColor(),
-                                  width: 8,
-                                ),
-                              ),
-                              child: Center(
-                                child: FittedBox(
-                                  fit: BoxFit.scaleDown,
-                                  child: Text(
-                                    _questionTimerRemaining.toString(),
-                                    style: TextStyle(
-                                      fontSize: circleSize * 0.4,
-                                      fontWeight: FontWeight.bold,
-                                      color: _getQuestionTimerColor(),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-
-                        // Expanded space 2: ВРЕМЯ ВЫШЛО текст
-                        Expanded(
-                          flex: 2,
-                          child: Center(
-                            child: (_isTimeUp || _isAdditionalTime)
-                                ? FadeTransition(
-                                    opacity: _fadeAnimation,
-                                    child: FittedBox(
-                                      fit: BoxFit.scaleDown,
-                                      child: Text(
-                                        AppStrings.timeIsUp,
-                                        textAlign: TextAlign.center,
-                                        style: const TextStyle(
-                                          fontSize: 32,
-                                          fontWeight: FontWeight.w900,
-                                          color: Colors.redAccent,
-                                          letterSpacing: 2,
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                : const SizedBox(),
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
                   ),
                 ),
-              );
-            },
+              ),
+
+              // Expanded space 2: ВРЕМЯ ВЫШЛО текст
+              Expanded(
+                flex: 2,
+                child: Center(
+                  child: (_isTimeUp || _isAdditionalTime)
+                      ? FadeTransition(
+                          opacity: _fadeAnimation,
+                          child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              AppStrings.timeIsUp,
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                fontSize: 32,
+                                fontWeight: FontWeight.w900,
+                                color: Colors.redAccent,
+                                letterSpacing: 2,
+                              ),
+                            ),
+                          ),
+                        )
+                      : const SizedBox(),
+                ),
+              ),
+            ],
           ),
         ),
 
