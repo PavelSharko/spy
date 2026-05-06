@@ -6,13 +6,19 @@ import '../utils/app_styles.dart';
 import '../utils/game_rules.dart';
 import '../utils/sound_service.dart';
 import 'round_score_screen.dart';
+import 'role_guess_screen.dart';
 import '../widgets/exit_game_button.dart';
 import '../utils/context_extensions.dart';
 
 class SpyLastWordScreen extends StatefulWidget {
   final GameSession session;
+  final bool isSpyFound;
 
-  const SpyLastWordScreen({super.key, required this.session});
+  const SpyLastWordScreen({
+    super.key, 
+    required this.session,
+    this.isSpyFound = false,
+  });
 
   @override
   State<SpyLastWordScreen> createState() => _SpyLastWordScreenState();
@@ -35,12 +41,21 @@ class _SpyLastWordScreenState extends State<SpyLastWordScreen> {
       widget.session.addScoreToSpy(GameRules.spyGuessedAfterFound);
     }
 
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => RoundScoreScreen(session: widget.session),
-      ),
-    );
+    if (widget.isSpyFound) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => RoleGuessScreen(session: widget.session),
+        ),
+      );
+    } else {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => RoundScoreScreen(session: widget.session),
+        ),
+      );
+    }
   }
 
   @override

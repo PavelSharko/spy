@@ -393,7 +393,6 @@ class _LocationSelectionScreenState extends State<LocationSelectionScreen>
               ),
             ),
           ),
-          const ExitGameButton(),
         ],
       ),
     );

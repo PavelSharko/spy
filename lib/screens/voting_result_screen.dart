@@ -20,21 +20,15 @@ class VotingResultScreen extends StatelessWidget {
 
   void _onNext(BuildContext context) {
     SoundService.instance.playClick();
-    if (isSpyFound) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => RoleGuessScreen(session: session),
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => SpyLastWordScreen(
+          session: session,
+          isSpyFound: isSpyFound,
         ),
-      );
-    } else {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => SpyLastWordScreen(session: session),
-        ),
-      );
-    }
+      ),
+    );
   }
 
   @override

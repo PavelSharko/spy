@@ -45,6 +45,11 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
     if (settingName == AppStrings.locationSelection) {
       // Block if rounds not selected yet
       if (_selectedRoundCount == null) {
+        if (_activeSettingId != null) {
+          setState(() => _activeSettingId = null);
+        }
+
+        ScaffoldMessenger.of(context).clearSnackBars();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: const Text(
@@ -53,17 +58,18 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
             ),
             backgroundColor: AppStyles.danger,
             behavior: SnackBarBehavior.floating,
+            margin: EdgeInsets.only(
+              bottom: context.screenHeight * 0.12,
+              left: context.horizontalMargin,
+              right: context.horizontalMargin,
+            ),
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(12),
             ),
             duration: const Duration(seconds: 2),
           ),
         );
         return;
-      }
-
-      if (_activeSettingId != null) {
-        setState(() => _activeSettingId = null);
       }
 
       final result = await Navigator.push(
@@ -157,13 +163,19 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
     SoundService.instance.playClick();
     final String? validationError = _firstValidationError();
     if (validationError != null) {
+      ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(validationError, textAlign: TextAlign.center),
           backgroundColor: AppStyles.danger,
           behavior: SnackBarBehavior.floating,
+          margin: EdgeInsets.only(
+            bottom: context.screenHeight * 0.12,
+            left: context.horizontalMargin,
+            right: context.horizontalMargin,
+          ),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(12),
           ),
           duration: const Duration(seconds: 2),
         ),
@@ -342,7 +354,6 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
                 ),
               ),
             ),
-            const ExitGameButton(),
           ],
         ),
       ),

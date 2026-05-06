@@ -15,7 +15,17 @@ class ExitGameButton extends StatelessWidget {
       top: 40, // typical safe area
       right: 20,
       child: IconButton(
-        icon: const Icon(Icons.close, color: Colors.white, size: 30),
+        icon: Container(
+          padding: const EdgeInsets.all(4),
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            border: Border.all(
+              color: AppStyles.textBright,
+              width: 1.5,
+            ),
+          ),
+          child: Icon(Icons.close, color: AppStyles.textBright, size: 24),
+        ),
         onPressed: () {
           SoundService.instance.playClick();
           // Pause the game if necessary

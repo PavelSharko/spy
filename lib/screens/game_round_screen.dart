@@ -28,7 +28,7 @@ class GameRoundScreen extends StatefulWidget {
 }
 
 class _GameRoundScreenState extends State<GameRoundScreen>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin, WidgetsBindingObserver {
   late int _mainTimerRemaining;
   int _questionTimerRemaining = 20;
 
@@ -62,6 +62,7 @@ class _GameRoundScreenState extends State<GameRoundScreen>
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _pulseController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 300),
@@ -89,11 +90,13 @@ class _GameRoundScreenState extends State<GameRoundScreen>
   }
 
   void _startTimers() {
+    _mainTimer?.cancel();
+    _questionTimer?.cancel();
+    
     _mainTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (_mainTimerRemaining > 0 &&
           !_isTimeUp &&
-          !_isTransitioning &&
-          !_isLastQuestion) {
+          !_isTransitioning) {
         setState(() {
           _mainTimerRemaining--;
         });
@@ -413,7 +416,18 @@ class _GameRoundScreenState extends State<GameRoundScreen>
   }
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused || state == AppLifecycleState.inactive) {
+      _mainTimer?.cancel();
+      _questionTimer?.cancel();
+    } else if (state == AppLifecycleState.resumed) {
+      _startTimers();
+    }
+  }
+
+  @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _mainTimer?.cancel();
     _questionTimer?.cancel();
     _pulseController.dispose();
