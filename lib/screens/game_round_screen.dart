@@ -583,48 +583,7 @@ class _GameRoundScreenState extends State<GameRoundScreen>
               ),
             ),
           ),
-          // Penalty notification overlay
-          if (_showPenaltyNotification)
-            Positioned.fill(
-              child: IgnorePointer(
-                child: Align(
-                  alignment: Alignment.center,
-                  child: Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 30),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 24,
-                      vertical: 18,
-                    ),
-                    decoration: BoxDecoration(
-                      color: AppStyles.danger.withValues(
-                        alpha: 0.25,
-                      ), // Цвет фона штрафного окна
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(
-                        color: AppStyles.cardBg,
-                        width: 2,
-                      ), // Цвет рамки штрафного окна
-                      boxShadow: [
-                        BoxShadow(
-                          color: AppStyles.darkAccent.withValues(alpha: 0.5),
-                          blurRadius: 20,
-                        ),
-                      ], // Цвет тени штрафного окна
-                    ),
-                    child: Text(
-                      '$_penaltyPlayerName − теряет часть своего очка 😭\n${GameRules.penaltyOvertime}',
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        color: Colors.white, // Цвет текста в штрафном окне
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                        height: 1.5,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
+
           ExitGameButton(
             onPause: () {
               _mainTimer?.cancel();
@@ -641,7 +600,7 @@ class _GameRoundScreenState extends State<GameRoundScreen>
 
   Widget _buildRoundContent(BuildContext context) {
     bool subscribe_payed = false;
-    final double circleSize = (context.screenWidth * 0.35).clamp(100.0, 180.0);
+    final double circleSize = (context.screenWidth * 0.3).clamp(80.0, 130.0);
 
     return Column(
       key: const ValueKey('content'),
@@ -658,7 +617,7 @@ class _GameRoundScreenState extends State<GameRoundScreen>
                   horizontal: context.horizontalMargin,
                 ),
                 child: Container(
-                  padding: const EdgeInsets.all(20),
+                  padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
                     color: AppStyles.cardBg,
                     borderRadius: BorderRadius.circular(15),
@@ -723,7 +682,7 @@ class _GameRoundScreenState extends State<GameRoundScreen>
                     foregroundColor: AppStyles.darkAccent,
                     disabledBackgroundColor: AppStyles.cardBg,
                     disabledForegroundColor: AppStyles.accent.withOpacity(0.5),
-                    padding: const EdgeInsets.symmetric(vertical: 15),
+                    padding: const EdgeInsets.symmetric(vertical: 10),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30),
                     ),
@@ -732,25 +691,24 @@ class _GameRoundScreenState extends State<GameRoundScreen>
                 ),
               ),
 
-              // Expanded space 1: Текст подсказки
+              // Текст подсказки (занимает всё свободное место)
               Expanded(
-                flex: 3,
                 child: Center(
-                  child: (_currentHintsText.isNotEmpty && !_isTimeUp)
+                  child: (_currentHintsText.isNotEmpty)
                       ? Padding(
                           padding: EdgeInsets.symmetric(
                             horizontal: context.horizontalMargin,
-                            vertical: 10,
+                            vertical: 5,
                           ),
                           child: SingleChildScrollView(
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: _currentHintsText.map((hint) {
                                 return Container(
-                                  margin: const EdgeInsets.only(bottom: 8),
+                                  margin: const EdgeInsets.only(bottom: 6),
                                   padding: const EdgeInsets.symmetric(
-                                    horizontal: 16,
-                                    vertical: 8,
+                                    horizontal: 12,
+                                    vertical: 6,
                                   ),
                                   decoration: BoxDecoration(
                                     color: AppStyles.accent.withOpacity(0.75),
@@ -764,8 +722,7 @@ class _GameRoundScreenState extends State<GameRoundScreen>
                                     hint,
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
-                                      fontSize:
-                                          20, // чуть уменьшил для вместимости
+                                      fontSize: 16, // Уменьшили, чтобы всё влезало
                                       color: AppStyles.bgColor,
                                       fontWeight: FontWeight.w800,
                                     ),
@@ -779,65 +736,103 @@ class _GameRoundScreenState extends State<GameRoundScreen>
                 ),
               ),
 
-              // 3. Question Timer
-              Visibility(
-                visible: !_isTimeUp,
-                maintainSize: true,
-                maintainAnimation: true,
-                maintainState: true,
-                child: Center(
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 300),
-                    width: circleSize,
-                    height: circleSize,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: _getQuestionTimerColor(),
-                        width: 8,
-                      ),
-                    ),
-                    child: Center(
-                      child: FittedBox(
-                        fit: BoxFit.scaleDown,
-                        child: Text(
-                          _questionTimerRemaining.toString(),
-                          style: TextStyle(
-                            fontSize: circleSize * 0.4,
-                            fontWeight: FontWeight.bold,
+              // 3. Блок Таймера / ВРЕМЯ ВЫШЛО / Штрафа
+              Center(
+                child: Stack(
+                  clipBehavior: Clip.none,
+                  alignment: Alignment.center,
+                  children: [
+                    // Таймер (прячем, если время вышло, но размер сохраняем)
+                    Visibility(
+                      visible: !_isTimeUp,
+                      maintainSize: true,
+                      maintainAnimation: true,
+                      maintainState: true,
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 300),
+                        width: circleSize,
+                        height: circleSize,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(
                             color: _getQuestionTimerColor(),
+                            width: 8,
+                          ),
+                        ),
+                        child: Center(
+                          child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              _questionTimerRemaining.toString(),
+                              style: TextStyle(
+                                fontSize: circleSize * 0.4,
+                                fontWeight: FontWeight.bold,
+                                color: _getQuestionTimerColor(),
+                              ),
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                ),
-              ),
 
-              // Expanded space 2: ВРЕМЯ ВЫШЛО текст
-              Expanded(
-                flex: 2,
-                child: Center(
-                  child: (_isTimeUp || _isAdditionalTime)
-                      ? FadeTransition(
-                          opacity: _fadeAnimation,
-                          child: FittedBox(
-                            fit: BoxFit.scaleDown,
-                            child: Text(
-                              AppStrings.timeIsUp,
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                fontSize: 32,
-                                fontWeight: FontWeight.w900,
-                                color: Colors.redAccent,
-                                letterSpacing: 2,
-                              ),
+                    // Текст "ВРЕМЯ ВЫШЛО" (показывается вместо таймера)
+                    if (_isTimeUp || _isAdditionalTime)
+                      FadeTransition(
+                        opacity: _fadeAnimation,
+                        child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Text(
+                            AppStrings.timeIsUp,
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              fontSize: 32,
+                              fontWeight: FontWeight.w900,
+                              color: Colors.redAccent,
+                              letterSpacing: 2,
                             ),
                           ),
-                        )
-                      : const SizedBox(),
+                        ),
+                      ),
+
+                    // Окно штрафа (поверх всего)
+                    if (_showPenaltyNotification)
+                      IgnorePointer(
+                        child: Container(
+                          width: context.screenWidth * 0.8,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 12,
+                          ),
+                          decoration: BoxDecoration(
+                            color: AppStyles.danger.withOpacity(0.9),
+                            borderRadius: BorderRadius.circular(15),
+                            border: Border.all(
+                              color: AppStyles.cardBg,
+                              width: 2,
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: AppStyles.darkAccent.withOpacity(0.5),
+                                blurRadius: 15,
+                              ),
+                            ],
+                          ),
+                          child: Text(
+                            '$_penaltyPlayerName − теряет часть своего очка 😭\n${GameRules.penaltyOvertime}',
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              height: 1.2,
+                            ),
+                          ),
+                        ),
+                      ),
+                  ],
                 ),
               ),
+              const SizedBox(height: 10),
             ],
           ),
         ),
@@ -888,7 +883,7 @@ class _GameRoundScreenState extends State<GameRoundScreen>
                     foregroundColor: (_isAdditionalTime || _isLastQuestion)
                         ? Colors.white
                         : AppStyles.darkAccent,
-                    padding: const EdgeInsets.symmetric(vertical: 18),
+                    padding: const EdgeInsets.symmetric(vertical: 12),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15),
                     ),
@@ -903,7 +898,7 @@ class _GameRoundScreenState extends State<GameRoundScreen>
                                 ? AppStrings.endRound
                                 : AppStrings.nextPlayer),
                       style: const TextStyle(
-                        fontSize: 22,
+                        fontSize: 18,
                         fontWeight: FontWeight.bold,
                         letterSpacing: 1.5,
                       ),
@@ -923,11 +918,11 @@ class _GameRoundScreenState extends State<GameRoundScreen>
               child: ElevatedButton(
                 onPressed: _showStopRoundDialog,
                 style: ElevatedButton.styleFrom(
-                  minimumSize: const Size(double.infinity, 60),
+                  minimumSize: const Size(double.infinity, 50),
                   backgroundColor: AppStyles.danger,
                   foregroundColor: Colors.white,
                   side: BorderSide(color: Colors.red.shade900, width: 3),
-                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  padding: const EdgeInsets.symmetric(vertical: 12),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15),
                   ),
@@ -935,7 +930,7 @@ class _GameRoundScreenState extends State<GameRoundScreen>
                 ),
                 child: const Text(
                   AppStrings.stopRound,
-                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
               ),
             ),
