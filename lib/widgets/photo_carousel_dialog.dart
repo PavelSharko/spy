@@ -231,88 +231,94 @@ class _PhotoCarouselDialogState extends State<PhotoCarouselDialog> {
 
     final List<String> slideSubtitles = [
       'Результаты раунда',
-      'Карточка локации',
-      'Результат игры',
+      'Локация была: ${currentRound.locationName ?? "Секретная"}',
+      'Результат игры (шпион ${currentRound.spyWon ? "выиграл" : "проиграл"})',
     ];
 
     return Dialog(
       backgroundColor: Colors.transparent,
       insetPadding: const EdgeInsets.all(10),
-      child: Container(
-        width: double.infinity,
-        height: MediaQuery.of(context).size.height * 0.75,
-        decoration: BoxDecoration(
-          color: AppStyles.bgColor,
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: AppStyles.accent.withValues(alpha: 0.8), width: 2),
+      child: ConstrainedBox(
+        constraints: BoxConstraints(
+          maxWidth: 550,
+          maxHeight: MediaQuery.of(context).size.height * 0.8,
         ),
-        child: Column(
-          children: [
-            // Header
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 8, 8, 8),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: Text(
-                      'Раунд ${currentRound.roundNumber}: ${slideSubtitles[_currentPage]}',
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
+        child: Container(
+          width: double.infinity,
+          height: double.infinity,
+          decoration: BoxDecoration(
+            color: AppStyles.bgColor,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: AppStyles.accent.withValues(alpha: 0.8), width: 2),
+          ),
+          child: Column(
+            children: [
+              // Header
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 8, 8, 8),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        'Раунд ${currentRound.roundNumber}: ${slideSubtitles[_currentPage]}',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
                     ),
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.close, color: Colors.white),
-                    onPressed: () {
-                      SoundService.instance.playClick();
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                ],
-              ),
-            ),
-
-            // Horizontal tab selector for rounds
-            _buildRoundTabs(),
-
-            // Page Carousel
-            Expanded(
-              child: ClipRRect(
-                borderRadius: const BorderRadius.vertical(bottom: Radius.circular(18)),
-                child: PageView(
-                  controller: _pageController,
-                  onPageChanged: (index) {
-                    setState(() => _currentPage = index);
-                  },
-                  children: roundSlides,
+                    IconButton(
+                      icon: const Icon(Icons.close, color: Colors.white),
+                      onPressed: () {
+                        SoundService.instance.playClick();
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ],
                 ),
               ),
-            ),
 
-            // 3 dots indicators for the active round's slides
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 12.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: List.generate(3, (index) {
-                  return Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 4),
-                    width: _currentPage == index ? 10 : 6,
-                    height: _currentPage == index ? 10 : 6,
-                    decoration: BoxDecoration(
-                      color: _currentPage == index ? AppStyles.accent : Colors.white30,
-                      shape: BoxShape.circle,
-                    ),
-                  );
-                }),
+              // Horizontal tab selector for rounds
+              _buildRoundTabs(),
+
+              // Page Carousel
+              Expanded(
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.vertical(bottom: Radius.circular(18)),
+                  child: PageView(
+                    controller: _pageController,
+                    onPageChanged: (index) {
+                      setState(() => _currentPage = index);
+                    },
+                    children: roundSlides,
+                  ),
+                ),
               ),
-            ),
-          ],
+
+              // 3 dots indicators for the active round's slides
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 12.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: List.generate(3, (index) {
+                    return Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 4),
+                      width: _currentPage == index ? 10 : 6,
+                      height: _currentPage == index ? 10 : 6,
+                      decoration: BoxDecoration(
+                        color: _currentPage == index ? AppStyles.accent : Colors.white30,
+                        shape: BoxShape.circle,
+                      ),
+                    );
+                  }),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

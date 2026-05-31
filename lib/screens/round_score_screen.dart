@@ -188,6 +188,7 @@ class _RoundScoreScreenState extends State<RoundScoreScreen> {
                                 
                                 allRounds.add(RoundHistory(
                                   roundNumber: r,
+                                  locationName: locName,
                                   locationImageBytes: locBytes,
                                   resultImageBytes: resultBytes,
                                   playerScores: widget.session.roundScoresHistory[r] ?? {},
