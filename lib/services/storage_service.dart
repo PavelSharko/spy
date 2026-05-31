@@ -200,6 +200,44 @@ class StorageService {
     return chosenText;
   }
 
+  /// Generates a random name combination synchronously using a persistent pool of names and qualities.
+  /// Removes elements from the pool to avoid repeats, refilling and shuffling when empty.
+  /// Saves the updated lists to local file in the background.
+  String generatePersistentName(List<String> allNames, List<String> allQualities) {
+    // 1. Get unused names from memory cache
+    var unusedNamesRaw = _data['unused_names'];
+    List<String> unusedNames = [];
+    if (unusedNamesRaw is List) {
+      unusedNames = unusedNamesRaw.map((e) => e.toString()).toList();
+    }
+    if (unusedNames.isEmpty) {
+      unusedNames = List<String>.from(allNames)..shuffle();
+    }
+    
+    // 2. Get unused qualities from memory cache
+    var unusedQualitiesRaw = _data['unused_qualities'];
+    List<String> unusedQualities = [];
+    if (unusedQualitiesRaw is List) {
+      unusedQualities = unusedQualitiesRaw.map((e) => e.toString()).toList();
+    }
+    if (unusedQualities.isEmpty) {
+      unusedQualities = List<String>.from(allQualities)..shuffle();
+    }
+    
+    // 3. Extract first elements
+    final String name = unusedNames.removeAt(0);
+    final String quality = unusedQualities.removeAt(0);
+    
+    // 4. Save pools back to memory and trigger background disk write
+    _data['unused_names'] = unusedNames;
+    _data['unused_qualities'] = unusedQualities;
+    _saveStats();
+    
+    // 5. Combine and format
+    final combined = '$quality $name';
+    return combined[0].toUpperCase() + combined.substring(1);
+  }
+
   // ─── Private helpers ─────────────────────────────────────────────
 
   List<Map<String, dynamic>> _universalHints() {
