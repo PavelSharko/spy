@@ -1,4 +1,7 @@
 import 'package:shared_preferences/shared_preferences.dart';
+import '../config/app_environment.dart';
+
+enum SubscriptionLevel { none, plus, ultra }
 
 /// Global application settings (persistent across app restarts).
 class AppSettings {
@@ -16,7 +19,7 @@ class AppSettings {
   }
 
   /// Whether to generate unique cards based on location roles.
-  bool _uniqueCardsEnabled = true;
+  bool _uniqueCardsEnabled = false;
   bool get uniqueCardsEnabled => _uniqueCardsEnabled;
   set uniqueCardsEnabled(bool value) {
     _uniqueCardsEnabled = value;
@@ -32,18 +35,39 @@ class AppSettings {
   }
 
   /// Whether to include player faces on unique cards.
-  bool _playerFacesEnabled = true;
+  bool _playerFacesEnabled = false;
   bool get playerFacesEnabled => _playerFacesEnabled;
   set playerFacesEnabled(bool value) {
     _playerFacesEnabled = value;
     _prefs.setBool('playerFacesEnabled', value);
   }
 
+  /// Subscription levels for gating premium features.
+  SubscriptionLevel _subscriptionLevel = SubscriptionLevel.none;
+  SubscriptionLevel get subscriptionLevel => _subscriptionLevel;
+  set subscriptionLevel(SubscriptionLevel value) {
+    _subscriptionLevel = value;
+    _prefs.setInt('subscriptionLevel', value.index);
+  }
+
+  /// Whether the user has at least PLUS subscription.
+  bool get hasPlus =>
+      AppEnvironment.bypassSubscriptionCheck ||
+      _subscriptionLevel == SubscriptionLevel.plus ||
+      _subscriptionLevel == SubscriptionLevel.ultra;
+
+  /// Whether the user has ULTRA subscription.
+  bool get hasUltra =>
+      AppEnvironment.bypassSubscriptionCheck ||
+      _subscriptionLevel == SubscriptionLevel.ultra;
+
   Future<void> init() async {
     _prefs = await SharedPreferences.getInstance();
     _soundEnabled = _prefs.getBool('soundEnabled') ?? true;
-    _uniqueCardsEnabled = _prefs.getBool('uniqueCardsEnabled') ?? true;
+    _uniqueCardsEnabled = _prefs.getBool('uniqueCardsEnabled') ?? false;
     _cardStyle = _prefs.getString('cardStyle') ?? "не выбрано";
-    _playerFacesEnabled = _prefs.getBool('playerFacesEnabled') ?? true;
+    _playerFacesEnabled = _prefs.getBool('playerFacesEnabled') ?? false;
+    _subscriptionLevel = SubscriptionLevel.values[
+        _prefs.getInt('subscriptionLevel') ?? SubscriptionLevel.none.index];
   }
 }

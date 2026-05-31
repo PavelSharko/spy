@@ -39,19 +39,619 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   void _toggleUniqueCards(bool value) {
+    if (value && !AppSettings.instance.hasPlus) {
+      _showSubscriptionDialog(SubscriptionLevel.plus);
+      return;
+    }
     setState(() {
       _uniqueCardsEnabled = value;
       AppSettings.instance.uniqueCardsEnabled = value;
+      // If uniquely disabled, make sure faces is also disabled
+      if (!value) {
+        _playerFacesEnabled = false;
+        AppSettings.instance.playerFacesEnabled = false;
+      }
     });
     if (_soundEnabled) SoundService.instance.playClick();
   }
 
   void _togglePlayerFaces(bool value) {
+    if (value && !AppSettings.instance.hasUltra) {
+      _showSubscriptionDialog(SubscriptionLevel.ultra);
+      return;
+    }
     setState(() {
       _playerFacesEnabled = value;
       AppSettings.instance.playerFacesEnabled = value;
     });
     if (_soundEnabled) SoundService.instance.playClick();
+  }
+
+  Widget _buildSubscriptionStatusCard() {
+    String levelName = 'БАЗОВЫЙ';
+    IconData levelIcon = Icons.lock_outline_rounded;
+    Color levelColor = AppStyles.textSecondary;
+
+    if (AppSettings.instance.hasUltra) {
+      levelName = 'ULTRA';
+      levelIcon = Icons.workspace_premium_rounded;
+      levelColor = Colors.purpleAccent;
+    } else if (AppSettings.instance.hasPlus) {
+      levelName = 'PLUS';
+      levelIcon = Icons.star_rounded;
+      levelColor = AppStyles.accent;
+    }
+
+    return _buildSettingsCard(
+      icon: levelIcon,
+      iconColor: levelColor,
+      title: 'Ваш тариф',
+      subtitle: levelName,
+      trailing: Icon(
+        Icons.edit_rounded,
+        color: AppStyles.accent.withValues(alpha: 0.8),
+        size: 24,
+      ),
+      onTap: _showSubscriptionSelectionDialog,
+    );
+  }
+
+  void _showSubscriptionSelectionDialog() {
+    if (_soundEnabled) SoundService.instance.playClick();
+    
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          insetPadding: EdgeInsets.symmetric(horizontal: context.horizontalMargin),
+          child: Container(
+            padding: const EdgeInsets.all(24),
+            decoration: BoxDecoration(
+              color: AppStyles.bgColor,
+              borderRadius: BorderRadius.circular(25),
+              border: Border.all(color: AppStyles.accent.withValues(alpha: 0.8), width: 2),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'ТАРИФНЫЕ ПЛАНЫ',
+                  style: GoogleFonts.russoOne(
+                    fontSize: 24,
+                    color: AppStyles.accent,
+                    letterSpacing: 1.5,
+                  ),
+                ),
+                const SizedBox(height: 20),
+                
+                // Base Tariff Option
+                _buildSubscriptionOptionTile(
+                  title: 'БАЗОВЫЙ (БЕСПЛАТНО)',
+                  description: 'Стандартные локации и правила игры.',
+                  icon: Icons.lock_outline_rounded,
+                  color: AppStyles.textSecondary,
+                  onTap: () {
+                    AppSettings.instance.subscriptionLevel = SubscriptionLevel.none;
+                    AppSettings.instance.uniqueCardsEnabled = false;
+                    AppSettings.instance.playerFacesEnabled = false;
+                    Navigator.of(context).pop();
+                    setState(() {
+                      _uniqueCardsEnabled = false;
+                      _playerFacesEnabled = false;
+                    });
+                  },
+                ),
+                const SizedBox(height: 12),
+                
+                // Plus Option
+                _buildSubscriptionOptionTile(
+                  title: 'ТАРИФ PLUS',
+                  description: 'Генерация уникальных карточек локаций.',
+                  icon: Icons.star_rounded,
+                  color: AppStyles.accent,
+                  onTap: () {
+                    AppSettings.instance.subscriptionLevel = SubscriptionLevel.plus;
+                    AppSettings.instance.playerFacesEnabled = false;
+                    Navigator.of(context).pop();
+                    setState(() {
+                      _playerFacesEnabled = false;
+                    });
+                  },
+                ),
+                const SizedBox(height: 12),
+                
+                // Ultra Option
+                _buildSubscriptionOptionTile(
+                  title: 'ТАРИФ ULTRA',
+                  description: 'Уникальные карточки + вживление ваших лиц!',
+                  icon: Icons.workspace_premium_rounded,
+                  color: Colors.purpleAccent,
+                  onTap: () {
+                    AppSettings.instance.subscriptionLevel = SubscriptionLevel.ultra;
+                    Navigator.of(context).pop();
+                    setState(() {});
+                  },
+                ),
+                const SizedBox(height: 20),
+                
+                TextButton(
+                  onPressed: () {
+                    SoundService.instance.playClick();
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('ЗАКРЫТЬ', style: TextStyle(color: Colors.white54)),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildSubscriptionOptionTile({
+    required String title,
+    required String description,
+    required IconData icon,
+    required Color color,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: () {
+        SoundService.instance.playClick();
+        onTap();
+      },
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: AppStyles.cardBg,
+          borderRadius: BorderRadius.circular(15),
+          border: Border.all(
+            color: color.withValues(alpha: 0.3),
+            width: 1.5,
+          ),
+        ),
+        child: Row(
+          children: [
+            Icon(icon, color: color, size: 32),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: color,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    description,
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: Colors.white70,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+
+  void _showSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: Colors.green,
+        duration: const Duration(seconds: 2),
+        content: Text(
+          message,
+          style: const TextStyle(color: Colors.white),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFeatureRow(
+    IconData icon,
+    String text, {
+    Color color = Colors.greenAccent,
+    String? badgeText,
+    Color? badgeColor,
+  }) {
+    return Row(
+      children: [
+        Icon(icon, color: color, size: 20),
+        const SizedBox(width: 8),
+        Expanded(
+          child: Text(
+            text,
+            style: TextStyle(
+              color: color == Colors.white38 ? Colors.white38 : Colors.white70,
+              fontSize: 14,
+            ),
+          ),
+        ),
+        if (badgeText != null) ...[
+          const SizedBox(width: 8),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+            decoration: BoxDecoration(
+              color: (badgeColor ?? AppStyles.accent).withValues(alpha: 0.15),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: (badgeColor ?? AppStyles.accent).withValues(alpha: 0.8),
+                width: 1,
+              ),
+            ),
+            child: Text(
+              badgeText,
+              style: TextStyle(
+                color: badgeColor ?? AppStyles.accent,
+                fontSize: 10,
+                fontWeight: FontWeight.bold,
+                letterSpacing: 0.5,
+              ),
+            ),
+          ),
+        ],
+      ],
+    );
+  }
+
+  void _showSubscriptionDialog(SubscriptionLevel requiredLevel) {
+    if (_soundEnabled) SoundService.instance.playClick();
+
+    final currentLevel = AppSettings.instance.subscriptionLevel;
+    final isUltra = requiredLevel == SubscriptionLevel.ultra;
+    final showBothOptions = requiredLevel == SubscriptionLevel.plus && currentLevel == SubscriptionLevel.none;
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          insetPadding: EdgeInsets.symmetric(horizontal: context.horizontalMargin),
+          child: Container(
+            padding: const EdgeInsets.all(24),
+            decoration: BoxDecoration(
+              color: AppStyles.bgColor,
+              borderRadius: BorderRadius.circular(25),
+              border: Border.all(
+                color: isUltra ? Colors.purpleAccent : AppStyles.accent,
+                width: 2.5,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: (isUltra ? Colors.purpleAccent : AppStyles.accent).withValues(alpha: 0.25),
+                  blurRadius: 20,
+                  spreadRadius: 2,
+                ),
+              ],
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: (isUltra ? Colors.purpleAccent : AppStyles.accent).withValues(alpha: 0.15),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    isUltra ? Icons.workspace_premium_rounded : Icons.star_rounded,
+                    color: isUltra ? Colors.purpleAccent : AppStyles.accent,
+                    size: 54,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  showBothOptions ? 'ВЫБЕРИТЕ ТАРИФ' : 'ТАРИФ ${isUltra ? 'ULTRA' : 'PLUS'}',
+                  style: GoogleFonts.russoOne(
+                    fontSize: 26,
+                    color: isUltra ? Colors.purpleAccent : AppStyles.accent,
+                    letterSpacing: 1.5,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  showBothOptions
+                      ? 'Премиум функции доступны в тарифах PLUS и ULTRA. Выберите лучший для вас!'
+                      : (isUltra
+                          ? 'Вам необходим тариф ULTRA для персонализирования карточек с лицами игроков!'
+                          : 'Вам необходим тариф PLUS для генерации умных ИИ локаций!'),
+                  style: const TextStyle(
+                    color: Colors.white70,
+                    fontSize: 16,
+                    height: 1.4,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 20),
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: AppStyles.cardBg,
+                    borderRadius: BorderRadius.circular(15),
+                    border: Border.all(
+                      color: Colors.white10,
+                      width: 1,
+                    ),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildFeatureRow(
+                        Icons.check_circle_outline,
+                        'Умный ИИ художник локаций',
+                        badgeText: 'PLUS',
+                        badgeColor: AppStyles.accent,
+                      ),
+                      const SizedBox(height: 12),
+                      _buildFeatureRow(
+                        isUltra || showBothOptions ? Icons.check_circle_outline : Icons.lock_outline,
+                        'Персонализирование карточки с лицами игроков в реальных локациях',
+                        badgeText: 'ULTRA',
+                        badgeColor: Colors.purpleAccent,
+                        color: isUltra || showBothOptions ? Colors.greenAccent : Colors.white38,
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 24),
+                if (showBothOptions) ...[
+                  GameButton(
+                    text: 'КУПИТЬ ТАРИФ PLUS (199 ₽)',
+                    onPressed: () {
+                      SoundService.instance.playClick();
+                      Navigator.of(context).pop();
+                      _simulateAppStoreRedirect('PLUS', enableUnique: true);
+                    },
+                  ),
+                  const SizedBox(height: 12),
+                  GameButton(
+                    text: 'КУПИТЬ ТАРИФ ULTRA (399 ₽) — ХИТ!',
+                    onPressed: () {
+                      SoundService.instance.playClick();
+                      Navigator.of(context).pop();
+                      _simulateAppStoreRedirect('ULTRA', enableUnique: true);
+                    },
+                  ),
+                  const SizedBox(height: 12),
+                  GameButton(
+                    text: 'ТЕСТОВАЯ ULTRA (БЕСПЛАТНО)',
+                    type: GameButtonType.secondary,
+                    onPressed: () {
+                      SoundService.instance.playClick();
+                      AppSettings.instance.subscriptionLevel = SubscriptionLevel.ultra;
+                      AppSettings.instance.uniqueCardsEnabled = true;
+                      Navigator.of(context).pop();
+                      setState(() {
+                        _uniqueCardsEnabled = true;
+                      });
+                      _showSnackBar('Успешно активирован тариф ULTRA!');
+                    },
+                  ),
+                ] else ...[
+                  GameButton(
+                    text: 'КУПИТЬ ТАРИФ ${isUltra ? 'ULTRA' : 'PLUS'} (${isUltra ? '399' : '199'} ₽)',
+                    onPressed: () {
+                      SoundService.instance.playClick();
+                      Navigator.of(context).pop();
+                      _simulateAppStoreRedirect(isUltra ? 'ULTRA' : 'PLUS',
+                          enableUnique: requiredLevel == SubscriptionLevel.plus,
+                          enableFaces: requiredLevel == SubscriptionLevel.ultra);
+                    },
+                  ),
+                  const SizedBox(height: 12),
+                  GameButton(
+                    text: 'ТЕСТОВАЯ ПОКУПКА (БЕСПЛАТНО)',
+                    type: GameButtonType.secondary,
+                    onPressed: () {
+                      SoundService.instance.playClick();
+                      AppSettings.instance.subscriptionLevel = requiredLevel;
+                      Navigator.of(context).pop();
+                      setState(() {
+                        if (requiredLevel == SubscriptionLevel.plus) {
+                          _uniqueCardsEnabled = true;
+                          AppSettings.instance.uniqueCardsEnabled = true;
+                        } else if (requiredLevel == SubscriptionLevel.ultra) {
+                          _playerFacesEnabled = true;
+                          AppSettings.instance.playerFacesEnabled = true;
+                        }
+                      });
+                      _showSnackBar('Успешно активирован тариф ${isUltra ? 'ULTRA' : 'PLUS'}!');
+                    },
+                  ),
+                ],
+                const SizedBox(height: 8),
+                TextButton(
+                  onPressed: () {
+                    SoundService.instance.playClick();
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text(
+                    'ОТМЕНА',
+                    style: TextStyle(
+                      color: Colors.white54,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 1,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void _simulateAppStoreRedirect(String levelName,
+      {bool enableUnique = false, bool enableFaces = false}) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          child: Container(
+            padding: const EdgeInsets.all(24),
+            decoration: BoxDecoration(
+              color: const Color(0xFF1E1E24),
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: Colors.white24),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const CircularProgressIndicator(color: Colors.white),
+                const SizedBox(height: 20),
+                Text(
+                  'Переход в Магазин Приложений...',
+                  style: GoogleFonts.russoOne(color: Colors.white, fontSize: 18),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 10),
+                const Text(
+                  'Симуляция подключения к App Store / Google Play',
+                  style: TextStyle(color: Colors.white54, fontSize: 13),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+
+    Future.delayed(const Duration(milliseconds: 1500), () {
+      if (!mounted) return;
+      Navigator.of(context).pop();
+
+      showModalBottomSheet(
+        context: context,
+        backgroundColor: Colors.transparent,
+        isScrollControlled: true,
+        builder: (context) {
+          final isPlus = levelName == 'PLUS';
+          final price = isPlus ? '199 ₽' : '399 ₽';
+          return Container(
+            margin: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: const Color(0xFF23232A),
+              borderRadius: BorderRadius.circular(24),
+              border: Border.all(color: Colors.white10),
+            ),
+            child: SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.all(24.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            const Icon(
+                              Icons.phone_android_rounded,
+                              color: Colors.greenAccent,
+                              size: 36,
+                            ),
+                            const SizedBox(width: 12),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  'Шпион: Premium',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Text(
+                                  'Тариф $levelName',
+                                  style: const TextStyle(
+                                    color: Colors.white70,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        Text(
+                          price,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const Divider(color: Colors.white12, height: 32),
+                    const Text(
+                      'Подтвердите встроенную покупку через аккаунт Google Play или App Store.',
+                      style: TextStyle(color: Colors.white60, fontSize: 13),
+                    ),
+                    const SizedBox(height: 24),
+                    GameButton(
+                      text: 'ПОДТВЕРДИТЬ И ОПЛАТИТЬ',
+                      onPressed: () {
+                        SoundService.instance.playClick();
+                        final newLevel = levelName == 'PLUS'
+                            ? SubscriptionLevel.plus
+                            : SubscriptionLevel.ultra;
+                        AppSettings.instance.subscriptionLevel = newLevel;
+
+                        // Automatically activate the requested toggles upon successful mock purchase
+                        if (enableUnique || newLevel == SubscriptionLevel.plus || newLevel == SubscriptionLevel.ultra) {
+                          AppSettings.instance.uniqueCardsEnabled = true;
+                        }
+                        if (enableFaces && newLevel == SubscriptionLevel.ultra) {
+                          AppSettings.instance.playerFacesEnabled = true;
+                        }
+
+                        Navigator.of(context).pop();
+
+                        setState(() {
+                          _uniqueCardsEnabled = AppSettings.instance.uniqueCardsEnabled;
+                          _playerFacesEnabled = AppSettings.instance.playerFacesEnabled;
+                        });
+
+                        _showSnackBar('Покупка успешна! Тариф $levelName активирован.');
+                      },
+                    ),
+                    const SizedBox(height: 12),
+                    TextButton(
+                      onPressed: () {
+                        SoundService.instance.playClick();
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text(
+                        'ОТМЕНА',
+                        style: TextStyle(color: Colors.white38),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
+      );
+    });
   }
 
   void _chooseCardStyle() {
@@ -249,12 +849,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
                     SizedBox(height: context.padding4),
 
-                    // Scrollable Settings List
                     Expanded(
                       child: ListView(
                         physics: const BouncingScrollPhysics(),
                         padding: EdgeInsets.zero,
                         children: [
+                          // Subscription status card
+                          _buildSubscriptionStatusCard(),
+
+                          SizedBox(height: 16),
+
                           // Sound toggle card
                           _buildSettingsCard(
                             icon: _soundEnabled

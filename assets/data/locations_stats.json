@@ -4,7 +4,7 @@
       "location_chosed_times": 0,
       "hints_private": [
         {
-          "text": "Что на счет сменной обуви в этом месте",
+          "text": "Что на счет обуви в этом месте",
           "hint_choosed_times": 0
         },
         {
@@ -16,15 +16,39 @@
           "hint_choosed_times": 0
         },
         {
-          "text": "Спроси можно как найти тут туалет тут",
+          "text": "Вопрос про санузел спроси",
           "hint_choosed_times": 0
         },
         {
-          "text": "Что сказать если пришел сюда без документов",
+          "text": "На счет документов что можешь сказать?",
           "hint_choosed_times": 0
         },
         {
-          "text": "Спроси про банкеты в этом месте",
+          "text": "Спроси про опыт личных посещений",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Как насчет очередей?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Вопрос про требования к одежде",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Про запах (например чем тут пахнет?)",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "можно ли тут легально поспать средь бела дня?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Про возраст — тут больше стариков или молодежи?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Тут всегда все по плану?",
           "hint_choosed_times": 0
         }
       ]
@@ -45,7 +69,7 @@
           "hint_choosed_times": 0
         },
         {
-          "text": "кто здесь руководит процессом",
+          "text": "Кто здесь руководит процессом",
           "hint_choosed_times": 0
         },
         {
@@ -74,15 +98,19 @@
           "hint_choosed_times": 0
         },
         {
-          "text": "можно ли тут читать/ смотреть фильмы",
+          "text": "Можно ли тут читать/смотреть фильмы",
           "hint_choosed_times": 0
         },
         {
-          "text": "где люди проводят время в этом месте",
+          "text": "Про одежду спроси (напрмер можно ли тут быть голым)",
           "hint_choosed_times": 0
         },
         {
-          "text": "объявления и надписи на стенах? что будет если их убрать?",
+          "text": "Объявления и надписи на стенах? что будет если их убрать?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Вопрос про час пик",
           "hint_choosed_times": 0
         }
       ]
@@ -91,15 +119,27 @@
       "location_chosed_times": 0,
       "hints_private": [
         {
-          "text": "если у тебя есть только 10 минут? ты что-то успеешь тут сделать?",
+          "text": "Если у тебя есть только 10 минут? ты что-то успеешь тут сделать?",
           "hint_choosed_times": 0
         },
         {
-          "text": "стоят здесь или сидят, можно ли тут присесть на бутылку?",
+          "text": "Стоят здесь или сидят, можно ли тут присесть на бутылку?",
           "hint_choosed_times": 0
         },
         {
-          "text": "Сюда лучше придти в дождь или солнце ? как тебе лучше погода?",
+          "text": "Сюда лучше придти в дождь или солнце? как тебе лучше погода?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "как на счет животных тут?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спроси вопрос про алкоголь ..",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Про возможность знакомства (например можно ли тут встретить свою судьбу?)",
           "hint_choosed_times": 0
         }
       ]
@@ -118,6 +158,10 @@
         {
           "text": "Спросите про праздники в этом месте",
           "hint_choosed_times": 0
+        },
+        {
+          "text": "Про время суток спроси (например что тут ночью бывает)",
+          "hint_choosed_times": 0
         }
       ]
     },
@@ -125,11 +169,15 @@
       "location_chosed_times": 0,
       "hints_private": [
         {
-          "text": "что люди здесь обычно держат в руках",
+          "text": "Что люди здесь обычно держат в руках",
           "hint_choosed_times": 0
         },
         {
-          "text": "что здесь делают перед уходом",
+          "text": "Что здесь делают перед уходом",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Вопрос про видеосъемки (например про скрытые камеры или запрет на съемку)",
           "hint_choosed_times": 0
         }
       ]
@@ -138,7 +186,7 @@
       "location_chosed_times": 0,
       "hints_private": [
         {
-          "text": "что будет если ты тут случайно пукнешь?",
+          "text": "Что будет если ты тут случайно пукнешь?",
           "hint_choosed_times": 0
         },
         {
@@ -154,7 +202,15 @@
           "hint_choosed_times": 0
         },
         {
-          "text": "спросите про одиночество тут",
+          "text": "Спросите про одиночество тут",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Про угощения что нибудь спроси",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Есть ли вариант тут все использовать бесплатно",
           "hint_choosed_times": 0
         }
       ]
@@ -163,11 +219,7 @@
       "location_chosed_times": 0,
       "hints_private": [
         {
-          "text": "Спросите про количество людей в этом месте",
-          "hint_choosed_times": 0
-        },
-        {
-          "text": "приходят ли сюда заранее",
+          "text": "Про верхнюю одежду тут",
           "hint_choosed_times": 0
         }
       ]
@@ -180,7 +232,15 @@
           "hint_choosed_times": 0
         },
         {
-          "text": "Что - ты скаешь если туда придет ребенок?",
+          "text": "Что ты скажешь если туда придет ребенок?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Тут можно заработать деньги?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спроси про вермя суток (напрмиер что будет если ты попадешь сюда ночью? или можно ли попасть сюда в 4 утра)",
           "hint_choosed_times": 0
         }
       ]
@@ -191,6 +251,18 @@
         {
           "text": "Про взгляд: куда обычно тут смотрят?",
           "hint_choosed_times": 0
+        },
+        {
+          "text": "Вопрос про руже задай",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Тут дешево кушать (или другой вопрос про еду)",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Задай вопрос с подвохом про аплодисменты",
+          "hint_choosed_times": 0
         }
       ]
     },
@@ -198,7 +270,31 @@
       "location_chosed_times": 0,
       "hints_private": [
         {
-          "text": "Что здесь делают с документами?",
+          "text": "Как насчет требований к одежде в этом месте?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спроси про время суток (например, что тут ночью происходит?)",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Что ты скажешь про количество людей в будни и в выходные?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спроси про то, сидят тут люди или постоянно стоят.",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Вопрос про самочувсвуие: \"всегда ли тут комфортная температура?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спроси про перерывы: можно ли просто взять и уйти?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "что то нужно чтобы попасть сюда!",
           "hint_choosed_times": 0
         }
       ]
@@ -207,7 +303,19 @@
       "location_chosed_times": 0,
       "hints_private": [
         {
-          "text": "Спросите про действие рук в этом месте",
+          "text": "Можно  ли быть здесь до самой ночи?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Можно ли здесь завести полезные знакомства?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Вход платный?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Требуется ли соблюдать тишину?",
           "hint_choosed_times": 0
         }
       ]
@@ -288,7 +396,11 @@
       "location_chosed_times": 0,
       "hints_private": [
         {
-          "text": "В этом месте как ты поступаешь с едой?",
+          "text": "Часто ли тут трясет?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Про вредные привычки спроси",
           "hint_choosed_times": 0
         }
       ]
@@ -315,7 +427,23 @@
       "location_chosed_times": 0,
       "hints_private": [
         {
-          "text": "Про верхнюю одежду тут",
+          "text": "Легко ли тут заблудиться?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "сколько тут может быть этажей?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Далеко ли до суши?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Все ли включено в стоимость?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Приходится ли стоять согнувшись?",
           "hint_choosed_times": 0
         }
       ]
@@ -324,7 +452,19 @@
       "location_chosed_times": 0,
       "hints_private": [
         {
-          "text": "Спроси про положение тела (сидят/стоят)",
+          "text": "Сильный ли тут ветер?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Пахнет ли тут сыростью?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Строгий ли тут досмотр?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Громко ли тут?",
           "hint_choosed_times": 0
         }
       ]
@@ -333,7 +473,19 @@
       "location_chosed_times": 0,
       "hints_private": [
         {
-          "text": "Спроси про взаимодействие с незнакомцами",
+          "text": "Резкий ли тут запах?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Долго ли тут находятся?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Можно ли тут кайфануть?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Можно ли придти сюда в ночи?",
           "hint_choosed_times": 0
         }
       ]
@@ -342,7 +494,15 @@
       "location_chosed_times": 0,
       "hints_private": [
         {
-          "text": "Спроси про уровень шума тут",
+          "text": "Нужны ли специальные документы?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Отвечаешь ли ты за ущерб?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Можно ли тут сильно замерзнуть?",
           "hint_choosed_times": 0
         }
       ]
@@ -378,7 +538,31 @@
       "location_chosed_times": 0,
       "hints_private": [
         {
-          "text": "Что здесь делают с документами?",
+          "text": "Раздражают ли чавкающие соседи?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Выключают ли тут свет?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Бесплатно ли наливают на баре?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Принято ли тут спать?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Можно ли тут преравть процесс?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Часто ли тут целуются?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Сильно ли тут потеют?",
           "hint_choosed_times": 0
         }
       ]
@@ -387,7 +571,23 @@
       "location_chosed_times": 0,
       "hints_private": [
         {
-          "text": "Спросите про действие рук в этом месте",
+          "text": "Спроси про зук в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Что нужно для входа?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Легко ли тут познакомиться?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Можно ли тут встретить рассвет?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Нужно ли тут сидеть тихо?",
           "hint_choosed_times": 0
         }
       ]
@@ -396,7 +596,23 @@
       "location_chosed_times": 0,
       "hints_private": [
         {
-          "text": "Спросите про семью в этом месте",
+          "text": "Бывает ли тут стыдно за других?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Обязательно ли тут иметь талант?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Сильно ли тут потеют?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Легко ли тут потратить все деньги?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Часто ли тут теряются дети?",
           "hint_choosed_times": 0
         }
       ]
@@ -405,7 +621,23 @@
       "location_chosed_times": 0,
       "hints_private": [
         {
-          "text": "Про передвижение в этом месте",
+          "text": "Часто ли тут теряются дети?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Работает ли тут кондиционер?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Долго ли тут бродят без цели?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Много ли тут сумасшедших подростков?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Часто ли тут передают микрофон?",
           "hint_choosed_times": 0
         }
       ]
@@ -423,7 +655,23 @@
       "location_chosed_times": 0,
       "hints_private": [
         {
-          "text": "Что здесь обычно делают с телефоном?",
+          "text": "Строгий ли тут дресс-код?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Можно ли тут стать миллионером?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Часто ли тут блефуют?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Сильно ли тут месят грязь?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Бывают ли тут безумные скидки?",
           "hint_choosed_times": 0
         }
       ]
@@ -441,7 +689,31 @@
       "location_chosed_times": 0,
       "hints_private": [
         {
-          "text": "Спроси про температуру в этом месте",
+          "text": "Обязательно ли тут раздеваться?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спроси про запахи?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Можно ли тут ходить в туалет?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Можно ли тут встретить кумира?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Много ли тут диких зверей?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Безопасно ли тут совать пальцы в отверстия?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Можно ли тут трогать руками?",
           "hint_choosed_times": 0
         }
       ]
@@ -450,7 +722,19 @@
       "location_chosed_times": 0,
       "hints_private": [
         {
-          "text": "Спроси про запахи здесь",
+          "text": "Специфический ли тут запах?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Можно ли тут поесть местную еду?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Платный ли сюда вход?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Можно ли тут утонуть?",
           "hint_choosed_times": 0
         }
       ]
@@ -459,7 +743,23 @@
       "location_chosed_times": 0,
       "hints_private": [
         {
-          "text": "Про обувь в этом месте",
+          "text": "Спроси про веселье ?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Сильно ли тут тянет в сон?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Обязательно ли тут быть культурным?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Ходят ли тут группами?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Сидят ли тут в клетках?",
           "hint_choosed_times": 0
         }
       ]
@@ -468,7 +768,23 @@
       "location_chosed_times": 0,
       "hints_private": [
         {
-          "text": "В этом месте как ты поступаешь с едой?",
+          "text": "Много ли тут лысых?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Бесит ли тут громкий звук?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спроси про местный аналог алкоголя",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Вопрос про дресс-код на местной вечеринке",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Кто тут носит шлем, не снимая его даже в туалете?",
           "hint_choosed_times": 0
         }
       ]
@@ -486,7 +802,23 @@
       "location_chosed_times": 0,
       "hints_private": [
         {
-          "text": "Что тут делают перед уходом?",
+          "text": "Часто ли тут разводят огонь?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Много ли тут поют?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спроси про то, где тут наливают",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Можно ли тут встретить медведя?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Если ты попытаешься взломать терминал, тебя спалят?",
           "hint_choosed_times": 0
         }
       ]
@@ -495,7 +827,27 @@
       "location_chosed_times": 0,
       "hints_private": [
         {
-          "text": "Про верхнюю одежду тут",
+          "text": "Спросите про количество людей в этом месте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Приходят ли сюда заранее",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Вопрос про то, в чем люди сюда приходят (напримерпро наряды или можно ли в Валенках сюда заскочить)",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спроси про специальные оптические приборы для лучшего обзора.",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Что тут по еде принято ?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Шум - тут кричат или сидят тихо?",
           "hint_choosed_times": 0
         }
       ]
@@ -513,7 +865,23 @@
       "location_chosed_times": 0,
       "hints_private": [
         {
-          "text": "Спроси про взаимодействие с незнакомцами",
+          "text": "Много ли тут плачут?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Берут ли тут взятки?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Если ты начнешь кричать, что с тобой сделают?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Часто ли тут устраивают пранки?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Много ли тут переводят?",
           "hint_choosed_times": 0
         }
       ]
@@ -558,7 +926,23 @@
       "location_chosed_times": 0,
       "hints_private": [
         {
-          "text": "Что здесь делают с документами?",
+          "text": "Можно ли тут снять тик-ток и не получить по шее?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Тут всегда все по плану или сплошной хаос?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Легко ли тут найти иностранца?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Тут носят короны?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про уровень радиации — счетчик Гейгера не трещит?",
           "hint_choosed_times": 0
         }
       ]
@@ -567,7 +951,23 @@
       "location_chosed_times": 0,
       "hints_private": [
         {
-          "text": "Спросите про действие рук в этом месте",
+          "text": "Можно ли тут довериться незнакомцу?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Как насчет громкой музыки и танцев до утра?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Тут есть пророчество о том, кто всех спасет?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Если ты начнешь умничать, что с тобой сделают?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Тут много диких и опасных зверей?",
           "hint_choosed_times": 0
         }
       ]
@@ -576,7 +976,23 @@
       "location_chosed_times": 0,
       "hints_private": [
         {
-          "text": "Спросите про семью в этом месте",
+          "text": "Если тут врубить рэп на полную, что будет?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Как насчет личного пространства?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Тут всегда нужно быть начеку?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "тут есть волшебство или магия?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Тут можно устроить свидание вслепую?",
           "hint_choosed_times": 0
         }
       ]
@@ -585,7 +1001,23 @@
       "location_chosed_times": 0,
       "hints_private": [
         {
-          "text": "Про передвижение в этом месте",
+          "text": "Вопрос про уровень стресса у местных обитателей",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Про риск для жизни — насколько тут опасно?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "тут есть бабайки?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Если ты забудешь пароль от шлюза, тебя выкинет в вакуум?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Тут знают про огнестрельное оружие?",
           "hint_choosed_times": 0
         }
       ]
@@ -594,7 +1026,23 @@
       "location_chosed_times": 0,
       "hints_private": [
         {
-          "text": "Спроси про внимание к времени",
+          "text": "Спросите про уровень секретности и тайны",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Вопрос про ограничения свободы",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Про возраст — тут вообще есть дети?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Тут дерутся на аренах ради зрителей?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Если ты уснешь на посту, какие будут последствия?",
           "hint_choosed_times": 0
         }
       ]
@@ -603,7 +1051,23 @@
       "location_chosed_times": 0,
       "hints_private": [
         {
-          "text": "Что здесь обычно делают с телефоном?",
+          "text": "Про питание — кормят тут вкусно или как собак?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Если сюда придут с ребенком, что будет?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Может ли тут произойти что то эпичное?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Можно ли тут расплатиться биткоинами из 21 века?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Сильно ли тут болит голова?",
           "hint_choosed_times": 0
         }
       ]
@@ -612,7 +1076,23 @@
       "location_chosed_times": 0,
       "hints_private": [
         {
-          "text": "Про наличие воды в этом месте",
+          "text": "Спроси про наличие караоке",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Если ты будешь вонять, тебя отсюда выгонят?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Нужно ли тут платить дважды?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Тут можно шутить или за это накажут?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Вопрос про связь с внешним миром",
           "hint_choosed_times": 0
         }
       ]
@@ -621,7 +1101,23 @@
       "location_chosed_times": 0,
       "hints_private": [
         {
-          "text": "Спроси про температуру в этом месте",
+          "text": "Тут можно встретить настоящих героев?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Про запахи — пахнет ли тут химикатами или лекарствами?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спроси про отношение к зельям и травам",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Можно ли тут легально поспать средь бела дня?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Если я принесу кальян, меня пустят?",
           "hint_choosed_times": 0
         }
       ]
@@ -630,7 +1126,23 @@
       "location_chosed_times": 0,
       "hints_private": [
         {
-          "text": "Спроси про запахи здесь",
+          "text": "Можно ли сюда придти голышом и что будет?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Как насчет крыс и прочих паразитов?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спроси про то, как часто тут смеются до слез",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Тут можно найти спрятанный клад?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Здесь пьют вино или что покрепче?",
           "hint_choosed_times": 0
         }
       ]
@@ -639,7 +1151,23 @@
       "location_chosed_times": 0,
       "hints_private": [
         {
-          "text": "Про обувь в этом месте",
+          "text": "Вопрос про бесплатные коктейли",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Про запах — тут пахнет страхом или потом?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Тут часто происходят перестрелки тут?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "можно ли найти тут клад?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Если ты сломаешь скафандр, тебе конец?",
           "hint_choosed_times": 0
         }
       ]
@@ -648,7 +1176,23 @@
       "location_chosed_times": 0,
       "hints_private": [
         {
-          "text": "В этом месте как ты поступаешь с едой?",
+          "text": "Спроси про странные звуки в темноте",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Если ты начнешь тут петь, тебя побьют?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Тут можно торговаться или цены фиксированные?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Можно ли тут купить что-то нелегально?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Про магию — тут можно колдовать без последствий?",
           "hint_choosed_times": 0
         }
       ]
@@ -657,7 +1201,23 @@
       "location_chosed_times": 0,
       "hints_private": [
         {
-          "text": "Как дела с деньгами в этом месте?",
+          "text": "Кто тут носит самую дурацкую шляпу?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Если сюда придут с мечом, что будет?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Как насчет того, чтобы устроить гонки на джетпаках?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Вопрос про местный Wi-Fi — ловит хотя бы 6G?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Тут можно спрятаться от правосудия?",
           "hint_choosed_times": 0
         }
       ]
@@ -666,7 +1226,23 @@
       "location_chosed_times": 0,
       "hints_private": [
         {
-          "text": "Что тут делают перед уходом?",
+          "text": "Тут всегда так грязно или просто не убирают?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Если ты потеряешь карту, ты тут выживешь?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Кто тут отвечает за безопасность?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Как насчет шансов встретить здесь монстра?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Вопрос про местный транспорт — на чем тут передвигаются?",
           "hint_choosed_times": 0
         }
       ]
@@ -675,7 +1251,23 @@
       "location_chosed_times": 0,
       "hints_private": [
         {
-          "text": "Про верхнюю одежду тут",
+          "text": "Как насчет того, чтобы поспать тут часок?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Вопрос про длину бороды у местных",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Тут все такие пафосные или только руководство?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Про веселье — тут вообще умеют отрываться?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Если начнется дискотека, кто первый пойдет в пляс?",
           "hint_choosed_times": 0
         }
       ]
@@ -684,7 +1276,23 @@
       "location_chosed_times": 0,
       "hints_private": [
         {
-          "text": "Спроси про положение тела (сидят/стоят)",
+          "text": "Можно ли тут подцепить странную болезнь?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про секретные ходы",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Вопрос про местного главного злодея — он страшный?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Тут владеют  кунг-фу?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Тут заставляют платить налоги?",
           "hint_choosed_times": 0
         }
       ]
@@ -693,7 +1301,23 @@
       "location_chosed_times": 0,
       "hints_private": [
         {
-          "text": "Спроси про взаимодействие с незнакомцами",
+          "text": "Спроси про размер клыков у соседей",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Вопрос про местную гигиену — тут вообще моются?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Как насчет шансов выбраться отсюда целым?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Кто тут больше всего врет?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Тут уважают стариков?",
           "hint_choosed_times": 0
         }
       ]
@@ -711,7 +1335,23 @@
       "location_chosed_times": 0,
       "hints_private": [
         {
-          "text": "Про освещение в этом месте",
+          "text": "Тут много шпионов и доносчиков?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Тут безопасно гулять ночью?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спроси про то, как часто тут отключают гравитацию",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Про одежду — тут принято носить лохмотья?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Можно ли сюда заказать пиццу и клоунов?",
           "hint_choosed_times": 0
         }
       ]
@@ -720,7 +1360,23 @@
       "location_chosed_times": 0,
       "hints_private": [
         {
-          "text": "Как долго тут обычно находятся?",
+          "text": "Про драки — тут часто бьют морды?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Можно ли тут спрятаться от погони?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Легко ли тут умереть?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Важно ли тут правильное произношение?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Обязательно ли тут улыбаться?",
           "hint_choosed_times": 0
         }
       ]
@@ -729,7 +1385,23 @@
       "location_chosed_times": 0,
       "hints_private": [
         {
-          "text": "Про взгляд: куда обычно тут смотрят?",
+          "text": "Как насчет того, чтобы стать тут своим?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Вопрос про наличие тут странных существ",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Вопрос про отношение к чужакам",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Тут вообще бывает скучно?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Часто ли тут просятся домой?",
           "hint_choosed_times": 0
         }
       ]
@@ -738,7 +1410,23 @@
       "location_chosed_times": 0,
       "hints_private": [
         {
-          "text": "Что здесь делают с документами?",
+          "text": "Если в тебя плюнет кислотой местная фауна, что делать?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Тут вообще соблюдают законы физики?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Вопрос про оружие?  можно ли тут ходить с пушкой?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про то, как тут пахнет",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Тут часто бунтуют?",
           "hint_choosed_times": 0
         }
       ]
@@ -765,7 +1453,23 @@
       "location_chosed_times": 0,
       "hints_private": [
         {
-          "text": "Про передвижение в этом месте",
+          "text": "Спросите про то, как тут утилизируют мусор",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Вопрос про отношение к лазерным мечам",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Вопрос про наличие у местных зеленых щупалец",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Как тут хранят еду без холодильника?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Сильно ли тут дует сквозняк?",
           "hint_choosed_times": 0
         }
       ]
@@ -882,7 +1586,23 @@
       "location_chosed_times": 0,
       "hints_private": [
         {
-          "text": "Спроси про уровень шума тут",
+          "text": "Здесь носят тяжелые доспехи?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Где тут достать еду?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Кто тут главный злодей по мнению большинства?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Можно ли тут получить автомат?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спроси про наличие огромных боевых роботов или драконов!",
           "hint_choosed_times": 0
         }
       ]
@@ -1003,11 +1723,1204 @@
           "hint_choosed_times": 0
         }
       ]
-    }
-  },
-  "shared_hints": {
-    "Пример общей подсказки": {
-      "hint_choosed_times": 0
+    },
+    "Презентация стартапа": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Часто ли здесь дают пустые обещания?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Можно ли здесь сильно опозориться перед всеми?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Просят ли здесь вложиться во что-то сомнительное?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Тут лучше болтать или молчать?",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Курилка бизнес-центра": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Влияет ли нахождение здесь на здоровье?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Делятся ли здесь самыми горячими секретами?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Выходят ли сюда просто чтобы потянуть время?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Часто ли здесь попрошайничают?",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Бизнес ланч с коллегами (ресторан)": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Бывает ли неловко, когда приходит время платить?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Обсуждают ли здесь тех, кого нет рядом?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Сильно ли ограничивают по времени?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Можно ли здесь сболтнуть лишнего?",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Обед в столовой на работе": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Приходится ли самому за собой убирать?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Приходят ли сюда со своим?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Клонит ли в сон после этого места?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Можно ли здесь встретить самого главного начальника?",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Бизнес Планерка/Совещание": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Часто ли здесь спят с открытыми глазами?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Могут ли отчитать при всех за опоздание?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Записывают ли здесь всё, что ты говоришь?",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Отель-командировка": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Оплачивает ли кто-то другой твое присутствие здесь?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Приходится ли собирать бумажки для отчета?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Бывает ли здесь одиноко по вечерам?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Забирают ли отсюда что-нибудь мелкое на память?",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Лифт в офисе": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Часто ли здесь возникает неловкое молчание?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Стараются ли люди избегать зрительного контакта?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Ограничено ли максимальное количество присутствующих?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Бывает ли страх, что всё внезапно остановится?",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Корпоратив": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Угощения тут за счет заведения?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Боишься ли делать тут фото?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Все приходят нарядными или в обычном?",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Плацкартный вагон": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Сильно пахнет едой?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Как чувствуют тут себя фут-фетишисты?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "как на счет сна тут?",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Автобус": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "ругаются ли тут из за расположения ?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "можно ли тут спать?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "что на счет животных?",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Электричка": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Легко ли проскочить бесплатно?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Поют ли тут песни?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Часто ли тут останавливаются?ё",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Зависают ли тут в воздухе?",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Канатная дорога": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Страшно ли смотреть вниз?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Зависают ли тут в воздухе?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Можно ли тут сильно замерзнуть?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Сильно ли тут болтает?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Часто ли ходят попрошайки?",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Маршрутка": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Просят ли передать деньги?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Просят ли не хлопать дверью?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Сильно ли тут трясет?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Можно ли тут сильно замерзнуть?",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Такси": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Попался ли болтливый собеседник?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Сильно ли завышают цену?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Зависит ли цена от погоды?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Выставляют ли тут рейтинг?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Можно ли тут сильно замерзнуть?",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Компьютерный клуб": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Сильно ли тут матерятся?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Приходят ли сюда злые мамы?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Можно ли тут зависнуть на сутки?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Часто ли тут горят пуканы?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Раздражает ли громкий вой?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Можно ли тут сорвать голос?",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Музыкальный фестиваль": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спят ли тут прямо на земле?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Дорого ли тут стоит вода?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Много ли тут невменяемых людей?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спроси про алкоголь",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Опасно ли тут мухлевать?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Легко ли тут слить всю зарплату?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Заставляют ли тут говорить шепотом?",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Автошкола": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Можно ли тут натереть мозоли?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Нужно ли тут верить?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Кто тут главный фрик по мнению окружающих?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Можно ли тут подружиться с искусственным интеллектом?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Как тут развлекается народ?",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Школьный спортзал": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Сильно ли тут бьют палками?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Живут ли тут аскеты?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Тихо ли тут себя ведут?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Можно ли тут спрятаться так, чтобы не нашли?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Как насчет того, чтобы покормить местного мутанта?",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Детский лагерь": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Обязательно ли тут жестко страдать?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Часто ли тут жестко фальшивят?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Можно ли тут найти запчасти для старого дроида?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Можно ли тут заработать?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Тут ездят на лошадях?",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Воскресная школа": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Обязательно ли тут переодеваться?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Можно ли тут найти любовь?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спроси про местное золото и сокровища",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Обязательно ли тут иметь талант?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Бывает ли тут физически больно?",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Монастырь Шаолинь": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Часто ли тут просят пощады?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Бывают ли тут отчисления?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Тут верят в древних богов?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Тут всегда такие очереди на стыковку?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Стены здесь надежные?",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Лагерь скаутов": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Много ли тут паникеров?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Часто ли тут сдают долги?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Тут есть вредные бабки?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Как насчет того, чтобы поучаствовать в соревновании?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Опасно ли тут шастать ночью?",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Школа выживания": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Много ли тут тупых блондинок?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Много ли тут задротов?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Опасно ли тут совершать ошибки?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Тут можно обойтись без карты?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Как насчет того, чтобы стать правителем галактики?",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Замок Вампира": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Можно ли тут найти старинные свитки?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про отношение к свету и солнцу",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Кто тут самый главный киборг на районе?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Если тут выключить свет, начнется паника?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Тут можно заработать без драки?",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Космический корабль": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Вопрос про цены на кислород",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Вопрос про защиту от метеоритов",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Тут бывают эпидемии и болезни?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спроси про то, часто ли тут ломаются законы физики?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Про оружие — у всех ли оно тут есть?",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Киберпанк-город": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Вопрос про шансы дожить до завтрашнего утра",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Вопрос про контрабанду — тут легко купить запрещенку?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Как насчет того, чтобы погладить местное животное?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Кто тут самый главный тусовщик?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Если ты случайно сломаешь оборудование, что будет?",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Луна-парк будущего": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Как насчет порталов в другие измерения?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Если сюда прилетят космические пираты, что будет?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Тут можно встретить пришельца, который хочет тебя съесть?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Тут всегда нужно носить специальную одежду?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Тут есть свой суд?",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Галактический совет": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Если в тебя выстрелят из бластера, тут есть аптечка?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Если ты нажмешь на красную кнопку, мы все умрем?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Выдают ли тут сертификаты?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Какое оружие сейчас в моде?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Тут часто объявляют войны?",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Планета пришельцев": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спроси про то, из чего тут делают местную шаурму",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Кто тут спит в криокамере дольше всех?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Здесь суровые зимы?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Кто тут отвечает за гиперпрыжок?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Тут приносят жертвы богам?",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Космопорт": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Вопрос про телепортацию — тут это безопасно?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Тут всегда так темно, или просто экономят энергию?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Можно ли тут найти свою смерть за копейки?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Кто тут выглядит так, будто прилетел с другой планеты?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Можно ли тут встретить живого мертвеца?",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Подземный город матрицы (Зеон)": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про самые жуткие эксперименты ученых",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Тут вообще знают, что такое свежий земной воздух?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Вопрос про местную выпивку и еду",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Вопрос про чипирование — у всех ли тут есть импланты?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Тут можно стать генералом?",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Город на луне": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Можно ли тут встретить парня в черном плаще и темных очках?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Как насчет того, чтобы угнать звездолет?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Можно ли тут познать дзен?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Много ли тут бегают?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Вопрос про наличие роботов-убийц",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Хогвартс (Гарри Поттер)": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спросите про самых странных обитателей этого места",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "тут можно вызвать полицию?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Тут наказывают за магию и колдовство?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Тут используют яды для убийств?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спроси про страх перед черными дырами",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Спрингфилд (Симпсоны)": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Тут есть волшебное что-то?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Вопрос про то, носят ли тут плащи и маски?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спроси про отношение к восстанию машин",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Если ты наступишь кому-то на ногу, тебя убьют?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Кто здесь руководит процессом и отдает приказы?",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Вечеринка в студии Марвел": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Тут вообще можно выжить без суперспособностей?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Вопрос про местную валюту — например \"как тут поатить?\"",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Если ты откажешься выполнять приказ, что с тобой будет?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про то, часто ли тут стирают память",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Про возраст — тут больше молодых и здоровых?",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Мордор (Властелин колец)": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Тут нужен план действий?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Вопрос про то, легально ли тут использовать оружие?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Сильно ли тут воняет потом?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Опасно ли тут заблудиться?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спроси про оружие, например можно ли тут легально купить крутую пушку",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Звезда Смерти (Звездные войны)": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Если я съем местную пищу, я выживу?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Это другая реальность?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Тут казнят людей?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про гравитационные аномалии",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Кто тут самый главный?",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Парк Юрского периода": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Спроси про странных существ, которые тут обитают?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Тут можно встретить пиратов, бандитов или контрабандистов?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Вопрос про острые уши у местных",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Вопрос про местные законы — их вообще кто-то соблюдает?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Тут есть рабы?",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Планета Пандора (Аватар)": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Могут ли животные тут говорить?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "тут могут быть артефакты ?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Можно ли тут легально грабить?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Часто ли тут бьют посуду?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Сильно ли тут пахнет старостью?",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Матрица (фильм)": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Если я начну стрелять с двух рук в прыжке, это оценят?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Тут есть злодеи?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Сильно ли тут все тупят?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Если ты придешь сюда голым, что будет?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Если система жизнеобеспечения накроется, сколько нам осталось?",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Черная Жемчужина (Пираты Карибского моря)": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Вопрос про местный климат — (тут всегда так мрачно и эпично)?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "тут нужно драться?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Если ты скажешь, что Земля плоская, над тобой поржут?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Вопрос про справедливость и честность",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Если ты скажешь правду, тебе поверят?",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Сходка героев боевиков (Бар олдскула)": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Тут реально есть люди, которые хотят захватить мир?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Можно ли тут встретить в супергеройском костюме?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Про блестящие штуки — тут любят золото?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Как насчет бесплатной медицины?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спроси про поцелуи в этом жутком месте",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Древний Египет (Пирамиды)": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Тут есть подземелья или темницы?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Тут легко подхватить заразу?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Тут можно заработать или только потерять?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Тут вообще моются?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Много ли тут дохляков?",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Римский Колизей": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Тут сжигают на костре?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Тут грабят путников на дорогах?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Легко ли тут сломать ногу?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Много ли тут сумасшедших?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Если нагрянет галактическая полиция, куда прятаться?",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Дворцовый бал (Питербуг)": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Тут часто меняется власть?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Тут верят предсказаниям?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Можно ли тут легально перепрошить мозги?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Часто ли тут вызывают полицию?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Как насчет азартных игр на раздевание?",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Типичное среднивековье": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Можно ли выбиться в люди из низов?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Тут торгуют людьми?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спросите про самые строгие правила",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Можно ли тут встретить призрака?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спроси про местный аналог алкоголя",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Древняя Греция (Олимп)": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Тут строят гигантские гробницы?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Здесь уважают силу или ум?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Вопрос про дресс-код на местной вечеринке",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Кто тут носит шлем, не снимая его даже в туалете?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Спроси про то, где тут наливают",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Ледниковый период (Пещера)": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Тут легально носить пушку или меч?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Тут часто бывают пожары?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Можно ли тут встретить медведя?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Если ты попытаешься взломать терминал, тебя спалят?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Если ты начнешь кричать, что с тобой сделают?",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Окопы Второй мировой": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Тут есть наемные убийцы?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Тут плетут интриги?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Часто ли тут устраивают пранки?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Много ли тут переводят?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Кто тут главный фрик по мнению окружающих?",
+          "hint_choosed_times": 0
+        }
+      ]
+    },
+    "Великая депрессия 1920 - Америка": {
+      "location_chosed_times": 0,
+      "hints_private": [
+        {
+          "text": "Тут плетут тайные заговоры?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Местные умеют читать и писать?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Можно ли тут подружиться с искусственным интеллектом?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Как тут развлекается народ?",
+          "hint_choosed_times": 0
+        },
+        {
+          "text": "Тихо ли тут себя ведут?",
+          "hint_choosed_times": 0
+        }
+      ]
     }
   }
 }

@@ -219,19 +219,61 @@ class StorageService {
     String fileName,
     String assetPath,
   ) async {
+    final asset = await _loadAsset(assetPath);
     if (kIsWeb) {
-      return _loadAsset(assetPath);
+      return asset;
     }
     try {
       final file = await _localFile(fileName);
       if (await file.exists()) {
         final content = await file.readAsString();
-        return jsonDecode(content) as Map<String, dynamic>;
+        final localData = jsonDecode(content) as Map<String, dynamic>;
+        
+        if (fileName == _statsFileName) {
+          final assetLocs = asset['locations'] as Map<String, dynamic>? ?? {};
+          final localLocs = localData['locations'] as Map<String, dynamic>? ?? {};
+          bool changed = false;
+          
+          for (final entry in assetLocs.entries) {
+            final String locName = entry.key;
+            if (!localLocs.containsKey(locName)) {
+              localLocs[locName] = entry.value;
+              changed = true;
+            } else {
+              final localHints = localLocs[locName]['hints_private'] as List?;
+              final assetHints = entry.value['hints_private'] as List?;
+              
+              if (assetHints != null) {
+                final Map<String, int> oldCounts = {};
+                if (localHints != null) {
+                  for (final h in localHints) {
+                    oldCounts[h['text'] as String] = (h['hint_choosed_times'] as num?)?.toInt() ?? 0;
+                  }
+                }
+                
+                final List newHints = [];
+                for (final h in assetHints) {
+                  final text = h['text'] as String;
+                  newHints.add({
+                    'text': text,
+                    'hint_choosed_times': oldCounts[text] ?? 0,
+                  });
+                }
+                localLocs[locName]['hints_private'] = newHints;
+                changed = true;
+              }
+            }
+          }
+          if (changed) {
+            await file.writeAsString(jsonEncode(localData));
+          }
+        }
+        
+        return localData;
       }
     } catch (e) {
       debugPrint('StorageService: failed to read $fileName – $e');
     }
-    final asset = await _loadAsset(assetPath);
     await _writeToFile(fileName, asset);
     return asset;
   }

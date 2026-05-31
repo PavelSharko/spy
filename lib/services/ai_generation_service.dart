@@ -290,10 +290,10 @@ class AiGenerationService {
         buf.addAll(utf8.encode('--$boundary\r\n'));
         buf.addAll(
           utf8.encode(
-            'content-disposition: form-data; name="spy_photo"; filename="spy.jpg"\r\n',
+            'content-disposition: form-data; name="spy_photo"; filename="spy.png"\r\n',
           ),
         );
-        buf.addAll(utf8.encode('content-type: image/jpeg\r\n'));
+        buf.addAll(utf8.encode('content-type: image/png\r\n'));
         buf.addAll(utf8.encode('\r\n'));
         buf.addAll(spyPhoto);
         buf.addAll(utf8.encode('\r\n'));
@@ -303,10 +303,10 @@ class AiGenerationService {
         buf.addAll(utf8.encode('--$boundary\r\n'));
         buf.addAll(
           utf8.encode(
-            'content-disposition: form-data; name="photo_$i"; filename="player_$i.jpg"\r\n',
+            'content-disposition: form-data; name="photo_$i"; filename="player_$i.png"\r\n',
           ),
         );
-        buf.addAll(utf8.encode('content-type: image/jpeg\r\n'));
+        buf.addAll(utf8.encode('content-type: image/png\r\n'));
         buf.addAll(utf8.encode('\r\n'));
         buf.addAll(civilianPhotos[i]);
         buf.addAll(utf8.encode('\r\n'));

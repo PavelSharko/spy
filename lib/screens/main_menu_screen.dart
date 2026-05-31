@@ -7,6 +7,7 @@ import 'settings_screen.dart';
 import '../utils/app_styles.dart';
 import '../widgets/common/game_button.dart';
 import '../utils/context_extensions.dart';
+import 'game_history_screen.dart';
 
 class MainMenuScreen extends StatelessWidget {
   const MainMenuScreen({super.key});
@@ -89,6 +90,21 @@ class MainMenuScreen extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                         builder: (context) => const RulesScreen(),
+                      ),
+                    );
+                  },
+                ),
+                SizedBox(height: context.padding2),
+
+                GameButton(
+                  text: 'ИСТОРИЯ ИГР',
+                  type: GameButtonType.secondary,
+                  onPressed: () {
+                    SoundService.instance.playClick();
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const GameHistoryScreen(),
                       ),
                     );
                   },

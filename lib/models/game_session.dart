@@ -23,6 +23,14 @@ class GameSession {
   /// Key = round number, Value = {'win': imageBytes, 'loss': imageBytes}.
   final Map<int, Map<String, Uint8List>> roundFinalCards = {};
 
+  /// Historical scores per round.
+  /// Key = round number, Value = Map of player names to their round score.
+  final Map<int, Map<String, double>> roundScoresHistory = {};
+
+  /// History of whether the spy won each round.
+  /// Key = round number, Value = boolean (true if spy won).
+  final Map<int, bool> spyWonHistory = {};
+
   /// Returns the secret location for the current round.
   String get currentSecretLocation => secretLocationsQueue[currentRound - 1];
 

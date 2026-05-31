@@ -1,11 +1,73 @@
-import 'dart:typed_data';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:camera/camera.dart';
+import 'package:image/image.dart' as img;
 import '../utils/app_styles.dart';
 import '../utils/sound_service.dart';
 
-/// A full-screen overlay that shows a camera preview area with an oval face frame.
-/// Uses [ImagePicker] for cross-platform (Web/Mobile) camera access.
+// Top-level function for isolate
+Uint8List _processImage(Map<String, dynamic> args) {
+  final bytes = args['bytes'] as Uint8List;
+  final widthPct = args['widthPct'] as double; // 0.8
+  final heightPct = args['heightPct'] as double; // 0.7
+
+  img.Image? decoded = img.decodeImage(bytes);
+  if (decoded == null) return bytes; // fallback
+
+  // The image comes from the camera. Ensure correct orientation.
+  decoded = img.bakeOrientation(decoded);
+
+  // We want to crop to the center 3:4 aspect ratio first to match the UI preview
+  // UI aspect ratio is 3/4 = width/height
+  final double targetRatio = 3.0 / 4.0;
+  final double currentRatio = decoded.width / decoded.height;
+
+  int cropX = 0;
+  int cropY = 0;
+  int cropW = decoded.width;
+  int cropH = decoded.height;
+
+  if (currentRatio > targetRatio) {
+    // Current is wider, crop width
+    cropW = (decoded.height * targetRatio).round();
+    cropX = (decoded.width - cropW) ~/ 2;
+  } else if (currentRatio < targetRatio) {
+    // Current is taller, crop height
+    cropH = (decoded.width / targetRatio).round();
+    cropY = (decoded.height - cropH) ~/ 2;
+  }
+
+  img.Image centerCropped = img.copyCrop(decoded, x: cropX, y: cropY, width: cropW, height: cropH);
+
+  // We must ensure the image has an alpha channel to support transparency
+  if (!centerCropped.hasAlpha) {
+    centerCropped = centerCropped.convert(numChannels: 4);
+  }
+
+  // Draw transparent outside the oval.
+  // The oval is centered.
+  // Ellipse equation: (x - cx)^2 / rx^2 + (y - cy)^2 / ry^2 <= 1
+  final double cx = centerCropped.width / 2;
+  final double cy = centerCropped.height / 2;
+  final double rx = (centerCropped.width * widthPct) / 2;
+  final double ry = (centerCropped.height * heightPct) / 2;
+
+  final transparentColor = img.ColorRgba8(0, 0, 0, 0);
+
+  for (int y = 0; y < centerCropped.height; y++) {
+    for (int x = 0; x < centerCropped.width; x++) {
+      final double dx = x - cx;
+      final double dy = y - cy;
+      if ((dx * dx) / (rx * rx) + (dy * dy) / (ry * ry) > 1.0) {
+        centerCropped.setPixel(x, y, transparentColor);
+      }
+    }
+  }
+
+  return img.encodePng(centerCropped);
+}
+
+/// A full-screen overlay that shows a native camera preview area with an oval face frame.
 class CameraOverlay extends StatefulWidget {
   /// Called with the captured JPEG bytes when a photo is taken.
   final ValueChanged<Uint8List> onPhotoCaptured;
@@ -24,38 +86,78 @@ class CameraOverlay extends StatefulWidget {
 }
 
 class _CameraOverlayState extends State<CameraOverlay> {
-  final ImagePicker _picker = ImagePicker();
+  CameraController? _controller;
   bool _isCapturing = false;
+  bool _isProcessing = false;
   Uint8List? _previewBytes;
 
+  @override
+  void initState() {
+    super.initState();
+    _initCamera();
+  }
+
+  Future<void> _initCamera() async {
+    try {
+      final cameras = await availableCameras();
+      if (cameras.isEmpty) return;
+      final front = cameras.firstWhere(
+        (c) => c.lensDirection == CameraLensDirection.front,
+        orElse: () => cameras.first,
+      );
+      _controller = CameraController(
+        front,
+        ResolutionPreset.medium,
+        enableAudio: false,
+      );
+      await _controller!.initialize();
+      if (mounted) setState(() {});
+    } catch (e) {
+      debugPrint('[CameraOverlay] init error: $e');
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller?.dispose();
+    super.dispose();
+  }
+
   Future<void> _takePhoto() async {
-    if (_isCapturing) return;
+    if (_isCapturing || _isProcessing || _controller == null || !_controller!.value.isInitialized) return;
     setState(() => _isCapturing = true);
     SoundService.instance.playClick();
 
     try {
-      final XFile? photo = await _picker.pickImage(
-        source: ImageSource.camera,
-        maxWidth: 512,
-        maxHeight: 512,
-        imageQuality: 75,
-        preferredCameraDevice: CameraDevice.front,
-      );
+      final XFile photo = await _controller!.takePicture();
+      final bytes = await photo.readAsBytes();
+      
+      setState(() {
+        _isCapturing = false;
+        _isProcessing = true;
+      });
 
-      if (photo != null) {
-        final bytes = await photo.readAsBytes();
-        if (mounted) {
-          setState(() {
-            _previewBytes = bytes;
-            _isCapturing = false;
-          });
-        }
-      } else {
-        if (mounted) setState(() => _isCapturing = false);
+      // Process in isolate to avoid freezing UI
+      final processedBytes = await compute(_processImage, {
+        'bytes': bytes,
+        'widthPct': 0.8,
+        'heightPct': 0.7,
+      });
+
+      if (mounted) {
+        setState(() {
+          _previewBytes = processedBytes;
+          _isProcessing = false;
+        });
       }
     } catch (e) {
       debugPrint('[CameraOverlay] camera error: $e');
-      if (mounted) setState(() => _isCapturing = false);
+      if (mounted) {
+        setState(() {
+          _isCapturing = false;
+          _isProcessing = false;
+        });
+      }
     }
   }
 
@@ -114,21 +216,27 @@ class _CameraOverlayState extends State<CameraOverlay> {
                     children: [
                       // Background / preview
                       if (_previewBytes != null)
-                        Image.memory(_previewBytes!, fit: BoxFit.cover)
+                        Image.memory(_previewBytes!, fit: BoxFit.contain)
+                      else if (_controller != null && _controller!.value.isInitialized)
+                        FittedBox(
+                          fit: BoxFit.cover,
+                          child: SizedBox(
+                            width: 100,
+                            height: 100 * _controller!.value.aspectRatio,
+                            child: CameraPreview(_controller!),
+                          ),
+                        )
                       else
                         Container(
                           color: AppStyles.darkAccent.withValues(alpha: 0.08),
                           child: Center(
-                            child: Icon(
-                              Icons.camera_alt_rounded,
-                              size: 80,
-                              color: AppStyles.textSecondary,
-                            ),
+                            child: CircularProgressIndicator(),
                           ),
                         ),
 
                       // Oval overlay frame
-                      CustomPaint(painter: _OvalFramePainter()),
+                      if (_previewBytes == null)
+                        CustomPaint(painter: _OvalFramePainter()),
                     ],
                   ),
                 ),
@@ -186,10 +294,9 @@ class _CameraOverlayState extends State<CameraOverlay> {
                     ),
                   ],
                 )
-              : // Capture button only (no skip)
-                ElevatedButton.icon(
-                  onPressed: _isCapturing ? null : _takePhoto,
-                  icon: _isCapturing
+              : ElevatedButton.icon(
+                  onPressed: (_isCapturing || _isProcessing) ? null : _takePhoto,
+                  icon: (_isCapturing || _isProcessing)
                       ? SizedBox(
                           width: 20,
                           height: 20,
@@ -200,7 +307,7 @@ class _CameraOverlayState extends State<CameraOverlay> {
                         )
                       : Icon(Icons.camera_alt_rounded),
                   label: Text(
-                    _isCapturing ? 'Открываем камеру...' : 'Сфоткать мордаху',
+                    _isProcessing ? 'Обработка...' : (_isCapturing ? 'Снимаем...' : 'Сфоткать мордаху'),
                   ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppStyles.accent,
@@ -226,12 +333,13 @@ class _CameraOverlayState extends State<CameraOverlay> {
 class _OvalFramePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
-    final paint = Paint()..color = Colors.black.withValues(alpha: 0.35);
+    final paint = Paint()..color = Colors.black.withValues(alpha: 0.45);
 
     // Full rectangle
     final fullRect = Rect.fromLTWH(0, 0, size.width, size.height);
 
     // Oval cutout — 15% top/bottom inset, 10% left/right inset
+    // This defines 80% width and 70% height
     final ovalRect = Rect.fromLTRB(
       size.width * 0.10,
       size.height * 0.15,

@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import '../data/locations_data.dart';
@@ -127,9 +126,6 @@ class _RoleGuessScreenState extends State<RoleGuessScreen>
 
   // ── Phase: guess | reveal ─────────────────────────────────────────────────
   bool _isRevealPhase = false;
-  int _countdown = 3;
-  bool _showResult = false;
-  Timer? _countdownTimer;
   bool? _wasCorrect;
 
   // ── Running border animation ──────────────────────────────────────────────
@@ -160,7 +156,6 @@ class _RoleGuessScreenState extends State<RoleGuessScreen>
 
   @override
   void dispose() {
-    _countdownTimer?.cancel();
     _borderController.dispose();
     super.dispose();
   }
@@ -183,39 +178,16 @@ class _RoleGuessScreenState extends State<RoleGuessScreen>
   void _onConfirm() {
     if (_selectedRole == null) return;
     SoundService.instance.playClick();
-    setState(() {
-      _isRevealPhase = true;
-      _countdown = 3;
-      _showResult = false;
-    });
-    _startCountdown();
-  }
 
-  void _startCountdown() {
-    _countdownTimer?.cancel();
-    _countdownTimer = Timer.periodic(const Duration(seconds: 1), (t) {
-      if (!mounted) {
-        t.cancel();
-        return;
-      }
-      if (_countdown > 1) {
-        setState(() => _countdown--);
-      } else {
-        t.cancel();
-        _revealResult();
-      }
-    });
-  }
-
-  void _revealResult() {
     final correct = _selectedRole == _target.role;
     if (correct) {
       _guesser.addScore(GameRules.roleGuessCorrectGuesser);
       _target.addScore(GameRules.roleGuessCorrectGuessed);
     }
+
     setState(() {
+      _isRevealPhase = true;
       _wasCorrect = correct;
-      _showResult = true;
     });
   }
 
@@ -235,7 +207,6 @@ class _RoleGuessScreenState extends State<RoleGuessScreen>
       _stepIndex++;
       _selectedRole = null;
       _isRevealPhase = false;
-      _showResult = false;
       _wasCorrect = null;
     });
   }
@@ -249,14 +220,26 @@ class _RoleGuessScreenState extends State<RoleGuessScreen>
         children: [
           Container(
             color: AppStyles.bgColor,
-            child: Container(
-              child: SafeArea(
-                child: Center(
-                  child: ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 800),
+            child: SafeArea(
+              child: Center(
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 800),
+                  child: AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 350),
+                    switchInCurve: Curves.easeInOut,
+                    switchOutCurve: Curves.easeInOut,
+                    transitionBuilder: (Widget child, Animation<double> animation) {
+                      return SlideTransition(
+                        position: Tween<Offset>(
+                          begin: const Offset(1.0, 0.0),
+                          end: Offset.zero,
+                        ).animate(animation),
+                        child: child,
+                      );
+                    },
                     child: _isRevealPhase
-                        ? _buildRevealPhase()
-                        : _buildGuessPhase(),
+                        ? _buildRevealPhase(key: ValueKey('reveal_$_stepIndex'))
+                        : _buildGuessPhase(key: ValueKey('guess_$_stepIndex')),
                   ),
                 ),
               ),
@@ -271,8 +254,9 @@ class _RoleGuessScreenState extends State<RoleGuessScreen>
   // ══════════════════════════════════════════════════════════════════════════
   // GUESS PHASE
   // ══════════════════════════════════════════════════════════════════════════
-  Widget _buildGuessPhase() {
+  Widget _buildGuessPhase({Key? key}) {
     return Column(
+      key: key,
       children: [
         SizedBox(height: 16),
 
@@ -459,40 +443,13 @@ class _RoleGuessScreenState extends State<RoleGuessScreen>
   // ══════════════════════════════════════════════════════════════════════════
   // REVEAL PHASE
   // ══════════════════════════════════════════════════════════════════════════
-  Widget _buildRevealPhase() {
-    if (!_showResult) {
-      // Countdown
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              AppStrings.revealingIn,
-              style: TextStyle(
-                fontSize: 24,
-                color: Colors.white70,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            SizedBox(height: 20),
-            Text(
-              '$_countdown',
-              style: TextStyle(
-                fontSize: 100,
-                color: AppStyles.darkAccent,
-                fontWeight: FontWeight.w900,
-              ),
-            ),
-          ],
-        ),
-      );
-    }
-
+  Widget _buildRevealPhase({Key? key}) {
     // Result
     final bool correct = _wasCorrect!;
     final Color roleColor = correct ? Colors.greenAccent : Colors.redAccent;
 
     return Column(
+      key: key,
       children: [
         SizedBox(height: 30),
 

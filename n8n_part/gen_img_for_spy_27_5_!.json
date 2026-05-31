@@ -1,0 +1,777 @@
+{
+  "name": "gen_img_for_spy_27_5_!",
+  "nodes": [
+    {
+      "parameters": {
+        "respondWith": "binary",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        576,
+        400
+      ],
+      "id": "d9dc9fe1-0a2f-45d5-a96c-95f47bb9e722",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -1248,
+        128
+      ],
+      "id": "211797eb-d54d-441e-82ca-42bdfeedbcd9",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Списки данных\nconst locations = ['Супермаркет', 'Космическая станция', 'Древний замок', 'Офис будущего', 'Таинственный лес', 'Подводная лодка', 'Пустыня', 'Школа магии', 'Заброшенный завод', 'Пляж'];\nconst styles = ['Мультяшный', 'Реализм', 'Аниме', 'Киберпанк', 'Пиксель-арт', '3D Рендер', 'Скетч', 'Масляная живопись', 'Нуар', 'Стимпанк'];\nconst languages = ['русский', 'английский'];\nconst allCharacters = [\n  'Кассир', 'Консультант', 'Менеджер', 'Охранник', 'Покупатель', 'Робот', 'Пришелец', 'Рыцарь', 'Маг', 'Детектив',\n  'Пират', 'Ниндзя', 'Ученый', 'Астронавт', 'Зомби', 'Дракон', 'Король', 'Шпион', 'Врач', 'Повар',\n  'Механик', 'Художник', 'Спортсмен', 'Турист', 'Пилот', 'Фермер', 'Бармен', 'Музыкант', 'Судья', 'Лесник'\n];\n\n// Функция для получения рандомных элементов (нужна для строк)\nconst getRandom = (arr) => arr[Math.floor(Math.random() * arr.length)];\n\n// Логика для персонажей\nconst shuffledChars = [...allCharacters].sort(() => 0.5 - Math.random());\nconst charCount = Math.floor(Math.random() * (6 - 3 + 1)) + 3; \nconst selectedCharacters = shuffledChars.slice(0, charCount).join(', ');\n\n// Логика для победителя (true/false)\nconst spyWinner = Math.random() >= 0.5;\n\nreturn [\n  {\n    json: {\n      params: {},\n      query: {},\n      body: {\n        location: getRandom(locations),\n        Style: getRandom(styles),\n        Characters: selectedCharacters,\n        Language: getRandom(languages),\n        type_query: \"Card\" // Исправлено: передаем готовый true/false\n      },\n      webhookUrl: 'https://n8n.sharksbots.com/webhook-test/get-scene-picture',\n      executionMode: 'test',\n    },\n  },\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -976,
+        128
+      ],
+      "id": "7751ee88-79f1-4430-8c8e-c51d08415e18",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.body.type_query }}",
+                    "rightValue": "gen_card_for_location",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "1ff4aecc-d7b5-44fe-879a-61b521e9ff05"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "dc13ae8c-569e-4993-a7d9-6816b5faad65",
+                    "leftValue": "={{ $json.body.type_query }}",
+                    "rightValue": "=gen_card_for_finish_round",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        -816,
+        384
+      ],
+      "id": "1448dff6-3078-4be1-81bf-31a2bc8beaf5",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-3.1-flash-image-preview",
+          "mode": "id"
+        },
+        "prompt": "={{ $json.Prompt }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        32,
+        80
+      ],
+      "id": "12095cbf-17a6-4ec7-8cc5-a2d4f9113831",
+      "name": "Generate an image Default",
+      "retryOnFail": true,
+      "credentials": {
+        "googlePalmApi": {
+          "id": "nWpOT1KxAeSVchXv",
+          "name": "spy-game-sasha"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "f5d43ab5-360e-486e-8ba8-76c2dc2652cc",
+              "leftValue": "={{ $json.bytes }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        288,
+        448
+      ],
+      "id": "16a4c17d-0e4a-4366-9321-d4cc2adc6265",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "amount": 3
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        288,
+        880
+      ],
+      "id": "5675b694-43e6-433e-b312-90847bfd65ce",
+      "name": "Wait",
+      "webhookId": "6314c663-7f72-4f4f-bca7-a0b2ae00bd2c"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "postman-test",
+        "responseMode": "lastNode",
+        "options": {
+          "rawBody": true
+        }
+      },
+      "name": "тест_от_постман",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        -1232,
+        528
+      ],
+      "id": "3833b832-018b-42e0-acab-34a260c3fe0d",
+      "webhookId": "b52ca74a-a0c3-4039-9ff8-e6168256c2b6"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "get-scene-picture",
+        "authentication": "basicAuth",
+        "responseMode": "responseNode",
+        "options": {
+          "allowedOrigins": "*"
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -1232,
+        384
+      ],
+      "id": "e0c8b1ec-34e8-4bdc-973e-dd27046cc8ba",
+      "name": "MainWebhook",
+      "webhookId": "bceebbf7-bcd6-4f22-867f-d51b3305032d",
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "rQKxa8KD3oOEVjba",
+          "name": "Unnamed credential 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "68a30d74-b675-429a-951d-d51ad100d938",
+              "name": "Prompt",
+              "value": "=Твоя главная задача: сгенерировать картинку. Ниже будут данные о этой картинке. Изображение будет служить игре по типу Шпион.\n\n1. Локация изображение должна быть строго: {{ $json.body.location }}\n\n2. На картинке должны присутствовать данные люди с ролями (они могут находиться в разных позах, кто - то сидит, стоит, отдыхает): {{ $json.body.roles }}\n\n3. Кроме людей с ролями, на изображении так же должна находиться черная безликая фигура в черной шляпе, с черным револьвером на поясе и с белым вопросительном знаке на груди, так же она должна как ни в чем не бывало стоять рядом с другим людьми, но не должен особо выделятся - это шпион.\n\n4. Изображение должно быть строго в конкретном стиле, поэтому адаптируй картинку под этот стиль: {{ $json.body.generation_style }}\n\n5. Размер изображения должен быть 3:4\n\n! Что НЕ должно присутствовать на изображении:\n1. НИКАКОГО ТЕКСТА!\n2. на изображении не должно быть никаких людей кроме тех кто прописан выше",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -496,
+        192
+      ],
+      "id": "f5bf2135-6ec7-4626-834e-33d5ad306853",
+      "name": "CardPrompt"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Проходим по всем входным элементам и добавляем поле 'secondsFromStartOfDay'\nfor (const item of $input.all()) {\n  const now = new Date();\n  \n  // Вычисляем: (часы * 3600) + (минуты * 60) + секунды\n  const seconds = (now.getHours() * 3600) + (now.getMinutes() * 60) + now.getSeconds();\n  \n  item.json.secondsFromStartOfDay = seconds;\n}\n\nreturn $input.all();"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -160,
+        16
+      ],
+      "id": "77dac443-616b-4939-b81e-7dfb1797d975",
+      "name": "TimeBeforeRequest"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Проходим по всем входным элементам и добавляем поле 'secondsFromStartOfDay'\nfor (const item of $input.all()) {\n  const now = new Date();\n  \n  // Вычисляем: (часы * 3600) + (минуты * 60) + секунды\n  const seconds = (now.getHours() * 3600) + (now.getMinutes() * 60) + now.getSeconds();\n  \n  item.json.secondsFromStartOfDay = seconds;\n}\n\nreturn $input.all();"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        192,
+        96
+      ],
+      "id": "36992a59-f154-438e-abf6-09181d4737c0",
+      "name": "TimeAfterRequest"
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-3.1-flash-image-preview",
+          "mode": "list",
+          "cachedResultName": "models/gemini-3.1-flash-image-preview"
+        },
+        "prompt": "=### СИСТЕМНЫЙ ПРОТОКОЛ: ГЕНЕРАЦИЯ СТРОГО ПО ЗАДАННЫМ ПАРАМЕТРАМ ###\n\n1. **Описание сцены и логика:** {{ $json.promt_situation }}\n\n2. **Строгая локация:** Действие должно происходить исключительно в: {{ $json.location }}. Никаких посторонних объектов из других сред.\n\n3. **Обязательный стиль:** Изображение должно быть выполнено строго и безупречно в стиле: {{ $json.generation_style }}. (Это касается текстур, освещения и анатомии).\n\n**4. Абсолютный и конечный список персонажей (ОТКЛОНЕНИЯ ЗАПРЕЩЕНЫ):**\nТебе разрешено генерировать **ТОЛЬКО** тех лиц, которые указаны в списке ниже. Считай этот список жестким программным ограничением. Ты ОБЯЗАН сгенерировать **всех** указанных людей и **никого больше**. Перепроверь их количество и роли. Список разрешенных персонажей: {{ $json.roles_list }}\n\n**5. Ограничения-исключения (ПРОВЕРКА ПЕРЕД ВЫДАЧЕЙ):**\nПеред финальной генерацией проведи аудит. Если в кадре есть что-то из списка ниже — удали это.\n1. **ЛЮБОЙ ТЕКСТ, БУКВЫ, ЦИФРЫ, ЗНАКИ, ЭТИКЕТКИ ИЛИ ЛОГОТИПЫ.** В любом месте кадра.\n2. **ЛЮБЫЕ ЛИШНИЕ ФИГУРЫ ЛЮДЕЙ ИЛИ СУЩЕСТВ.** Это включает: случайных прохожих, людей на заднем плане, силуэты, толпы или «второстепенных персонажей», не указанных в пункте 4. \n**ВАЖНО:** Общее количество людей на картинке должно **строго соответствовать** количеству ролей из {{ $json.roles_list }}. Ни одним человеком больше.\n\n**6. Протокол размещения (Безопасная зона):**\nВсе персонажи из пункта 4 должны быть сгруппированы и расположены в центральной «безопасной зоне» кадра. Ни одна важная часть тела (голова, лицо) не должна касаться краев рамки или подходить к ним вплотную. Оставь достаточно свободного пространства (фона) по периметру изображения.\n\n**7. Системная проверка:** Ты ДОЛЖЕН физически пересчитать количество голов на созданном черновике. Если число не совпадает со списком из пункта 4 — это нарушение инструкции. Генерируй ровно то, что просили: не больше и не меньше.\n\n**8. Размер изображения должен быть 3:4",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        -80,
+        672
+      ],
+      "id": "b29da0df-c269-40cf-b057-9b7cc6c81ba2",
+      "name": "генерация без лиц",
+      "retryOnFail": true,
+      "credentials": {
+        "googlePalmApi": {
+          "id": "nWpOT1KxAeSVchXv",
+          "name": "spy-game-sasha"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "464732cf-2027-4368-b230-3613f9803cd3",
+              "leftValue": "={{ $json.need_add_faces }}",
+              "rightValue": "true",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -256,
+        544
+      ],
+      "id": "b31ac2dc-6942-40cf-bfd8-80228c2db6eb",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "content": "for (const item of $input.all()) {\n  // 1. Получаем данные из входящего JSON\n  // Пытаемся взять данные из item.json или item.json.body (если пришла строка)\n  let data = item.json.body;\n  if (typeof data === 'string') {\n    try {\n      data = JSON.parse(data);\n    } catch (e) {\n      data = item.json; // Если не распарсилось, берем верхний уровень\n    }\n  } else {\n    data = item.json; // Данные уже на верхнем уровне\n  }\n\n  // Задаем значения по умолчанию, если данные не пришли\n  const location = data.location || 'Подземелье';\n  const roles_list = (data.roles || ['Авантюрист', 'Маг', 'Страж']).join(', ');\n  const style = data.generation_style || 'как настоящее фото';\n\n  // Входная переменная \"spywon\" (ожидаем строку \"true\" или \"false\")\n  const spywon_status = String(data.spywon).toLowerCase() || \"false\";\n  \n  let final_prompt = '';\n\n  // Описание шпиона (для вставки в оба варианта промта)\n  const spy_description = `черная безликая фигура в черной шляпе, с черным револьвером на поясе и с белым вопросительном знаке на груди - это шпион`;\n\n  // Обязательные ограничения (добавляются в конец любого промта)\n  const final_constraints = ` ! Что НЕ должно присутствовать на изображении: 1. НИКАКОГО ТЕКСТА! 2. на изображении не должно быть никаких людей кроме тех кто прописан выше.`;\n\n  // === ЛОГИКА ВЫБОРА ПРОМТА ===\n\n  if (spywon_status === \"true\") {\n    // Вторая переменная: ШПИОН ВЫИГРАЛ (Ваш новый текст)\n    final_prompt = `Твоя главная задача: сгенерировать картинку. Ниже будут данные о этой картинке. Изображение будет служить игре по типу Шпион. 1. Локация изображение должна быть строго: ${location}. 2. На картинке должны присутствовать данные люди с ролями: ${roles_list}, а так же ${spy_description}. Шпион должен насмехаться над другими людьмы с ролями (его не рассекретили). Он стоит в позе триумфатора, пока другие люди (роли: ${roles_list}) выглядят растерянными и обманутыми. 3. Изображение должно быть строго в конкретном стиле, поэтому адаптируй картинку под этот стиль: ${style}.`;\n  } else {\n    // Первая переменная: ШПИОН ПРОИГРАЛ (Текст из прошлого запроса)\n    final_prompt = `Твоя главная задача: сгенерировать картинку. Ниже будут данные о этой картинке. Изображение будет служить игре по типу Шпион. 1. Локация изображение должна быть строго: ${location}. 2. На картинке должны присутствовать данные люди с ролями: ${roles_list}, а так же ${spy_description}. Остальные люди с ролями должны его запинывать (жестоко избивать руками и ногами) за то что рассекретили его. Шпион лежит на земле, скрутившись от боли, остальные роли (роли: ${roles_list}) окружили его. 3. Изображение должно быть строго в конкретном стиле, поэтому адаптируй картинку под этот стиль: ${style}.`;\n  }\n\n  // Добавляем обязательные ограничения\n  final_prompt += final_constraints;\n\n  // === СОХРАНЕНИЕ РЕЗУЛЬТАТА В JSON ===\n  item.json.Prompt = final_prompt; // Результат будет доступен как $json.Prompt\n  item.json.spywon_status = spywon_status; // Сохраняем статус для отладки\n\n  // === ВАЖНО: СОХРАНЯЕМ БИНАРНЫЕ ДАННЫЕ (ФОТОГРАФИИ) ===\n  if (item.binary && item.binary.data) {\n    // Убедимся, что файл назван 'data', чтобы Gemini его увидел\n    const firstKey = Object.keys(item.binary)[0];\n    if (firstKey !== 'data') {\n      item.binary.data = item.binary[firstKey];\n    }\n  }\n}\n\n// Возвращаем все элементы с сохраненными фото и новым полем Prompt\nreturn $input.all();"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -336,
+        1264
+      ],
+      "typeVersion": 1,
+      "id": "3971e059-4b4c-480c-86ba-e055dd71c6b4",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "jsCode": "return items.map(item => {\n  const body = item.json.body || {};\n  \n  // 1. Работаем с ролями\n  const roleKeys = Object.keys(body)\n    .filter(key => key.startsWith('roles['))\n    .sort((a, b) => {\n      return a.localeCompare(b, undefined, { numeric: true });\n    });\n\n  // Создаем массив только из названий профессий для roles_list\n  const rolesArray = roleKeys.map(key => body[key]);\n  const roles_list = rolesArray.join(', ');\n\n  // Формируем части для лиц персонажей\n  const facesParts = roleKeys.map((key, index) => {\n    const roleName = body[key];\n    return `для ${roleName} лицо photo_${index}`;\n  });\n\n  // Собираем строку лиц и добавляем в конец фразу про шпиона\n  let faces_for_role = facesParts.join(', ');\n  if (faces_for_role) {\n    faces_for_role += ', '; // добавляем запятую, если список ролей не пустой\n  }\n  faces_for_role += 'для персонажа шпиона используй лицо из картинки spy_photo';\n\n  // 2. Логика для статуса шпиона\n  const spyWinnerPromtStr = `Твоя главная задача: сгенерировать картинку по опсанию сцены \n1. Сцена: черная безликая фигура в черной шляпе, и с белым вопросительном знаке на груди - это шпион. Шпион должен насмехаться над другими людьмы (персонажами) с (его не рассекретили). Он стоит в позе триумфатора, пока другие люди (персонажи) выглядят растерянными и обманутыми.`;\n  \n  const spyLoserPromtStr = `Твоя главная задача: сгенерировать картинку по опсанию сцены \n1. Сцена: Наглый но расстореный человек полностью в черной одежде в черной шляпе, - это шпион. Остальные люди (персонажи) показывать на него пальцем, стоят вокруг него и хохочут над ним потому что рассекретили`;\n  \n  const isSpyWin = String(body.spy_is_win).toLowerCase() === 'true';\n  const promt_situation = isSpyWin ? spyWinnerPromtStr : spyLoserPromtStr;\n\n  // 3. Формируем итоговый объект JSON\n  const newJson = {\n    ...body,\n    roles_count: roleKeys.length,\n    roles_list: roles_list,\n    faces_for_role: faces_for_role,\n    promt_situation: promt_situation\n  };\n\n  return {\n    json: newJson,\n    binary: item.binary \n  };\n});\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -608,
+        496
+      ],
+      "id": "08d27c69-8306-425c-a704-7929dea877b0",
+      "name": "дополняем код"
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "operation": "edit",
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-3-pro-image-preview",
+          "mode": "list",
+          "cachedResultName": "models/gemini-3-pro-image-preview (Nano Banana Pro)"
+        },
+        "prompt": "=Your primary and non-negotiable goal is to generate an image strictly adhering to the following detailed scene description and constraints:\n\n1.  **Scene Description and Logic:** {{ $json.promt_situation }}\n\n2.  **Strict Location:** The scene MUST strictly take place in: {{ $json.location }}\n\n3.  **Mandatory Generation Style:** The entire image MUST be executed strictly in the following style: {{ $json.generation_style }}. (This is critical for all visual elements, including faces).\n\n**4. Mandatory, Finite Character Roster (Audit Constraint):**\nThe only characters permitted in the image are those listed below. Use this field as a definitive checklist. You MUST generate **all** of the characters specified, and **no others**. Verify their presence. The required characters are: {{ $json.roles_list }}\n\n**5. Critical Face Substitution Instructions:**\nIt is mandatory to substitute the faces of the characters defined in step 4 with the facial features from the attached reference images. Use the following mapping to determine which face goes on which character: {{ $json.faces_for_role }}\n\n5.1. **Face Integration and Stylization Rules:**\n\n* **Deep Adaptation to \"{{ $json.generation_style }}\" (CRITICAL):** Deeply stylize the facial features from the reference photos to perfectly match the artistic manner, technique, and medium specified in point 3 (e.g., matching the specific brushwork, cross-hatching, or rendering style). Avoid photorealism unless the style in point 3 explicitly requires it. The faces must be organically drawn, painted, or rendered into the image, appearing as an integral part of the artwork, not as overlaid photo textures or collages.\n* **Character Recognition:** Analyze and precisely transfer the unique anthropometric features of each person from the photos (e.g., nose shape, eye shape, face structure) to maintain recognizable identity, regardless of the level of stylization.\n* **Color Palette and Lighting:** The skin tones, colors, and shadows on the faces must completely conform to the color palette and lighting characteristics typical of the style defined in point 3, not the original lighting from the reference photos.\n* **Emotion Synchronization:** Adjust the facial expressions and emotions to fit the scene description (e.g., make characters look bewildered, deceived, or triumphant as described), while retaining their core facial structure.\n\n**6. Exclusion Constraints (Check Before Finalizing):**\nThe following MUST NOT be present in the image. This is a rejection checklist:\n1.  **ANY TEXT OR LETTERS OF ANY KIND, INCLUDING LABELS, CAPTIONS, OR LOGOS.**\n2.  **ANY ADDITIONAL INDIVIDUALS, EXTRA BACKGROUND PEOPLE, OR INCIDENTAL CHARACTERS** other than those explicitly defined in step 4. The total number of people MUST exactly equal the total number of characters in {{ $json.roles_list }} plus any additional individuals mentioned in step 1.\n\n**7. Mandatory Character Placement (Safe Zone):**\nAll characters specified in step 4 MUST be positioned within the central \"safe zone\" of the composition. No character or essential part of their body (head, face) can be placed near the edges of the image frame. Ensure ample negative space around the edges to prevent any character from being cropped out during standard image framing or aspect ratio adjustments. All defined individuals must remain fully visible and centered.\n\n**8. Image size should be 3:4",
+        "images": {
+          "values": [
+            {
+              "binaryPropertyName": "=spy_photo"
+            },
+            {
+              "binaryPropertyName": "={{ $json[\"roles[0]\"] ? \"photo_0\" : \"\" }}"
+            },
+            {
+              "binaryPropertyName": "={{ $json[\"roles[1]\"] ? \"photo_1\" : \"\" }}"
+            },
+            {
+              "binaryPropertyName": "={{ $json[\"roles[2]\"] ? \"photo_2\" : \"\" }}"
+            },
+            {
+              "binaryPropertyName": "={{ $json[\"roles[3]\"] ? \"photo_3\" : \"\" }}"
+            },
+            {
+              "binaryPropertyName": "={{ $json[\"roles[4]\"] ? \"photo_4\" : \"\" }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        -32,
+        352
+      ],
+      "id": "718c2698-b738-419c-8cf6-67c7813fda50",
+      "name": "генерация с лицами1",
+      "retryOnFail": true,
+      "credentials": {
+        "googlePalmApi": {
+          "id": "nWpOT1KxAeSVchXv",
+          "name": "spy-game-sasha"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "{{ $json.promt_situation }}\n2. Локация для происходящего должна быть строго: {{ $json.location }}\n3. Стиль изображения обязательно и строго: {{ $json.generation_style }}. \n4. Персонажи которые еще обязательно должны присутствовать на картинке: {{ $json.roles_list }}\n5. важно к персонажам подставить лица из тех картинок котрорые я прикрепил: \n5.1  вот как надо подставить лица к персонажем из прикрепленных фото: {{ $json.faces_for_role }}\n6 Что НЕ должно присутствовать на изображении:\n1. НИКАКОГО ТЕКСТА!\n2. на изображении не должно быть никаких людей(персонажей) кроме тех кто прописан выше.\n"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -336,
+        272
+      ],
+      "id": "b543be62-6217-4035-9dac-1ccbb29d1bc4",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "value": "sdb2AUviI26ExlEF",
+          "mode": "list",
+          "cachedResultName": "Spy_Table",
+          "cachedResultUrl": "/projects/hW1scIIJe31DdFQs/datatables/sdb2AUviI26ExlEF"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "location": "={{ $json.body.location }}",
+            "roles": "={{\n  Array.isArray($json.body.roles)\n    ? $json.body.roles.join(', ')\n    : Object.entries($json.body)\n        .filter(([key]) => key.startsWith('roles['))\n        .map(([, value]) => value)\n        .join(', ')\n}}",
+            "type_query": "={{ $json.body.type_query }}",
+            "generation_style": "={{ $json.body.generation_style }}",
+            "need_add_faces": "={{ $json.body.need_add_faces }}",
+            "webhook_Url": "={{ $json.webhookUrl }}",
+            "spy_is_win": "={{ $json.body.spy_is_win }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "location",
+              "displayName": "location",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "roles",
+              "displayName": "roles",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "type_query",
+              "displayName": "type_query",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "generation_style",
+              "displayName": "generation_style",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "need_add_faces",
+              "displayName": "need_add_faces",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "webhook_Url",
+              "displayName": "webhook_Url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "spy_is_win",
+              "displayName": "spy_is_win",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        -1024,
+        288
+      ],
+      "id": "feddd46c-eb97-422f-a352-21c00478a52c",
+      "name": "Insert row"
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-flash-image",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-flash-image (Nano Banana)"
+        },
+        "prompt": "={{ $json.Prompt }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        32,
+        -112
+      ],
+      "id": "4b296677-5f1f-4425-b3a7-6cd0b225531e",
+      "name": "Generate an image Default1",
+      "retryOnFail": true,
+      "credentials": {
+        "googlePalmApi": {
+          "id": "nWpOT1KxAeSVchXv",
+          "name": "spy-game-sasha"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "CardPrompt",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "дополняем код",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate an image Default": {
+      "main": [
+        [
+          {
+            "node": "TimeAfterRequest",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "тест_от_постман": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MainWebhook": {
+      "main": [
+        [
+          {
+            "node": "Insert row",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CardPrompt": {
+      "main": [
+        [
+          {
+            "node": "TimeBeforeRequest",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "TimeBeforeRequest": {
+      "main": [
+        [
+          {
+            "node": "Generate an image Default",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Generate an image Default1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "TimeAfterRequest": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "генерация без лиц": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "генерация с лицами1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "генерация без лиц",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "дополняем код": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "генерация с лицами1": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert row": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "c58f5d75-b581-4dc3-9ac9-57dc0d629efd",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "71e606e6da71045116fe5b96a7d07008e047120bd7ee3480143e173146f122b9"
+  },
+  "id": "3Vyq4wWOLvVZ2ACs",
+  "tags": []
+}

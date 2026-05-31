@@ -5,11 +5,15 @@ import '../models/game_session.dart';
 import '../models/player.dart';
 import '../utils/app_strings.dart';
 import '../utils/app_styles.dart';
+import '../utils/app_settings.dart';
 import '../utils/sound_service.dart';
 import 'main_menu_screen.dart';
 import 'pre_game_flow_screen.dart';
 import '../widgets/exit_game_button.dart';
 import '../utils/context_extensions.dart';
+import '../models/game_history_entry.dart';
+import '../services/game_history_service.dart';
+import '../widgets/photo_carousel_dialog.dart';
 
 class RoundScoreScreen extends StatefulWidget {
   final GameSession session;
@@ -29,6 +33,16 @@ class _RoundScoreScreenState extends State<RoundScoreScreen> {
     super.initState();
     _isLastRound = widget.session.currentRound >= widget.session.totalRounds;
 
+    // Save snapshot of round scores for history
+    final round = widget.session.currentRound;
+    if (!widget.session.roundScoresHistory.containsKey(round)) {
+      widget.session.roundScoresHistory[round] = {
+        for (var p in widget.session.players) p.name: p.roundScore
+      };
+      widget.session.spyWonHistory[round] = 
+          widget.session.players[widget.session.currentSpyIndex].roundScore > 0;
+    }
+
     // Create a copy to sort without mutating the original list order (though mutating is fine too)
     _sortedPlayers = List.from(widget.session.players);
     _sortedPlayers.sort((a, b) => b.totalScore.compareTo(a.totalScore));
@@ -37,6 +51,9 @@ class _RoundScoreScreenState extends State<RoundScoreScreen> {
   void _onNextAction() {
     SoundService.instance.playClick();
     if (_isLastRound) {
+      // Save game history
+      GameHistoryService.saveGame(widget.session);
+      
       // Go to main menu
       Navigator.pushAndRemoveUntil(
         context,
@@ -171,40 +188,53 @@ class _RoundScoreScreenState extends State<RoundScoreScreen> {
                             ),
                           ),
 
-                        // Final round card (generated AI art)
-                        Builder(
-                          builder: (context) {
-                            final round = widget.session.currentRound;
-                            final cards = widget.session.roundFinalCards[round];
-                            // Determine which card to show based on whether spy won this round
-                            // We check if spy's round score is positive (spy won) or not
-                            final spyWon =
-                                widget
-                                    .session
-                                    .players[widget.session.currentSpyIndex]
-                                    .roundScore >
-                                0;
-                            final Uint8List? cardBytes =
-                                cards?[spyWon ? 'win' : 'loss'];
-
-                            if (cardBytes == null)
-                              return const SizedBox.shrink();
-
-                            return Padding(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: context.horizontalMargin,
-                                vertical: context.padding2,
+                        // Button to view photo history of the current game
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: context.horizontalMargin,
+                            vertical: context.padding2,
+                          ),
+                          child: OutlinedButton.icon(
+                            onPressed: () {
+                              final List<RoundHistory> allRounds = [];
+                              for (int r = 1; r <= widget.session.currentRound; r++) {
+                                final spyWon = widget.session.spyWonHistory[r] ?? false;
+                                final resultBytes = widget.session.roundFinalCards[r]?[spyWon ? 'win' : 'loss'];
+                                final locName = widget.session.secretLocationsQueue[r - 1];
+                                final locBytes = widget.session.locationImages[locName];
+                                
+                                allRounds.add(RoundHistory(
+                                  roundNumber: r,
+                                  locationImageBytes: locBytes,
+                                  resultImageBytes: resultBytes,
+                                  playerScores: widget.session.roundScoresHistory[r] ?? {},
+                                  spyWon: spyWon,
+                                ));
+                              }
+                              
+                              showDialog(
+                                context: context,
+                                builder: (context) => PhotoCarouselDialog(rounds: allRounds),
+                              );
+                            },
+                            icon: const Icon(Icons.photo_library, color: Colors.white),
+                            label: const Text(
+                              'Фото история игры',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
                               ),
-                              child: ClipRRect(
+                            ),
+                            style: OutlinedButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(vertical: 12),
+                              side: BorderSide(color: AppStyles.accent, width: 2),
+                              shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(15),
-                                child: Image.memory(
-                                  cardBytes,
-                                  fit: BoxFit.contain,
-                                  width: double.infinity,
-                                ),
                               ),
-                            );
-                          },
+                              backgroundColor: AppStyles.cardBg,
+                            ),
+                          ),
                         ),
 
                         // Players List

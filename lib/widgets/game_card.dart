@@ -2,6 +2,7 @@ import 'dart:math';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../data/locations_data.dart';
 import '../utils/app_images.dart';
 import '../utils/app_strings.dart';
 import '../utils/app_styles.dart';
@@ -231,7 +232,7 @@ class _GameCardState extends State<GameCard> with TickerProviderStateMixin {
                               fit: BoxFit.cover,
                             )
                           : Image.asset(
-                              AppImages.revealBgNotSpy,
+                              LocationsData.getDefaultLocationAsset(widget.secretLocation),
                               fit: BoxFit.cover,
                             )),
               ),

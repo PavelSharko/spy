@@ -12,6 +12,9 @@ class AppEnvironment {
     defaultValue: false,
   );
 
+  /// Если TRUE, то проверка подписок полностью отключается (все функции доступны бесплатно)
+  static const bool bypassSubscriptionCheck = false;
+
   // ==========================================
   // ТЕСТОВЫЕ НАСТРОЙКИ (Test Mode = true)
   // ==========================================
