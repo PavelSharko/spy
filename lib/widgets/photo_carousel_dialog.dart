@@ -231,7 +231,7 @@ class _PhotoCarouselDialogState extends State<PhotoCarouselDialog> {
 
     final List<String> slideSubtitles = [
       'Результаты раунда',
-      'Локация была: ${currentRound.locationName ?? "Секретная"}',
+      'Локация была: ${currentRound.locationName ?? ""}',
       'Результат игры (шпион ${currentRound.spyWon ? "выиграл" : "проиграл"})',
     ];
 
