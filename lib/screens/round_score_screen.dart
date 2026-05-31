@@ -111,7 +111,7 @@ class _RoundScoreScreenState extends State<RoundScoreScreen> {
                             child: Text(
                               _isLastRound
                                   ? "Итоги игры"
-                                  : AppStrings.roundScoreTitle,
+                                  : "Раунд ${widget.session.currentRound}: Результаты игры",
                               style: TextStyle(
                                 fontSize: 32,
                                 fontWeight: FontWeight.w900,
@@ -169,24 +169,7 @@ class _RoundScoreScreenState extends State<RoundScoreScreen> {
                             ),
                           ),
 
-                        // Subtitle
-                        if (!_isLastRound)
-                          Padding(
-                            padding: EdgeInsets.only(bottom: context.padding2),
-                            child: Center(
-                              child: FittedBox(
-                                fit: BoxFit.scaleDown,
-                                child: Text(
-                                  '${AppStrings.roundPrefix}${widget.session.currentRound}',
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w500,
-                                    color: Colors.white.withOpacity(0.8),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
+
 
                         // Button to view photo history of the current game
                         Padding(
@@ -324,9 +307,7 @@ class _RoundScoreScreenState extends State<RoundScoreScreen> {
                                           fontWeight: isFirst
                                               ? FontWeight.w900
                                               : FontWeight.w500,
-                                          color: isFirst
-                                              ? AppStyles.darkAccent
-                                              : AppStyles.accent,
+                                          color: AppStyles.accent,
                                         ),
                                         overflow: TextOverflow.ellipsis,
                                       ),
