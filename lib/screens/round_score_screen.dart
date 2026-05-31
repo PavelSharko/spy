@@ -202,10 +202,10 @@ class _RoundScoreScreenState extends State<RoundScoreScreen> {
                               );
                             },
                             icon: const Icon(Icons.photo_library, color: Colors.white),
-                            label: const Text(
+                            label: Text(
                               'Фото история игры',
                               style: TextStyle(
-                                color: Colors.white,
+                                color: AppStyles.accent,
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
                               ),
