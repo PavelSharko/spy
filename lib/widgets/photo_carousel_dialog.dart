@@ -7,6 +7,7 @@ import '../models/game_history_entry.dart';
 import '../utils/app_styles.dart';
 import '../data/locations_data.dart';
 import '../utils/sound_service.dart';
+import '../utils/context_extensions.dart';
 
 class PhotoCarouselDialog extends StatefulWidget {
   final List<RoundHistory> rounds;
@@ -113,8 +114,8 @@ class _PhotoCarouselDialogState extends State<PhotoCarouselDialog> {
                     children: [
                       Text(
                         entry.key,
-                        style: const TextStyle(
-                          color: Colors.white,
+                        style: TextStyle(
+                          color: AppStyles.accent,
                           fontSize: 18,
                           fontWeight: FontWeight.w600,
                         ),
@@ -230,109 +231,94 @@ class _PhotoCarouselDialogState extends State<PhotoCarouselDialog> {
     ];
 
     final List<String> slideSubtitles = [
-      'Результаты раунда',
-      'Локация была: ${currentRound.locationName ?? ""}',
-      'Результат игры (шпион ${currentRound.spyWon ? "выиграл" : "проиграл"})',
+      'Результаты игры',
+      'Локация была: ${currentRound.locationName ?? "Неизвестна"}',
+      'Результат игры (шпион ${currentRound.spyWon ? 'выиграл' : 'проиграл'})',
     ];
 
     return Dialog(
       backgroundColor: Colors.transparent,
-      insetPadding: const EdgeInsets.all(10),
-      child: ConstrainedBox(
-        constraints: BoxConstraints(
-          maxWidth: 550,
-          maxHeight: MediaQuery.of(context).size.height * 0.8,
+      insetPadding: EdgeInsets.symmetric(
+        horizontal: context.horizontalMargin,
+        vertical: 24.0,
+      ),
+      child: Container(
+        width: double.infinity,
+        height: MediaQuery.of(context).size.height * 0.75,
+        decoration: BoxDecoration(
+          color: AppStyles.bgColor,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: AppStyles.accent.withValues(alpha: 0.8), width: 2),
         ),
-        child: Container(
-          width: double.infinity,
-          height: double.infinity,
-          decoration: BoxDecoration(
-            color: AppStyles.bgColor,
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: AppStyles.accent.withValues(alpha: 0.8), width: 2),
-          ),
-          child: Column(
-            children: [
-              // Header
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16, 12, 8, 8),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            'Раунд ${currentRound.roundNumber}',
-                            style: TextStyle(
-                              color: AppStyles.accent,
-                              fontSize: 20,
-                              fontWeight: FontWeight.w900,
-                              letterSpacing: 1,
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            slideSubtitles[_currentPage],
-                            style: const TextStyle(
-                              color: Colors.white70,
-                              fontSize: 15,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
+        child: Column(
+          children: [
+            // Header
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 8, 8, 8),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Раунд ${currentRound.roundNumber}: ${slideSubtitles[_currentPage]}',
+                        style: TextStyle(
+                          color: AppStyles.accent,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
-                    IconButton(
-                      icon: const Icon(Icons.close, color: Colors.white),
-                      onPressed: () {
-                        SoundService.instance.playClick();
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                  ],
-                ),
-              ),
-
-              // Horizontal tab selector for rounds
-              _buildRoundTabs(),
-
-              // Page Carousel
-              Expanded(
-                child: ClipRRect(
-                  borderRadius: const BorderRadius.vertical(bottom: Radius.circular(18)),
-                  child: PageView(
-                    controller: _pageController,
-                    onPageChanged: (index) {
-                      setState(() => _currentPage = index);
-                    },
-                    children: roundSlides,
                   ),
-                ),
+                  IconButton(
+                    icon: const Icon(Icons.close, color: Colors.white),
+                    onPressed: () {
+                      SoundService.instance.playClick();
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
               ),
+            ),
 
-              // 3 dots indicators for the active round's slides
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 12.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: List.generate(3, (index) {
-                    return Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 4),
-                      width: _currentPage == index ? 10 : 6,
-                      height: _currentPage == index ? 10 : 6,
-                      decoration: BoxDecoration(
-                        color: _currentPage == index ? AppStyles.accent : Colors.white30,
-                        shape: BoxShape.circle,
-                      ),
-                    );
-                  }),
+            // Horizontal tab selector for rounds
+            _buildRoundTabs(),
+
+            // Page Carousel
+            Expanded(
+              child: ClipRRect(
+                borderRadius: const BorderRadius.vertical(bottom: Radius.circular(18)),
+                child: PageView(
+                  controller: _pageController,
+                  onPageChanged: (index) {
+                    setState(() => _currentPage = index);
+                  },
+                  children: roundSlides,
                 ),
               ),
-            ],
-          ),
+            ),
+
+            // 3 dots indicators for the active round's slides
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 12.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(3, (index) {
+                  return Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 4),
+                    width: _currentPage == index ? 10 : 6,
+                    height: _currentPage == index ? 10 : 6,
+                    decoration: BoxDecoration(
+                      color: _currentPage == index ? AppStyles.accent : Colors.white30,
+                      shape: BoxShape.circle,
+                    ),
+                  );
+                }),
+              ),
+            ),
+          ],
         ),
       ),
     );

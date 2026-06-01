@@ -59,7 +59,7 @@ class AppStrings {
   static const String transitionText = 'переход к следующему игроку';
   static const String stopRound = 'стоп / пауза';
   static const String whatHappened = 'Укажите причину:';
-  static const String spyGuessedLoc = 'Шпион уже отгадал локацию';
+  static const String spyGuessedLoc = 'Шпион готов отгадать локацию';
   static const String spyFailed = 'Провал шпиона';
   static const String spyCaught = 'Шпион пойман!';
   static const String continueGame = 'Ничего, играем дальше!';

@@ -41,8 +41,13 @@ class _VotingScreenState extends State<VotingScreen> {
 
   void _startVotingRound() {
     _votes = List.filled(widget.session.players.length, 0);
-    _votingQueue = List.generate(widget.session.players.length, (i) => i)
-      ..shuffle();
+    _votingQueue = [];
+    for (int i = 0; i < widget.session.players.length; i++) {
+      if (widget.session.isActivePlayer(i)) {
+        _votingQueue.add(i);
+      }
+    }
+    _votingQueue.shuffle();
     _currentVoterIndexInQueue = 0;
     _selectedCandidateIndex = null;
   }
@@ -84,7 +89,7 @@ class _VotingScreenState extends State<VotingScreen> {
       });
       _playTieSound();
 
-      Future.delayed(const Duration(seconds: 1), () {
+      Future.delayed(const Duration(seconds: 7), () {
         if (mounted && _showTieNotification) {
           setState(() {
             _showTieNotification = false;
@@ -116,7 +121,7 @@ class _VotingScreenState extends State<VotingScreen> {
   }
 
   void _playTieSound() async {
-    SoundService.instance.playTiePig();
+    SoundService.instance.playTieGekkon();
   }
 
   @override
@@ -125,6 +130,7 @@ class _VotingScreenState extends State<VotingScreen> {
       return Scaffold(
         backgroundColor: AppStyles.bgColor,
         body: GestureDetector(
+          behavior: HitTestBehavior.opaque,
           onTap: () {
             if (_showTieNotification) {
               setState(() {
@@ -134,20 +140,56 @@ class _VotingScreenState extends State<VotingScreen> {
             }
           },
           child: Container(
-            color: const Color(0xFF1565C0),
-            child: Container(
-              child: const SizedBox.expand(
-                child: Center(
-                  child: Padding(
-                    padding: EdgeInsets.all(20.0),
-                    child: Text(
-                      'Одинаковое количество голосов\nнадо переголосовать !!',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 32,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
+            color: AppStyles.bgColor, // Transparent tap area over bg
+            child: SizedBox.expand(
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  child: Container(
+                    padding: const EdgeInsets.all(30),
+                    decoration: BoxDecoration(
+                      color: AppStyles.cardBg,
+                      borderRadius: BorderRadius.circular(25),
+                      border: Border.all(color: AppStyles.accent, width: 3),
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppStyles.accent.withValues(alpha: 0.5),
+                          blurRadius: 25,
+                          spreadRadius: 2,
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.warning_amber_rounded,
+                          color: AppStyles.accent,
+                          size: 60,
+                        ),
+                        const SizedBox(height: 20),
+                        Text(
+                          'Одинаковое количество\nголосов!',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 26,
+                            fontWeight: FontWeight.w900,
+                            color: AppStyles.textBright,
+                            letterSpacing: 1.2,
+                          ),
+                        ),
+                        const SizedBox(height: 15),
+                        Text(
+                          'НАДО ПЕРЕГОЛОСОВАТЬ',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: AppStyles.accent,
+                            letterSpacing: 2,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -260,8 +302,8 @@ class _VotingScreenState extends State<VotingScreen> {
                             padding: EdgeInsets.symmetric(horizontal: 20),
                             itemCount: widget.session.players.length,
                             itemBuilder: (context, index) {
-                              if (index == currentVoter)
-                                return const SizedBox.shrink();
+                              if (!widget.session.isActivePlayer(index)) return const SizedBox.shrink();
+                              if (index == currentVoter) return const SizedBox.shrink();
 
                               if (_tieCandidates.isNotEmpty &&
                                   !_tieCandidates.contains(index)) {
@@ -370,6 +412,7 @@ class _VotingScreenState extends State<VotingScreen> {
                             children: List.generate(
                               widget.session.players.length,
                               (index) {
+                                if (!widget.session.isActivePlayer(index)) return const SizedBox.shrink();
                                 if (_tieCandidates.isNotEmpty &&
                                     !_tieCandidates.contains(index))
                                   return const SizedBox.shrink();

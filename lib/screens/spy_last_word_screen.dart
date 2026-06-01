@@ -13,11 +13,15 @@ import '../utils/context_extensions.dart';
 class SpyLastWordScreen extends StatefulWidget {
   final GameSession session;
   final bool isSpyFound;
+  final bool isEarlyGuess;
+  final bool skipRoleGuess;
 
   const SpyLastWordScreen({
     super.key, 
     required this.session,
     this.isSpyFound = false,
+    this.isEarlyGuess = false,
+    this.skipRoleGuess = false,
   });
 
   @override
@@ -36,12 +40,25 @@ class _SpyLastWordScreenState extends State<SpyLastWordScreen> {
   }
 
   void _onEndRound() {
-    SoundService.instance.playClick();
-    if (_didGuessRight == true) {
-      widget.session.addScoreToSpy(GameRules.spyGuessedAfterFound);
+    if (widget.isEarlyGuess) {
+      if (_didGuessRight == true) {
+        SoundService.instance.playSpyWin();
+        widget.session.addScoreToSpy(3);
+      } else {
+        SoundService.instance.playLocalsWin();
+        widget.session.addScoreToCivilians(2);
+        widget.session.addScoreToSpy(-2);
+      }
+    } else {
+      if (_didGuessRight == true) {
+        SoundService.instance.playSpyWin();
+        widget.session.addScoreToSpy(GameRules.spyGuessedAfterFound);
+      } else {
+        SoundService.instance.playLocalsWin();
+      }
     }
 
-    if (widget.isSpyFound) {
+    if (widget.isSpyFound && !widget.isEarlyGuess && !widget.skipRoleGuess) {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
@@ -81,7 +98,7 @@ class _SpyLastWordScreenState extends State<SpyLastWordScreen> {
                           child: FittedBox(
                             fit: BoxFit.scaleDown,
                             child: Text(
-                              AppStrings.SpyWas,
+                              widget.isEarlyGuess ? 'ШПИОН РИСКУЕТ!' : AppStrings.SpyWas,
                               style: TextStyle(
                                 fontSize: 24,
                                 color: AppStyles.accent,
@@ -171,7 +188,7 @@ class _SpyLastWordScreenState extends State<SpyLastWordScreen> {
                             top: 20,
                           ),
                           child: Text(
-                            AppStrings.spyMustGuess,
+                            widget.isEarlyGuess ? 'Шпион пытается досрочно назвать локацию...' : AppStrings.spyMustGuess,
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: 18,

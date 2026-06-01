@@ -10,6 +10,13 @@ import '../utils/sound_service.dart';
 import '../widgets/exit_game_button.dart';
 import 'round_score_screen.dart';
 
+class _GuessPair {
+  final Player guesser;
+  final Player target;
+  final bool isConsolation;
+  _GuessPair(this.guesser, this.target, {this.isConsolation = false});
+}
+
 // ─────────────────────────────────────────────────────────────────────────────
 // Running-border painter (same technique as in LocationSelectionScreen)
 // ─────────────────────────────────────────────────────────────────────────────
@@ -117,9 +124,8 @@ class RoleGuessScreen extends StatefulWidget {
 class _RoleGuessScreenState extends State<RoleGuessScreen>
     with TickerProviderStateMixin {
   // ── Queue ──────────────────────────────────────────────────────────────────
-  late final List<Player> _nonSpyPlayers;
-  late int _startIndex;
-  int _stepIndex = 0; // 0..n-1 — how many pairs we've done
+  late final List<_GuessPair> _guessPairs;
+  int _stepIndex = 0;
 
   // ── Selection ──────────────────────────────────────────────────────────────
   String? _selectedRole;
@@ -137,12 +143,32 @@ class _RoleGuessScreenState extends State<RoleGuessScreen>
   @override
   void initState() {
     super.initState();
-    // Build non-spy list in session order
-    _nonSpyPlayers = [
-      for (int i = 0; i < widget.session.players.length; i++)
-        if (i != widget.session.currentSpyIndex) widget.session.players[i],
-    ];
-    _startIndex = Random().nextInt(_nonSpyPlayers.length);
+    _guessPairs = [];
+    
+    // Build active civilians list
+    List<Player> activeCivs = [];
+    for (int i = 0; i < widget.session.players.length; i++) {
+      if (i != widget.session.currentSpyIndex && widget.session.isActivePlayer(i)) {
+        activeCivs.add(widget.session.players[i]);
+      }
+    }
+    
+    // Add normal circle pairs
+    if (activeCivs.length > 1) {
+       int startIndex = Random().nextInt(activeCivs.length);
+       for (int step = 0; step < activeCivs.length; step++) {
+          Player guesser = activeCivs[(startIndex + step) % activeCivs.length];
+          Player target = activeCivs[(startIndex + step + 1) % activeCivs.length];
+          _guessPairs.add(_GuessPair(guesser, target));
+       }
+    }
+    
+    // Add consolation pairs
+    widget.session.falseAccusations.forEach((victimIdx, accuserIdx) {
+       Player victim = widget.session.players[victimIdx];
+       Player accuser = widget.session.players[accuserIdx];
+       _guessPairs.add(_GuessPair(victim, accuser, isConsolation: true));
+    });
 
     _locationRoles = List<String>.from(
       LocationsData.roles[widget.session.currentSecretLocation] ?? [],
@@ -161,28 +187,25 @@ class _RoleGuessScreenState extends State<RoleGuessScreen>
   }
 
   // ── Queue helpers ──────────────────────────────────────────────────────────
-  int get _n => _nonSpyPlayers.length;
+  int get _n => _guessPairs.length;
 
-  /// Current guesser index in _nonSpyPlayers
-  int get _guesserIdx => (_startIndex + _stepIndex) % _n;
-
-  /// Current target index in _nonSpyPlayers (next after guesser)
-  int get _targetIdx => (_startIndex + _stepIndex + 1) % _n;
-
-  Player get _guesser => _nonSpyPlayers[_guesserIdx];
-  Player get _target => _nonSpyPlayers[_targetIdx];
+  Player get _guesser => _guessPairs[_stepIndex].guesser;
+  Player get _target => _guessPairs[_stepIndex].target;
+  bool get _isConsolation => _guessPairs[_stepIndex].isConsolation;
 
   bool get _isLastStep => _stepIndex == _n - 1;
 
   // ── Confirm guess ──────────────────────────────────────────────────────────
   void _onConfirm() {
     if (_selectedRole == null) return;
-    SoundService.instance.playClick();
 
     final correct = _selectedRole == _target.role;
     if (correct) {
+      SoundService.instance.playDing();
       _guesser.addScore(GameRules.roleGuessCorrectGuesser);
       _target.addScore(GameRules.roleGuessCorrectGuessed);
+    } else {
+      SoundService.instance.playBop();
     }
 
     setState(() {
@@ -224,23 +247,30 @@ class _RoleGuessScreenState extends State<RoleGuessScreen>
               child: Center(
                 child: ConstrainedBox(
                   constraints: const BoxConstraints(maxWidth: 800),
-                  child: AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 350),
-                    switchInCurve: Curves.easeInOut,
-                    switchOutCurve: Curves.easeInOut,
-                    transitionBuilder: (Widget child, Animation<double> animation) {
-                      return SlideTransition(
-                        position: Tween<Offset>(
-                          begin: const Offset(1.0, 0.0),
-                          end: Offset.zero,
-                        ).animate(animation),
-                        child: child,
-                      );
-                    },
-                    child: _isRevealPhase
-                        ? _buildRevealPhase(key: ValueKey('reveal_$_stepIndex'))
-                        : _buildGuessPhase(key: ValueKey('guess_$_stepIndex')),
-                  ),
+                  child: _guessPairs.isEmpty
+                      ? Center(
+                          child: Text(
+                            'Некому угадывать роли.',
+                            style: TextStyle(color: AppStyles.textSecondary, fontSize: 18),
+                          ),
+                        )
+                      : AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 350),
+                          switchInCurve: Curves.easeInOut,
+                          switchOutCurve: Curves.easeInOut,
+                          transitionBuilder: (Widget child, Animation<double> animation) {
+                            return SlideTransition(
+                              position: Tween<Offset>(
+                                begin: const Offset(1.0, 0.0),
+                                end: Offset.zero,
+                              ).animate(animation),
+                              child: child,
+                            );
+                          },
+                          child: _isRevealPhase
+                              ? _buildRevealPhase(key: ValueKey('reveal_$_stepIndex'))
+                              : _buildGuessPhase(key: ValueKey('guess_$_stepIndex')),
+                        ),
                 ),
               ),
             ),
@@ -262,11 +292,11 @@ class _RoleGuessScreenState extends State<RoleGuessScreen>
 
         // Title
         Text(
-          AppStrings.whoIsWho,
+          _isConsolation ? 'ПРАВО ДОП ВЫБОРА' : AppStrings.whoIsWho,
           style: TextStyle(
-            fontSize: 26,
+            fontSize: _isConsolation ? 20 : 26,
             fontWeight: FontWeight.w900,
-            color: AppStyles.accent,
+            color: _isConsolation ? AppStyles.warning : AppStyles.accent,
             letterSpacing: 3,
           ),
         ),

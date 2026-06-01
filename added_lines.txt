@@ -1,0 +1,337 @@
++import 'package:flutter_animate/flutter_animate.dart';
++import 'accuse_spy_screen.dart';
++import 'spy_last_word_screen.dart';
++import '../widgets/epic_player_card.dart';
++import '../widgets/epic_timer_card.dart';
++  bool _isDisposed = false;
++
++  bool _showSpySurrenderNotification = false;
++  bool _showEliminatedNotification = false;
++  bool _showSuccessAccusationNotification = false;
++  final GlobalKey<EpicPlayerCardState> _playerCardKey = GlobalKey();
++  final GlobalKey<EpicTimerCardState> _timerCardKey = GlobalKey();
++  bool _isPaused = false;
++  bool _wasTimeUpBeforeTransition = false;
++
++  // Для песочницы анимаций
++  int _currentAnimStyle = 0;
++  final List<String> _animStyles = [
++    'Cyber-Glitch',
++    'Laser Scanner',
++    'Sniper Target',
++    'Matrix Decode',
++    'Neon Pulse',
++  ];
++    if (_isPaused) return;
++
++          !_showSpySurrenderNotification &&
++      if (_showSpySurrenderNotification || _isTransitioning) return;
++            _isTimeUp = true;
++            _isTransitioning = true;
++
++    setState(() {
++      _isPaused = true;
++    });
++                  // Переход на экран проверки досрочного ответа шпиона
++                  _mainTimer?.cancel();
++                  _questionTimer?.cancel();
++                  storageService.resetPrivateHints(widget.session.currentSecretLocation);
++                  Navigator.pushReplacement(
++                    context,
++                    MaterialPageRoute(
++                      builder: (context) => SpyLastWordScreen(
++                        session: widget.session,
++                        isEarlyGuess: true,
++                      ),
++                    ),
++                  );
++                onPressed: () async {
++
++                  // Если кнопку нажал сам шпион
++                  if (_currentAskerIndex == widget.session.currentSpyIndex) {
++                    widget.session.addScoreToCivilians(2);
++                    widget.session.addScoreToSpy(-2);
++                    _mainTimer?.cancel();
++                    _questionTimer?.cancel();
++                    storageService.resetPrivateHints(widget.session.currentSecretLocation);
++
++                    SoundService.instance.playLocalsWin();
++
++                    setState(() {
++                      _showSpySurrenderNotification = true;
++                    });
++
++                    return;
++                  }
++
++                  // Иначе - переход на экран обвинения
++                  _mainTimer?.cancel();
++                  _questionTimer?.cancel();
++
++                  final selectedTargetIndex = await Navigator.push<int?>(
++                    context,
++                    MaterialPageRoute(
++                      builder: (context) => AccuseSpyScreen(
++                        session: widget.session,
++                        accuserIndex: _currentAskerIndex,
++                      ),
++                    ),
++                  );
++
++                  if (!mounted) return;
++
++                  if (selectedTargetIndex == null) {
++                    // Отменили обвинение
++                    setState(() {
++                      _isPaused = false;
++                    });
++                    _startTimers();
++                    return;
++                  }
++
++                  if (selectedTargetIndex == widget.session.currentSpyIndex) {
++                    // УГАДАЛ!
++                    widget.session.addScoreToSpy(-2);
++                    widget.session.addScoreToCivilians(1);
++                    widget.session.players[_currentAskerIndex].addScore(1); // Доп бонус обвинителю (+2 в сумме)
++
++                    storageService.resetPrivateHints(widget.session.currentSecretLocation);
++
++                    SoundService.instance.playLocalsWin();
++                    setState(() {
++                      _showSuccessAccusationNotification = true;
++                    });
++
++                    Future.delayed(const Duration(seconds: 4), () {
++                      if (mounted && _showSuccessAccusationNotification) {
++                        setState(() { _showSuccessAccusationNotification = false; });
++                        Navigator.pushReplacement(
++                          context,
++                          MaterialPageRoute(
++                            builder: (context) => SpyLastWordScreen(
++                              session: widget.session,
++                              isSpyFound: true,
++                              isEarlyGuess: false,
++                              skipRoleGuess: true,
++                            ),
++                          ),
++                        );
++                      }
++                    });
++                  } else {
++                    // ОШИБСЯ!
++                    widget.session.players[_currentAskerIndex].addScore(-2); // Штраф обвинителю
++
++                    // Выбывание
++                    widget.session.eliminatedPlayers.add(_currentAskerIndex);
++
++                    // Запись для утешительного приза
++                    widget.session.falseAccusations[selectedTargetIndex] = _currentAskerIndex;
++
++                    if (widget.session.activePlayersCount < 3) {
++                      // Раунд сразу заканчивается - шпиону +2
++                      widget.session.addScoreToSpy(2);
++
++                      // Победа шпиона
++                      storageService.resetPrivateHints(widget.session.currentSecretLocation);
++                      Navigator.pushReplacement(
++                        context,
++                        MaterialPageRoute(
++                          builder: (context) => SpyLastWordScreen(
++                            session: widget.session,
++                            isSpyFound: false,
++                            isEarlyGuess: false,
++                          ),
++                        ),
++                      );
++                    } else {
++                      // Раунд продолжается - шпиону только +1
++                      widget.session.addScoreToSpy(1);
++
++                      SoundService.instance.playErrorPavian();
++                      setState(() {
++                        _showEliminatedNotification = true;
++                      });
++
++                      Future.delayed(const Duration(seconds: 4), () {
++                        if (mounted && _showEliminatedNotification) {
++                          setState(() { _showEliminatedNotification = false; });
++                          _transitionToNextPlayer();
++                          _startTimers();
++                        }
++                      });
++                    }
++                  }
++                  setState(() {
++                    _isPaused = false;
++                  });
++  void _transitionToNextPlayer() {
++    _mainTimer?.cancel();
++    _questionTimer?.cancel();
++    int nextAsker = _currentTargetIndex;
++    while (!widget.session.isActivePlayer(nextAsker)) {
++      nextAsker = (nextAsker + 1) % widget.session.players.length;
++    }
++    int nextTarget = (nextAsker + 1) % widget.session.players.length;
++    while (!widget.session.isActivePlayer(nextTarget)) {
++      nextTarget = (nextTarget + 1) % widget.session.players.length;
++    }
++    final newAskerName = widget.session.players[nextAsker].name;
++    final newTargetName = widget.session.players[nextTarget].name;
++    _playerCardKey.currentState?.flipToNewPlayers(newAskerName, newTargetName);
++
++    if (!_isTimeUp) {
++      _timerCardKey.currentState?.flipToNewTimer(20, AppStyles.accent);
++    }
++
++    Future.delayed(const Duration(milliseconds: 600), () {
++      if (!mounted) return;
++      setState(() {
++        _currentAskerIndex = nextAsker;
++        _currentTargetIndex = nextTarget;
++        _hintsUsed = 0;
++        _privateHintsExhausted = false;
++        _currentHintsText.clear();
++        _questionTimerRemaining = 20;
++        _isTimeUp = false;
++        _additionalTimerRemaining = 0;
++
++        if (_mainTimerRemaining <= 20) {
++          _isLastQuestion = true;
++          _showLastQuestionText = true;
++          Future.delayed(const Duration(seconds: 5), () {
++            if (mounted) setState(() => _showLastQuestionText = false);
++          });
++        }
++      });
++      _startTimers();
++    await Future.delayed(const Duration(milliseconds: 800));
++    _isDisposed = true;
++    if (_showSpySurrenderNotification) {
++      return Scaffold(
++        backgroundColor: AppStyles.bgColor,
++        body: GestureDetector(
++          behavior: HitTestBehavior.opaque,
++          onTap: () {
++            if (_showSpySurrenderNotification) {
++              setState(() {
++                _showSpySurrenderNotification = false;
++              });
++              Navigator.pushReplacement(
++                context,
++                MaterialPageRoute(
++                  builder: (context) => RoundScoreScreen(session: widget.session),
++              );
++            }
++          },
++          child: Container(
++            color: AppStyles.bgColor,
++            child: SizedBox.expand(
++              child: Center(
++                child: Padding(
++                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
++                  child: EpicPlayerCard(
++                  key: _playerCardKey,
++                  topName: widget.session.players[_currentAskerIndex].name,
++                  bottomName: widget.session.players[_currentTargetIndex].name,
++                  fontSize: playerNameFontSize,
++              SizedBox(height: spacingHeight),
++                    padding: EdgeInsets.symmetric(vertical: hintButtonVerticalPadding),
++              SizedBox(height: spacingHeight),
++
++              // Текст подсказки (занимает зарезервированное место фиксированного размера)
++                  child: Container(
++                    height: hintContainerHeight,
++                    alignment: Alignment.center,
++                    child: AnimatedSwitcher(
++                      duration: const Duration(milliseconds: 300),
++                      child: _currentHintsText.isNotEmpty
++                          ? Padding(
++                              key: ValueKey(_currentHintsText.join('\n')),
++                              padding: EdgeInsets.symmetric(
++                                horizontal: context.horizontalMargin,
++                              ),
++                              child: Container(
++                                width: double.infinity,
++                                height: double.infinity,
++                                padding: const EdgeInsets.symmetric(
++                                  horizontal: 16,
++                                  vertical: 8,
++                                ),
++                                decoration: BoxDecoration(
++                                  color: AppStyles.accent.withValues(alpha: 0.75),
++                                  borderRadius: BorderRadius.circular(12),
++                                  border: Border.all(
++                                    color: AppStyles.warning,
++                                    width: 2,
++                                ),
++                                child: Center(
++                                  child: FittedBox(
++                                    fit: BoxFit.scaleDown,
++                                    child: Text(
++                                      _currentHintsText.join('\n'),
++                                      textAlign: TextAlign.center,
++                                      style: TextStyle(
++                                        fontSize: isCompact ? 14 : 16,
++                                        color: AppStyles.bgColor,
++                                        fontWeight: FontWeight.w800,
++                                      ),
++                                ),
++                              ),
++                            )
++                          : const SizedBox.shrink(),
++                    ),
++                  ),
++                    AnimatedOpacity(
++                      opacity: (!_isTimeUp && !_isAdditionalTime) ? 1.0 : 0.0,
++                      duration: const Duration(milliseconds: 300),
++                      child: IgnorePointer(
++                        ignoring: _isTimeUp || _isAdditionalTime,
++                        child: EpicTimerCard(
++                          key: _timerCardKey,
++                          time: _questionTimerRemaining,
++                          color: _getQuestionTimerColor(),
++                          circleSize: circleSize,
++                      ),
++                    ),
++                            ),
++                            child: Center(
++                              child: FittedBox(
++                                fit: BoxFit.scaleDown,
++                                child: Text(
++                                  _questionTimerRemaining.toString(),
++                                  style: TextStyle(
++                                    fontSize: circleSize * 0.4,
++                                    fontWeight: FontWeight.bold,
++                                    color: _getQuestionTimerColor(),
++                                  ),
++                                ),
++                        );
++
++                        if (_isTransitioning && !_wasTimeUpBeforeTransition) {
++                          return timerWidget
++                              .animate()
++                              .scaleXY(begin: 1.0, end: 1.3, duration: 400.ms, curve: Curves.easeIn)
++                              .flipH(begin: 0, end: 0.25, duration: 400.ms, curve: Curves.easeIn)
++                              .tint(color: Colors.cyanAccent.withValues(alpha: 0.5), duration: 400.ms)
++                              .swap(
++                                builder: (context, child) => timerWidget
++                                    .animate()
++                                    .scaleXY(begin: 1.3, end: 1.0, duration: 400.ms, curve: Curves.easeOut)
++                                    .flipH(begin: -0.25, end: 0, duration: 400.ms, curve: Curves.easeOut)
++                                    .tint(color: Colors.cyanAccent.withValues(alpha: 0.5), duration: 400.ms),
++                              );
++                        }
++
++                        // Если таймер только появляется (предыдущий раунд время вышло) - обычный fade
++                        if (_isTransitioning && _wasTimeUpBeforeTransition) {
++                          return timerWidget.animate().fadeIn(duration: 800.ms);
++                        }
++
++                        return timerWidget;
++                      }
++
++
++  // ---------------------------------------------------------------------------
++  // PREMIUM TRANSITION BUILDER
++  // ---------------------------------------------------------------------------

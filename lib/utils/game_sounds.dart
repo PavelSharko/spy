@@ -6,10 +6,35 @@ class GameSounds {
 
   // Played when a tie occurs in voting
   static const String tiePig = 'audio/pig.wav';
+  static const String tieGekkon = 'audio/tie_gekkon.wav';
 
   // Played on every button tap across the entire app
   static const String buttonClick = 'audio/pulk.wav';
 
   // Played when a card is flipped
   static const String cardFlip = 'audio/whoosh.wav';
+
+  // Played when the spy wins (hyena-sound-short.wav)
+  static const String spyWin = 'audio/hyena_spy_win.wav';
+
+  // Played when the locals win (dokumentalnyiy--realnaya-pobeda.wav)
+  static const String localsWin = 'audio/pobeda_locals_win.wav';
+
+  // Played on error/validation triggers (error_pavian.wav)
+  static const String errorPavian = 'audio/error_pavian.wav';
+
+  // Played when clicking Start round in preparation (sword_start.wav)
+  static const String swordStart = 'audio/sword_start.wav';
+
+  // Played when camera overlay opens (ask_photo.wav)
+  static const String askPhoto = 'audio/ask_photo.wav';
+
+  // Played when camera snap is taken (camera_flash.wav)
+  static const String cameraFlash = 'audio/camera_flash.wav';
+
+  // Played when guessing role correctly (ding.wav)
+  static const String ding = 'audio/ding.wav';
+
+  // Played when guessing role wrong (bop.wav)
+  static const String bop = 'audio/bop.wav';
 }

@@ -83,8 +83,8 @@ class LocationSelectionScreen extends StatefulWidget {
 
 class _LocationSelectionScreenState extends State<LocationSelectionScreen>
     with TickerProviderStateMixin {
-  // Selected group indexes (max = roundCount, each used once)
-  final Set<int> _selectedIndexes = {};
+  // Selected groups and their counts
+  final Map<int, int> _selectedCounts = {};
   bool _isRandomAll = false;
 
   // Running-border animations per button (-1 = random button)
@@ -152,12 +152,12 @@ class _LocationSelectionScreenState extends State<LocationSelectionScreen>
       _stopBorder(-1);
     } else {
       // Select random — clear manual picks
-      for (final idx in _selectedIndexes) {
+      for (final idx in _selectedCounts.keys) {
         _stopBorder(idx);
       }
       setState(() {
         _isRandomAll = true;
-        _selectedIndexes.clear();
+        _selectedCounts.clear();
       });
       _startBorder(-1);
     }
@@ -167,22 +167,30 @@ class _LocationSelectionScreenState extends State<LocationSelectionScreen>
     if (_isRandomAll) return; // random mode locks groups
     SoundService.instance.playClick();
 
-    if (_selectedIndexes.contains(index)) {
-      // Deselect
-      setState(() => _selectedIndexes.remove(index));
-      _stopBorder(index);
-    } else {
-      if (_selectedIndexes.length >= widget.roundCount) {
-        // Already full — shake hint
-        _triggerShakeHint();
-        return;
-      }
-      setState(() => _selectedIndexes.add(index));
-      _startBorder(index);
+    final int currentTotal = _selectedCounts.values.fold(0, (a, b) => a + b);
+    if (currentTotal >= widget.roundCount) {
+      // Already full — shake hint
+      _triggerShakeHint();
+      return;
     }
+
+    setState(() {
+      _selectedCounts[index] = (_selectedCounts[index] ?? 0) + 1;
+    });
+    _startBorder(index);
+  }
+
+  void _onGroupClear(int index) {
+    if (_isRandomAll) return;
+    SoundService.instance.playClick();
+    setState(() {
+      _selectedCounts.remove(index);
+    });
+    _stopBorder(index);
   }
 
   void _triggerShakeHint() {
+    SoundService.instance.playErrorPavian();
     setState(() => _showRedHint = true);
     _shakeController.forward(from: 0).then((_) {
       _shakeController.reverse().then((_) {
@@ -195,8 +203,9 @@ class _LocationSelectionScreenState extends State<LocationSelectionScreen>
 
   Future<void> _onConfirm() async {
     final int needed = widget.roundCount;
+    final int totalSelected = _selectedCounts.values.fold(0, (a, b) => a + b);
 
-    final bool valid = _isRandomAll || _selectedIndexes.length == needed;
+    final bool valid = _isRandomAll || totalSelected == needed;
     if (!valid) {
       _triggerShakeHint();
       return;
@@ -213,11 +222,19 @@ class _LocationSelectionScreenState extends State<LocationSelectionScreen>
     } else {
       pool = [];
       final names = <String>[];
-      for (final idx in _selectedIndexes) {
+      for (final entry in _selectedCounts.entries) {
+        final idx = entry.key;
+        final count = entry.value;
         final group = LocationsData.groups[idx];
-        names.add(group['groupName'] as String);
+        if (count > 1) {
+          names.add('${group['groupName']} (x$count)');
+        } else {
+          names.add(group['groupName'] as String);
+        }
         final locs = group['locations'] as List<dynamic>;
-        pool.addAll(locs.map((e) => e as String));
+        for (int i = 0; i < count; i++) {
+          pool.addAll(locs.map((e) => e as String));
+        }
       }
       displayName = names.join(', ');
     }
@@ -249,7 +266,7 @@ class _LocationSelectionScreenState extends State<LocationSelectionScreen>
   String _progressText() {
     final int selected = _isRandomAll
         ? widget.roundCount
-        : _selectedIndexes.length;
+        : _selectedCounts.values.fold(0, (a, b) => a + b);
     return AppStrings.locationProgressHint
         .replaceAll('{r}', '${widget.roundCount}')
         .replaceAll('{n}', '$selected');
@@ -298,17 +315,18 @@ class _LocationSelectionScreenState extends State<LocationSelectionScreen>
                           itemCount: LocationsData.groups.length,
                           itemBuilder: (context, index) {
                             final isDisabled = _isRandomAll;
-                            final isSelected = _selectedIndexes.contains(index);
+                            final count = _selectedCounts[index] ?? 0;
+                            final isSelected = count > 0;
                             return Padding(
                               padding: const EdgeInsets.only(bottom: 12),
                               child: _buildGroupButton(
                                 key: index,
-                                title:
-                                    LocationsData.groups[index]['groupName']
-                                        as String,
+                                title: LocationsData.groups[index]['groupName'] as String,
                                 isSelected: isSelected,
+                                selectionCount: count,
                                 isDisabled: isDisabled,
                                 onTap: () => _onGroupPressed(index),
+                                onClear: () => _onGroupClear(index),
                               ),
                             );
                           },
@@ -405,6 +423,8 @@ class _LocationSelectionScreenState extends State<LocationSelectionScreen>
     required String title,
     required bool isSelected,
     required VoidCallback onTap,
+    int selectionCount = 0,
+    VoidCallback? onClear,
     bool isRandom = false,
     bool isDisabled = false,
   }) {
@@ -447,17 +467,41 @@ class _LocationSelectionScreenState extends State<LocationSelectionScreen>
               ),
           ],
         ),
-        child: Center(
-          child: Text(
-            title,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: isRandom ? 22 : 18,
-              fontWeight: FontWeight.bold,
-              color: textColor,
-              letterSpacing: isRandom ? 1.2 : 0,
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            Center(
+              child: Text(
+                selectionCount > 0 ? '$title (x$selectionCount)' : title,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: isRandom ? 22 : 18,
+                  fontWeight: FontWeight.bold,
+                  color: textColor,
+                  letterSpacing: isRandom ? 1.2 : 0,
+                ),
+              ),
             ),
-          ),
+            if (selectionCount > 0 && onClear != null)
+              Positioned(
+                right: 0,
+                child: GestureDetector(
+                  onTap: onClear,
+                  child: Container(
+                    padding: const EdgeInsets.all(4),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(color: AppStyles.bgColor, width: 2),
+                    ),
+                    child: Icon(
+                      Icons.close,
+                      size: 16,
+                      color: AppStyles.bgColor,
+                    ),
+                  ),
+                ),
+              ),
+          ],
         ),
       ),
     );

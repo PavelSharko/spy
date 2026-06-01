@@ -39,6 +39,15 @@ class _VotingResultScreenState extends State<VotingResultScreen> {
         _checkCard();
       });
     }
+
+    // Play sound based on the voting result
+    if (widget.isSpyFound) {
+      // Locals successfully found the spy
+      SoundService.instance.playLocalsWin();
+    } else {
+      // Spy successfully hid
+      SoundService.instance.playSpyWin();
+    }
   }
 
   void _checkCard() {

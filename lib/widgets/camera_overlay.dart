@@ -126,7 +126,7 @@ class _CameraOverlayState extends State<CameraOverlay> {
   Future<void> _takePhoto() async {
     if (_isCapturing || _isProcessing || _controller == null || !_controller!.value.isInitialized) return;
     setState(() => _isCapturing = true);
-    SoundService.instance.playClick();
+    SoundService.instance.playCameraFlash();
 
     try {
       final XFile photo = await _controller!.takePicture();

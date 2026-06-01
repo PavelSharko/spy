@@ -13,6 +13,15 @@ class SoundService {
   final AudioPlayer _whooshPlayer = AudioPlayer();
   final AudioPlayer _sirenPlayer = AudioPlayer();
   final AudioPlayer _pigPlayer = AudioPlayer();
+  final AudioPlayer _spyWinPlayer = AudioPlayer();
+  final AudioPlayer _localsWinPlayer = AudioPlayer();
+  final AudioPlayer _errorPlayer = AudioPlayer();
+  final AudioPlayer _gekkonPlayer = AudioPlayer();
+  final AudioPlayer _swordPlayer = AudioPlayer();
+  final AudioPlayer _askPhotoPlayer = AudioPlayer();
+  final AudioPlayer _cameraFlashPlayer = AudioPlayer();
+  final AudioPlayer _dingPlayer = AudioPlayer();
+  final AudioPlayer _bopPlayer = AudioPlayer();
 
   Future<void> playClick() async {
     if (!AppSettings.instance.soundEnabled) return;
@@ -47,10 +56,82 @@ class SoundService {
     await _pigPlayer.play(AssetSource(GameSounds.tiePig));
   }
 
+  Future<void> playSpyWin() async {
+    if (!AppSettings.instance.soundEnabled) return;
+    await _spyWinPlayer.stop();
+    await _spyWinPlayer.setVolume(0.8);
+    await _spyWinPlayer.play(AssetSource(GameSounds.spyWin));
+  }
+
+  Future<void> playLocalsWin() async {
+    if (!AppSettings.instance.soundEnabled) return;
+    await _localsWinPlayer.stop();
+    await _localsWinPlayer.setVolume(0.8);
+    await _localsWinPlayer.play(AssetSource(GameSounds.localsWin));
+  }
+
+  Future<void> playErrorPavian() async {
+    if (!AppSettings.instance.soundEnabled) return;
+    await _errorPlayer.stop();
+    await _errorPlayer.setVolume(0.6);
+    await _errorPlayer.play(AssetSource(GameSounds.errorPavian));
+  }
+
+  Future<void> playTieGekkon() async {
+    if (!AppSettings.instance.soundEnabled) return;
+    await _gekkonPlayer.stop();
+    await _gekkonPlayer.setVolume(0.7);
+    await _gekkonPlayer.play(AssetSource(GameSounds.tieGekkon));
+  }
+
+  Future<void> playSwordStart() async {
+    if (!AppSettings.instance.soundEnabled) return;
+    await _swordPlayer.stop();
+    await _swordPlayer.setVolume(0.6);
+    await _swordPlayer.play(AssetSource(GameSounds.swordStart));
+  }
+
+  Future<void> playAskPhoto() async {
+    if (!AppSettings.instance.soundEnabled) return;
+    await _askPhotoPlayer.stop();
+    await _askPhotoPlayer.setVolume(0.7);
+    await _askPhotoPlayer.play(AssetSource(GameSounds.askPhoto));
+  }
+
+  Future<void> playCameraFlash() async {
+    if (!AppSettings.instance.soundEnabled) return;
+    await _cameraFlashPlayer.stop();
+    await _cameraFlashPlayer.setVolume(0.7);
+    await _cameraFlashPlayer.play(AssetSource(GameSounds.cameraFlash));
+  }
+
+  Future<void> playDing() async {
+    if (!AppSettings.instance.soundEnabled) return;
+    await _dingPlayer.stop();
+    await _dingPlayer.setVolume(0.7);
+    await _dingPlayer.play(AssetSource(GameSounds.ding));
+  }
+
+  Future<void> playBop() async {
+    if (!AppSettings.instance.soundEnabled) return;
+    await _bopPlayer.stop();
+    await _bopPlayer.setVolume(0.7);
+    await _bopPlayer.play(AssetSource(GameSounds.bop));
+  }
+
   void dispose() {
     _clickPlayer.dispose();
     _whooshPlayer.dispose();
     _sirenPlayer.dispose();
     _pigPlayer.dispose();
+    _spyWinPlayer.dispose();
+    _localsWinPlayer.dispose();
+    _errorPlayer.dispose();
+    _gekkonPlayer.dispose();
+    _swordPlayer.dispose();
+    _askPhotoPlayer.dispose();
+    _cameraFlashPlayer.dispose();
+    _dingPlayer.dispose();
+    _bopPlayer.dispose();
   }
 }

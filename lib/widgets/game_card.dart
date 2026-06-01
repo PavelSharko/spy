@@ -263,8 +263,8 @@ class _GameCardState extends State<GameCard> with TickerProviderStateMixin {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.info_outline, color: Colors.white, size: 24),
-                        SizedBox(width: 8),
+                        Icon(Icons.info_outline, color: Colors.white, size: 16),
+                        SizedBox(width: 5),
                         Expanded(
                           child: Text(
                             isSpy
@@ -272,7 +272,7 @@ class _GameCardState extends State<GameCard> with TickerProviderStateMixin {
                                 : 'Попробуйте отгадать шпиона!',
                             style: TextStyle(
                               color: Colors.white,
-                              fontSize: 16,
+                              fontSize: 11,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -300,11 +300,11 @@ class _GameCardState extends State<GameCard> with TickerProviderStateMixin {
               'ТЫ ШПИОН!',
               textAlign: TextAlign.center,
               style: GoogleFonts.russoOne(
-                fontSize: 42,
+                fontSize: 27,
                 letterSpacing: 2,
                 foreground: Paint()
                   ..style = PaintingStyle.stroke
-                  ..strokeWidth = 6
+                  ..strokeWidth = 4
                   ..color = Colors.black,
               ),
             ),
@@ -312,7 +312,7 @@ class _GameCardState extends State<GameCard> with TickerProviderStateMixin {
               'ТЫ ШПИОН!',
               textAlign: TextAlign.center,
               style: GoogleFonts.russoOne(
-                fontSize: 42,
+                fontSize: 27,
                 letterSpacing: 2,
                 color: Colors.redAccent.shade400, // Bloody red
               ),
@@ -325,7 +325,7 @@ class _GameCardState extends State<GameCard> with TickerProviderStateMixin {
 
   Widget _buildCivilianContent() {
     return Container(
-      padding: EdgeInsets.all(16),
+      padding: EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: Colors.white.withValues(alpha: 0.75),
         borderRadius: BorderRadius.circular(15),
@@ -341,35 +341,35 @@ class _GameCardState extends State<GameCard> with TickerProviderStateMixin {
             'ВЫ НАХОДИТЕСЬ:',
             style: TextStyle(
               color: AppStyles.cardBg,
-              fontSize: 16,
+              fontSize: 10,
               fontWeight: FontWeight.bold,
             ),
           ),
-          SizedBox(height: 8),
+          SizedBox(height: 5),
           Text(
             widget.secretLocation,
             textAlign: TextAlign.center,
-            style: GoogleFonts.russoOne(fontSize: 28, color: AppStyles.cardBg),
+            style: GoogleFonts.russoOne(fontSize: 18, color: AppStyles.cardBg),
           ),
           if (widget.role != null) ...[
             Padding(
-              padding: EdgeInsets.symmetric(vertical: 12),
+              padding: EdgeInsets.symmetric(vertical: 8),
               child: Divider(color: Colors.white38, height: 1),
             ),
             Text(
               'ВАША РОЛЬ:',
               style: TextStyle(
                 color: AppStyles.cardBg,
-                fontSize: 16,
+                fontSize: 10,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: 8),
+            SizedBox(height: 5),
             Text(
               widget.role!,
               textAlign: TextAlign.center,
               style: GoogleFonts.russoOne(
-                fontSize: 32,
+                fontSize: 21,
                 color: AppStyles.cardBg,
               ),
             ),

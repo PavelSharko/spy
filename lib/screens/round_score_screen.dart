@@ -62,13 +62,17 @@ class _RoundScoreScreenState extends State<RoundScoreScreen> {
       );
     } else {
       // Prepare next round
-      widget.session.currentRound++;
-      widget.session.resetRoundScores();
+      setState(() {
+        widget.session.currentRound++;
+        widget.session.resetRoundScores();
+        widget.session.resetRoundState(); // Reset eliminated players and false accusations
+        _isLastRound = widget.session.currentRound >= widget.session.totalRounds;
 
-      // Select new Spy
-      widget.session.currentSpyIndex = Random().nextInt(
-        widget.session.players.length,
-      );
+        // Select new Spy
+        widget.session.currentSpyIndex = Random().nextInt(
+          widget.session.players.length,
+        );
+      });
 
       // Location is already pre-computed in secretLocationsQueue —
       // currentSecretLocation getter returns queue[currentRound - 1] automatically.
@@ -105,18 +109,23 @@ class _RoundScoreScreenState extends State<RoundScoreScreen> {
                         SizedBox(height: context.topPadding5),
 
                         // Title
-                        Center(
-                          child: FittedBox(
-                            fit: BoxFit.scaleDown,
-                            child: Text(
-                              _isLastRound
-                                  ? "Итоги игры"
-                                  : "Раунд ${widget.session.currentRound}: Результаты игры",
-                              style: TextStyle(
-                                fontSize: 32,
-                                fontWeight: FontWeight.w900,
-                                color: AppStyles.accent,
-                                letterSpacing: 2,
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: context.horizontalMargin,
+                          ),
+                          child: Center(
+                            child: FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Text(
+                                _isLastRound
+                                    ? "Итоги игры"
+                                    : "Раунд ${widget.session.currentRound}: Результаты игры",
+                                style: TextStyle(
+                                  fontSize: 32,
+                                  fontWeight: FontWeight.w900,
+                                  color: AppStyles.accent,
+                                  letterSpacing: 2,
+                                ),
                               ),
                             ),
                           ),
@@ -413,7 +422,6 @@ class _RoundScoreScreenState extends State<RoundScoreScreen> {
               ),
             ),
           ),
-          const ExitGameButton(),
         ],
       ),
     );

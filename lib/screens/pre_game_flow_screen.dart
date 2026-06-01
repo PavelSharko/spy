@@ -153,6 +153,7 @@ class _PreGameFlowScreenState extends State<PreGameFlowScreen>
 
     if (_selectedRandomName == null) {
       if (finalName.isEmpty || finalName.length > 20) {
+        SoundService.instance.playErrorPavian();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: const Text(
@@ -178,6 +179,7 @@ class _PreGameFlowScreenState extends State<PreGameFlowScreen>
     // If unique cards AND faces are enabled, go to photo capture for this player
     if (AppSettings.instance.uniqueCardsEnabled &&
         AppSettings.instance.playerFacesEnabled) {
+      SoundService.instance.playAskPhoto();
       setState(() {
         _currentStep = FlowStep.photoCapture;
       });
@@ -230,6 +232,7 @@ class _PreGameFlowScreenState extends State<PreGameFlowScreen>
 
   void _onStartRound() {
     _launchEndGameCardGeneration();
+    SoundService.instance.playSwordStart();
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
@@ -290,7 +293,8 @@ class _PreGameFlowScreenState extends State<PreGameFlowScreen>
               ),
             ),
           ),
-          const ExitGameButton(),
+          if (_currentStep != FlowStep.cardReveal)
+            const ExitGameButton(),
         ],
       ),
     );

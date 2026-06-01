@@ -14,8 +14,11 @@ import '../utils/sound_service.dart';
 import '../models/game_session.dart';
 import '../services/storage_service.dart';
 import 'voting_screen.dart';
+import 'accuse_spy_screen.dart';
 import 'round_score_screen.dart';
+import 'spy_last_word_screen.dart';
 import '../widgets/exit_game_button.dart';
+import '../widgets/epic_player_card.dart';
 import '../utils/context_extensions.dart';
 
 class GameRoundScreen extends StatefulWidget {
@@ -52,12 +55,20 @@ class _GameRoundScreenState extends State<GameRoundScreen>
   bool _isLastQuestion = false;
   bool _showLastQuestionText = false;
   bool _isTimeUp = false;
+  bool _isDisposed = false;
+
+  bool _showSpySurrenderNotification = false;
+  bool _showEliminatedNotification = false;
+  bool _showSuccessAccusationNotification = false;
   bool _isTransitioning = false;
+  bool _isPaused = false;
 
   int _hintsUsed = 0;
   bool _isHintCooldown = false;
   bool _privateHintsExhausted = false;
-  List<String> _currentHintsText = [];
+  final List<String> _currentHintsText = [];
+  
+  final GlobalKey<EpicPlayerCardState> _cardKey = GlobalKey<EpicPlayerCardState>();
 
   @override
   void initState() {
@@ -90,12 +101,14 @@ class _GameRoundScreenState extends State<GameRoundScreen>
   }
 
   void _startTimers() {
+    if (_isPaused) return;
+    
     _mainTimer?.cancel();
     _questionTimer?.cancel();
     
     _mainTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (_mainTimerRemaining > 0 &&
-          !_isTimeUp &&
+          !_showSpySurrenderNotification &&
           !_isTransitioning) {
         setState(() {
           _mainTimerRemaining--;
@@ -104,7 +117,7 @@ class _GameRoundScreenState extends State<GameRoundScreen>
     });
 
     _questionTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (_isTimeUp || _isTransitioning) return;
+      if (_showSpySurrenderNotification || _isTransitioning) return;
 
       setState(() {
         if (_questionTimerRemaining > 0) {
@@ -127,8 +140,8 @@ class _GameRoundScreenState extends State<GameRoundScreen>
 
           if (_additionalTimerRemaining == 0) {
             _isAdditionalTime = false;
-            _isTimeUp =
-                true; // Отключаем кнопку "ДАЛЬШЕ!" для предотвращения нажатий во время показа штрафа
+            _isTimeUp = true;
+            _isTransitioning = true;
             final penalisedPlayer = widget.session.players[_currentAskerIndex];
             penalisedPlayer.addScore(GameRules.penaltyOvertime);
 
@@ -180,6 +193,10 @@ class _GameRoundScreenState extends State<GameRoundScreen>
 
   void _showStopRoundDialog() {
     SoundService.instance.playClick();
+    
+    setState(() {
+      _isPaused = true;
+    });
     // Pause timers
     _mainTimer?.cancel();
     _questionTimer?.cancel();
@@ -212,9 +229,19 @@ class _GameRoundScreenState extends State<GameRoundScreen>
               ElevatedButton(
                 onPressed: () {
                   Navigator.pop(ctx);
-                  // Шпион уже отгадал локацию -> Шпион +3 очка, мирные 0
-                  widget.session.addScoreToSpy(3);
-                  _navigateToScores();
+                  // Переход на экран проверки досрочного ответа шпиона
+                  _mainTimer?.cancel();
+                  _questionTimer?.cancel();
+                  storageService.resetPrivateHints(widget.session.currentSecretLocation);
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => SpyLastWordScreen(
+                        session: widget.session,
+                        isEarlyGuess: true,
+                      ),
+                    ),
+                  );
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppStyles
@@ -233,12 +260,124 @@ class _GameRoundScreenState extends State<GameRoundScreen>
               ),
               const SizedBox(height: 10),
               ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
                   Navigator.pop(ctx);
-                  // Провал шпиона -> Мирные +2, Шпион -2
-                  widget.session.addScoreToCivilians(2);
-                  widget.session.addScoreToSpy(-2);
-                  _navigateToScores();
+                  
+                  // Если кнопку нажал сам шпион
+                  if (_currentAskerIndex == widget.session.currentSpyIndex) {
+                    widget.session.addScoreToCivilians(2);
+                    widget.session.addScoreToSpy(-2);
+                    _mainTimer?.cancel();
+                    _questionTimer?.cancel();
+                    storageService.resetPrivateHints(widget.session.currentSecretLocation);
+                    
+                    SoundService.instance.playLocalsWin();
+                    
+                    setState(() {
+                      _showSpySurrenderNotification = true;
+                    });
+                    
+                    return;
+                  }
+                  
+                  // Иначе - переход на экран обвинения
+                  _mainTimer?.cancel();
+                  _questionTimer?.cancel();
+                  
+                  final selectedTargetIndex = await Navigator.push<int?>(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AccuseSpyScreen(
+                        session: widget.session,
+                        accuserIndex: _currentAskerIndex,
+                      ),
+                    ),
+                  );
+                  
+                  if (!mounted) return;
+                  
+                  if (selectedTargetIndex == null) {
+                    // Отменили обвинение
+                    setState(() {
+                      _isPaused = false;
+                    });
+                    _startTimers();
+                    return;
+                  }
+                  
+                  if (selectedTargetIndex == widget.session.currentSpyIndex) {
+                    // УГАДАЛ!
+                    widget.session.addScoreToSpy(-2);
+                    widget.session.addScoreToCivilians(1);
+                    widget.session.players[_currentAskerIndex].addScore(1); // Доп бонус обвинителю (+2 в сумме)
+                    
+                    storageService.resetPrivateHints(widget.session.currentSecretLocation);
+                    
+                    SoundService.instance.playLocalsWin();
+                    setState(() {
+                      _showSuccessAccusationNotification = true;
+                    });
+                    
+                    Future.delayed(const Duration(seconds: 4), () {
+                      if (mounted && _showSuccessAccusationNotification) {
+                        setState(() { _showSuccessAccusationNotification = false; });
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => SpyLastWordScreen(
+                              session: widget.session,
+                              isSpyFound: true,
+                              isEarlyGuess: false,
+                              skipRoleGuess: true,
+                            ),
+                          ),
+                        );
+                      }
+                    });
+                  } else {
+                    // ОШИБСЯ!
+                    widget.session.players[_currentAskerIndex].addScore(-2); // Штраф обвинителю
+                    
+                    // Выбывание
+                    widget.session.eliminatedPlayers.add(_currentAskerIndex);
+                    
+                    // Запись для утешительного приза
+                    widget.session.falseAccusations[selectedTargetIndex] = _currentAskerIndex;
+                    
+                    if (widget.session.activePlayersCount < 3) {
+                      // Раунд сразу заканчивается - шпиону +2
+                      widget.session.addScoreToSpy(2);
+                      
+                      // Победа шпиона
+                      storageService.resetPrivateHints(widget.session.currentSecretLocation);
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => SpyLastWordScreen(
+                            session: widget.session,
+                            isSpyFound: false,
+                            isEarlyGuess: false,
+                          ),
+                        ),
+                      );
+                    } else {
+                      // Раунд продолжается - шпиону только +1
+                      widget.session.addScoreToSpy(1);
+                      
+                      SoundService.instance.playErrorPavian();
+                      setState(() {
+                        _showEliminatedNotification = true;
+                      });
+                      
+                      Future.delayed(const Duration(seconds: 4), () {
+                        if (mounted && _showEliminatedNotification) {
+                          setState(() { _showEliminatedNotification = false; });
+                          _transitionToNextPlayer();
+                          _startTimers();
+                        }
+                      });
+                    }
+                  }
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor:
@@ -260,6 +399,9 @@ class _GameRoundScreenState extends State<GameRoundScreen>
                 onPressed: () {
                   Navigator.pop(ctx);
                   // Ничего, играем дальше -> resume timers
+                  setState(() {
+                    _isPaused = false;
+                  });
                   _startTimers();
                 },
                 style: ElevatedButton.styleFrom(
@@ -301,19 +443,32 @@ class _GameRoundScreenState extends State<GameRoundScreen>
     setState(() {
       _isTransitioning = true;
       _isTimeUp = false;
-      _isAdditionalTime = false;
       _additionalTimerRemaining = 0;
     });
 
-    // Simulate transition delay (2 seconds) for the rotation animation (which will be in the build method)
-    await Future.delayed(const Duration(seconds: 2));
+    int nextAsker = _currentTargetIndex;
+    while (!widget.session.isActivePlayer(nextAsker)) {
+      nextAsker = (nextAsker + 1) % widget.session.players.length;
+    }
+
+    int nextTarget = (nextAsker + 1) % widget.session.players.length;
+    while (!widget.session.isActivePlayer(nextTarget)) {
+      nextTarget = (nextTarget + 1) % widget.session.players.length;
+    }
+
+    String topName = widget.session.players[nextAsker].name;
+    String bottomName = widget.session.players[nextTarget].name;
+
+    _cardKey.currentState?.flipToNewPlayers(topName, bottomName);
+
+    // Ждем окончания анимации (600 мс) вместо 2 секунд
+    await Future.delayed(const Duration(milliseconds: 600));
 
     if (!mounted) return;
 
     setState(() {
-      _currentAskerIndex = _currentTargetIndex;
-      _currentTargetIndex =
-          (_currentTargetIndex + 1) % widget.session.players.length;
+      _currentAskerIndex = nextAsker;
+      _currentTargetIndex = nextTarget;
 
       _hintsUsed = 0;
       _privateHintsExhausted = false;
@@ -381,6 +536,10 @@ class _GameRoundScreenState extends State<GameRoundScreen>
 
     _pickHint().then((hintText) {
       if (!mounted) return;
+      
+      // Штраф: -0.1 очка за просмотр подсказки
+      widget.session.players[_currentAskerIndex].addScore(-0.1);
+      
       setState(() {
         _currentHintsText.clear();
         _currentHintsText.add(hintText);
@@ -427,6 +586,7 @@ class _GameRoundScreenState extends State<GameRoundScreen>
 
   @override
   void dispose() {
+    _isDisposed = true;
     WidgetsBinding.instance.removeObserver(this);
     _mainTimer?.cancel();
     _questionTimer?.cancel();
@@ -451,6 +611,221 @@ class _GameRoundScreenState extends State<GameRoundScreen>
 
   @override
   Widget build(BuildContext context) {
+    if (_showSpySurrenderNotification) {
+      return Scaffold(
+        backgroundColor: AppStyles.bgColor,
+        body: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () {
+            if (_showSpySurrenderNotification) {
+              setState(() {
+                _showSpySurrenderNotification = false;
+              });
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => RoundScoreScreen(session: widget.session),
+                ),
+              );
+            }
+          },
+          child: Container(
+            color: AppStyles.bgColor,
+            child: SizedBox.expand(
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  child: Container(
+                    padding: const EdgeInsets.all(30),
+                    decoration: BoxDecoration(
+                      color: AppStyles.cardBg,
+                      borderRadius: BorderRadius.circular(25),
+                      border: Border.all(color: AppStyles.danger, width: 3),
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppStyles.danger.withValues(alpha: 0.5),
+                          blurRadius: 25,
+                          spreadRadius: 2,
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.warning_amber_rounded, color: AppStyles.danger, size: 60),
+                        const SizedBox(height: 20),
+                        Text(
+                          'ШПИОН СДАЛСЯ!',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 26,
+                            fontWeight: FontWeight.w900,
+                            color: AppStyles.danger,
+                            letterSpacing: 1.2,
+                          ),
+                        ),
+                        const SizedBox(height: 15),
+                        Text(
+                          'Шпион рассекретил себя без права угадать локацию.',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: AppStyles.textSecondary,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+    if (_showEliminatedNotification) {
+      return Scaffold(
+        backgroundColor: AppStyles.bgColor,
+        body: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () {
+            if (_showEliminatedNotification) {
+              setState(() { _showEliminatedNotification = false; });
+              _transitionToNextPlayer();
+              _startTimers();
+            }
+          },
+          child: Container(
+            color: AppStyles.bgColor,
+            child: SizedBox.expand(
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  child: Container(
+                    padding: const EdgeInsets.all(30),
+                    decoration: BoxDecoration(
+                      color: AppStyles.cardBg,
+                      borderRadius: BorderRadius.circular(25),
+                      border: Border.all(color: AppStyles.danger, width: 3),
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppStyles.danger.withValues(alpha: 0.5),
+                          blurRadius: 25,
+                          spreadRadius: 2,
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.error_outline_rounded, color: AppStyles.danger, size: 60),
+                        const SizedBox(height: 20),
+                        Text(
+                          'КРИТИЧЕСКАЯ\nОШИБКА!',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 26,
+                            fontWeight: FontWeight.w900,
+                            color: AppStyles.danger,
+                            letterSpacing: 1.2,
+                          ),
+                        ),
+                        const SizedBox(height: 15),
+                        Text(
+                          'Вы обвинили мирного жителя!\nВы выбываете из текущего раунда.',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: AppStyles.textSecondary,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+    if (_showSuccessAccusationNotification) {
+      return Scaffold(
+        backgroundColor: AppStyles.bgColor,
+        body: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () {
+            if (_showSuccessAccusationNotification) {
+              setState(() { _showSuccessAccusationNotification = false; });
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => SpyLastWordScreen(
+                    session: widget.session,
+                    isSpyFound: true,
+                    isEarlyGuess: false,
+                  ),
+                ),
+              );
+            }
+          },
+          child: Container(
+            color: AppStyles.bgColor,
+            child: SizedBox.expand(
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  child: Container(
+                    padding: const EdgeInsets.all(30),
+                    decoration: BoxDecoration(
+                      color: AppStyles.cardBg,
+                      borderRadius: BorderRadius.circular(25),
+                      border: Border.all(color: AppStyles.accent, width: 3),
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppStyles.accent.withValues(alpha: 0.5),
+                          blurRadius: 25,
+                          spreadRadius: 2,
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.check_circle_outline_rounded, color: AppStyles.accent, size: 60),
+                        const SizedBox(height: 20),
+                        Text(
+                          'ШПИОН ПОЙМАН!',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 26,
+                            fontWeight: FontWeight.w900,
+                            color: AppStyles.accent,
+                            letterSpacing: 1.2,
+                          ),
+                        ),
+                        const SizedBox(height: 15),
+                        Text(
+                          'Отличная интуиция!\nМирные побеждают.',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: AppStyles.textSecondary,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+    }
     return Scaffold(
       body: Stack(
         children: [
@@ -533,50 +908,9 @@ class _GameRoundScreenState extends State<GameRoundScreen>
 
                     const SizedBox(height: 30),
 
-                    // Transition animation or Content
+                    // Main Content
                     Expanded(
-                      child: AnimatedSwitcher(
-                        duration: const Duration(milliseconds: 500),
-                        transitionBuilder:
-                            (Widget child, Animation<double> animation) {
-                              return RotationTransition(
-                                turns: Tween<double>(
-                                  begin: -0.5,
-                                  end: 0.0,
-                                ).animate(animation),
-                                child: FadeTransition(
-                                  opacity: animation,
-                                  child: child,
-                                ),
-                              );
-                            },
-                        child: _isTransitioning
-                            ? Center(
-                                key: const ValueKey('transition'),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Icon(
-                                      Icons.sync,
-                                      color: AppStyles.accent,
-                                      size: 140,
-                                    ), // Цвет иконки синхронизации
-                                    const SizedBox(height: 20),
-                                    Text(
-                                      AppStrings.transitionText,
-                                      style: TextStyle(
-                                        color: AppStyles
-                                            .accent, // Цвет текста "Передайте телефон"
-                                        fontSize: 22,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ],
-                                ),
-                              )
-                            : _buildRoundContent(context),
-                      ),
+                      child: _buildRoundContent(context),
                     ),
                   ],
                 ),
@@ -601,6 +935,12 @@ class _GameRoundScreenState extends State<GameRoundScreen>
   Widget _buildRoundContent(BuildContext context) {
     bool subscribe_payed = false;
     final double circleSize = (context.screenWidth * 0.3).clamp(80.0, 130.0);
+    final double screenHeight = MediaQuery.sizeOf(context).height;
+    final bool isCompact = screenHeight < 720;
+
+    final double hintButtonVerticalPadding = isCompact ? 8.0 : 10.0;
+    final double hintContainerHeight = isCompact ? 75.0 : 90.0;
+    final double spacingHeight = isCompact ? 16.0 : 24.0;
 
     return Column(
       key: const ValueKey('content'),
@@ -611,62 +951,21 @@ class _GameRoundScreenState extends State<GameRoundScreen>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // 2. Current turn text
+              // 4. Card with Players
               Padding(
                 padding: EdgeInsets.symmetric(
-                  horizontal: context.horizontalMargin,
+                  horizontal: context.horizontalMargin * 2,
                 ),
-                child: Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: AppStyles.cardBg,
-                    borderRadius: BorderRadius.circular(15),
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppStyles.darkAccent.withValues(alpha: 0.1),
-                        blurRadius: 10,
-                        offset: const Offset(0, 5),
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    children: [
-                      FittedBox(
-                        fit: BoxFit.scaleDown,
-                        child: Text(
-                          widget.session.players[_currentAskerIndex].name,
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            color: AppStyles.accent,
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8),
-                        child: Icon(
-                          Icons.arrow_downward,
-                          size: 45,
-                          color: AppStyles.accent,
-                        ),
-                      ),
-                      FittedBox(
-                        fit: BoxFit.scaleDown,
-                        child: Text(
-                          widget.session.players[_currentTargetIndex].name,
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            color: AppStyles.accent,
-                          ),
-                        ),
-                      ),
-                    ],
+                child: Center(
+                  child: EpicPlayerCard(
+                    key: _cardKey,
+                    topName: widget.session.players[_currentAskerIndex].name,
+                    bottomName: widget.session.players[_currentTargetIndex].name,
                   ),
                 ),
               ),
 
-              const SizedBox(height: 12),
+              SizedBox(height: spacingHeight),
 
               // 5. Hint Button
               Padding(
@@ -682,7 +981,7 @@ class _GameRoundScreenState extends State<GameRoundScreen>
                     foregroundColor: AppStyles.darkAccent,
                     disabledBackgroundColor: AppStyles.cardBg,
                     disabledForegroundColor: AppStyles.accent.withOpacity(0.5),
-                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    padding: EdgeInsets.symmetric(vertical: hintButtonVerticalPadding),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30),
                     ),
@@ -691,50 +990,60 @@ class _GameRoundScreenState extends State<GameRoundScreen>
                 ),
               ),
 
-              // Текст подсказки (занимает всё свободное место)
+              SizedBox(height: spacingHeight),
+
+              // Текст подсказки (занимает зарезервированное место фиксированного размера)
               Expanded(
                 child: Center(
-                  child: (_currentHintsText.isNotEmpty)
-                      ? Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: context.horizontalMargin,
-                            vertical: 5,
-                          ),
-                          child: SingleChildScrollView(
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: _currentHintsText.map((hint) {
-                                return Container(
-                                  margin: const EdgeInsets.only(bottom: 6),
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 12,
-                                    vertical: 6,
+                  child: Container(
+                    height: hintContainerHeight,
+                    alignment: Alignment.center,
+                    child: AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 300),
+                      child: _currentHintsText.isNotEmpty
+                          ? Padding(
+                              key: ValueKey(_currentHintsText.join('\n')),
+                              padding: EdgeInsets.symmetric(
+                                horizontal: context.horizontalMargin,
+                              ),
+                              child: Container(
+                                width: double.infinity,
+                                height: double.infinity,
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                  vertical: 8,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: AppStyles.accent.withValues(alpha: 0.75),
+                                  borderRadius: BorderRadius.circular(12),
+                                  border: Border.all(
+                                    color: AppStyles.warning,
+                                    width: 2,
                                   ),
-                                  decoration: BoxDecoration(
-                                    color: AppStyles.accent.withOpacity(0.75),
-                                    borderRadius: BorderRadius.circular(10),
-                                    border: Border.all(
-                                      color: AppStyles.warning,
-                                      width: 2,
+                                ),
+                                child: Center(
+                                  child: FittedBox(
+                                    fit: BoxFit.scaleDown,
+                                    child: Text(
+                                      _currentHintsText.join('\n'),
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: isCompact ? 14 : 16,
+                                        color: AppStyles.bgColor,
+                                        fontWeight: FontWeight.w800,
+                                      ),
                                     ),
                                   ),
-                                  child: Text(
-                                    hint,
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      fontSize: 16, // Уменьшили, чтобы всё влезало
-                                      color: AppStyles.bgColor,
-                                      fontWeight: FontWeight.w800,
-                                    ),
-                                  ),
-                                );
-                              }).toList(),
-                            ),
-                          ),
-                        )
-                      : const SizedBox(),
+                                ),
+                              ),
+                            )
+                          : const SizedBox.shrink(),
+                    ),
+                  ),
                 ),
               ),
+
+              SizedBox(height: spacingHeight),
 
               // 3. Блок Таймера / ВРЕМЯ ВЫШЛО / Штрафа
               Center(
@@ -744,7 +1053,7 @@ class _GameRoundScreenState extends State<GameRoundScreen>
                   children: [
                     // Таймер (прячем, если время вышло, но размер сохраняем)
                     Visibility(
-                      visible: !_isTimeUp,
+                      visible: !_isTimeUp && !_isAdditionalTime,
                       maintainSize: true,
                       maintainAnimation: true,
                       maintainState: true,

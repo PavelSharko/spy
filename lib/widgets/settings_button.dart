@@ -21,10 +21,15 @@ class SettingsButton extends StatelessWidget {
     // Default placeholder style
     final String displayValue = value ?? '--не выбрано--';
 
-    return SizedBox(
-      width: double.infinity,
-      height: height ?? 80, // Fallback if no height provided
-      // Use ElevatedButton for interaction but customize shape
+    // Адаптивный размер шрифта в зависимости от ширины экрана
+    final screenWidth = MediaQuery.sizeOf(context).width;
+    final double adaptiveFontSize = (screenWidth * 0.045).clamp(16.0, 18.0);
+
+    return ConstrainedBox(
+      constraints: BoxConstraints(
+        minWidth: double.infinity,
+        minHeight: height ?? 80,
+      ),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -53,8 +58,8 @@ class SettingsButton extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 child: Text(
                   title,
-                  style: const TextStyle(
-                    fontSize: 18,
+                  style: TextStyle(
+                    fontSize: adaptiveFontSize,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -63,21 +68,19 @@ class SettingsButton extends StatelessWidget {
             const SizedBox(width: 10),
             Expanded(
               flex: 4,
-              child: Align(
+              child: Container(
                 alignment: Alignment.centerRight,
-                child: FittedBox(
-                  fit: BoxFit.scaleDown,
-                  alignment: Alignment.centerRight,
-                  child: Text(
-                    displayValue,
-                    textAlign: TextAlign.right,
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: AppStyles.settings_game_text_colors.withValues(
-                        alpha: 0.8,
-                      ),
-                      fontStyle: FontStyle.italic,
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                child: Text(
+                  displayValue.replaceAll(', ', '\n'),
+                  textAlign: TextAlign.right,
+                  style: TextStyle(
+                    fontSize: adaptiveFontSize,
+                    color: AppStyles.settings_game_text_colors.withValues(
+                      alpha: 0.8,
                     ),
+                    fontStyle: FontStyle.italic,
+                    height: 1.3,
                   ),
                 ),
               ),

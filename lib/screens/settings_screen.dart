@@ -316,11 +316,27 @@ class _SettingsScreenState extends State<SettingsScreen> {
     showDialog(
       context: context,
       builder: (context) {
+        final screenHeight = MediaQuery.sizeOf(context).height;
+        // If height is small, apply tighter padding and font sizes
+        final isCompact = screenHeight < 750;
+
+        final dialogPadding = isCompact ? 16.0 : 24.0;
+        final iconSize = isCompact ? 44.0 : 54.0;
+        final iconPadding = isCompact ? 10.0 : 16.0;
+        final titleFontSize = isCompact ? 20.0 : 26.0;
+        final descFontSize = isCompact ? 13.0 : 15.0;
+        final sectionSpacing = isCompact ? 12.0 : 20.0;
+        final featurePadding = isCompact ? 12.0 : 16.0;
+        final buttonSpacing = isCompact ? 8.0 : 12.0;
+
         return Dialog(
           backgroundColor: Colors.transparent,
-          insetPadding: EdgeInsets.symmetric(horizontal: context.horizontalMargin),
+          insetPadding: EdgeInsets.symmetric(
+            horizontal: context.horizontalMargin,
+            vertical: isCompact ? 16.0 : 24.0,
+          ),
           child: Container(
-            padding: const EdgeInsets.all(24),
+            padding: EdgeInsets.all(dialogPadding),
             decoration: BoxDecoration(
               color: AppStyles.bgColor,
               borderRadius: BorderRadius.circular(25),
@@ -336,57 +352,58 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ),
               ],
             ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: (isUltra ? Colors.purpleAccent : AppStyles.accent).withValues(alpha: 0.15),
-                    shape: BoxShape.circle,
-                  ),
-                  child: Icon(
-                    isUltra ? Icons.workspace_premium_rounded : Icons.star_rounded,
-                    color: isUltra ? Colors.purpleAccent : AppStyles.accent,
-                    size: 54,
-                  ),
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  showBothOptions ? 'ВЫБЕРИТЕ ТАРИФ' : 'ТАРИФ ${isUltra ? 'ULTRA' : 'PLUS'}',
-                  style: GoogleFonts.russoOne(
-                    fontSize: 26,
-                    color: isUltra ? Colors.purpleAccent : AppStyles.accent,
-                    letterSpacing: 1.5,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 10),
-                Text(
-                  showBothOptions
-                      ? 'Премиум функции доступны в тарифах PLUS и ULTRA. Выберите лучший для вас!'
-                      : (isUltra
-                          ? 'Вам необходим тариф ULTRA для персонализирования карточек с лицами игроков!'
-                          : 'Вам необходим тариф PLUS для генерации умных ИИ локаций!'),
-                  style: const TextStyle(
-                    color: Colors.white70,
-                    fontSize: 16,
-                    height: 1.4,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 20),
-                Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: AppStyles.cardBg,
-                    borderRadius: BorderRadius.circular(15),
-                    border: Border.all(
-                      color: Colors.white10,
-                      width: 1,
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    padding: EdgeInsets.all(iconPadding),
+                    decoration: BoxDecoration(
+                      color: (isUltra ? Colors.purpleAccent : AppStyles.accent).withValues(alpha: 0.15),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      isUltra ? Icons.workspace_premium_rounded : Icons.star_rounded,
+                      color: isUltra ? Colors.purpleAccent : AppStyles.accent,
+                      size: iconSize,
                     ),
                   ),
-                  child: Column(
+                  SizedBox(height: isCompact ? 10 : 16),
+                  Text(
+                    showBothOptions ? 'ВЫБЕРИТЕ ТАРИФ' : 'ТАРИФ ${isUltra ? 'ULTRA' : 'PLUS'}',
+                    style: GoogleFonts.russoOne(
+                      fontSize: titleFontSize,
+                      color: isUltra ? Colors.purpleAccent : AppStyles.accent,
+                      letterSpacing: 1.5,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    showBothOptions
+                        ? 'Премиум функции доступны в тарифах PLUS и ULTRA. Выберите лучший для вас!'
+                        : (isUltra
+                            ? 'Вам необходим тариф ULTRA для персонализирования карточек с лицами игроков!'
+                            : 'Вам необходим тариф PLUS для генерации умных ИИ локаций!'),
+                    style: TextStyle(
+                      color: Colors.white70,
+                      fontSize: descFontSize,
+                      height: 1.3,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(height: sectionSpacing),
+                  Container(
+                    padding: EdgeInsets.all(featurePadding),
+                    decoration: BoxDecoration(
+                      color: AppStyles.cardBg,
+                      borderRadius: BorderRadius.circular(15),
+                      border: Border.all(
+                        color: Colors.white10,
+                        width: 1,
+                      ),
+                    ),
+                    child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       _buildFeatureRow(
@@ -395,7 +412,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         badgeText: 'PLUS',
                         badgeColor: AppStyles.accent,
                       ),
-                      const SizedBox(height: 12),
+                      SizedBox(height: isCompact ? 8 : 12),
                       _buildFeatureRow(
                         isUltra || showBothOptions ? Icons.check_circle_outline : Icons.lock_outline,
                         'Персонализирование карточки с лицами игроков в реальных локациях',
@@ -406,7 +423,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     ],
                   ),
                 ),
-                const SizedBox(height: 24),
+                SizedBox(height: isCompact ? 16 : 24),
                 if (showBothOptions) ...[
                   GameButton(
                     text: 'КУПИТЬ ТАРИФ PLUS (199 ₽)',
@@ -416,7 +433,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       _simulateAppStoreRedirect('PLUS', enableUnique: true);
                     },
                   ),
-                  const SizedBox(height: 12),
+                  SizedBox(height: buttonSpacing),
                   GameButton(
                     text: 'КУПИТЬ ТАРИФ ULTRA (399 ₽) — ХИТ!',
                     onPressed: () {
@@ -425,7 +442,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       _simulateAppStoreRedirect('ULTRA', enableUnique: true);
                     },
                   ),
-                  const SizedBox(height: 12),
+                  SizedBox(height: buttonSpacing),
                   GameButton(
                     text: 'ТЕСТОВАЯ ULTRA (БЕСПЛАТНО)',
                     type: GameButtonType.secondary,
@@ -451,7 +468,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           enableFaces: requiredLevel == SubscriptionLevel.ultra);
                     },
                   ),
-                  const SizedBox(height: 12),
+                  SizedBox(height: buttonSpacing),
                   GameButton(
                     text: 'ТЕСТОВАЯ ПОКУПКА (БЕСПЛАТНО)',
                     type: GameButtonType.secondary,
@@ -472,7 +489,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     },
                   ),
                 ],
-                const SizedBox(height: 8),
+                const SizedBox(height: 6),
                 TextButton(
                   onPressed: () {
                     SoundService.instance.playClick();
@@ -490,10 +507,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ],
             ),
           ),
-        );
-      },
-    );
-  }
+        ),
+      );
+    },
+  );
+}
 
   void _simulateAppStoreRedirect(String levelName,
       {bool enableUnique = false, bool enableFaces = false}) {

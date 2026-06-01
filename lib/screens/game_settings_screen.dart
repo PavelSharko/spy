@@ -49,6 +49,7 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
           setState(() => _activeSettingId = null);
         }
 
+        SoundService.instance.playErrorPavian();
         ScaffoldMessenger.of(context).clearSnackBars();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -163,6 +164,7 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
     SoundService.instance.playClick();
     final String? validationError = _firstValidationError();
     if (validationError != null) {
+      SoundService.instance.playErrorPavian();
       ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

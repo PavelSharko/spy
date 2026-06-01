@@ -1,0 +1,80 @@
+--- STEP 1572 ---
+Tool: replace_file_content
+{
+  "AllowMultiple": "false",
+  "Description": "\"Hide the countdown timer when the overtime phase (flashing \\\"Время вышло\\\") starts.\"",
+  "EndLine": "752",
+  "Instruction": "\"Change visible parameter from !_isTimeUp to !_isTimeUp && !_isAdditionalTime.\"",
+  "ReplacementContent": "\"         ...
+--- STEP 1624 ---
+Tool: replace_file_content
+{
+  "AllowMultiple": "false",
+  "Description": "\"Make GameRoundScreen layout adaptive and reserve fixed-size space for hints in advance.\"",
+  "EndLine": "737",
+  "Instruction": "\"Integrate isCompact dynamic layout, shrink Turn container components, and implement pre-allocated hint container to av...
+--- STEP 1944 ---
+Tool: multi_replace_file_content
+{
+  "Description": "\"Добавлен переход на экран проверки досрочного ответа шпиона\"",
+  "Instruction": "\"Вместо моментального начисления очков перекидывать на SpyLastWordScreen с флагом isEarlyGuess\"",
+  "ReplacementChunks": "[{\"AllowMultiple\":false,\"EndLine\":18,\"ReplacementContent\":\"import...
+--- STEP 1994 ---
+Tool: multi_replace_file_content
+{
+  "Description": "\"Добавлен переход на AccuseSpyScreen, обработка выбывших и логика пропуска хода\"",
+  "Instruction": "\"Обновить обработчик кнопки \\\"Шпион пойман\\\" и логику передачи хода в GameRoundScreen\"",
+  "ReplacementChunks": "[{\"AllowMultiple\":false,\"EndLine\":16,\"ReplacementCont...
+--- STEP 2027 ---
+Tool: multi_replace_file_content
+{
+  "Description": "\"Скорректировано начисление очков шпиону при ложном обвинении\"",
+  "Instruction": "\"Начислить шпиону +2 очка, если раунд сразу заканчивается, и +1, если раунд продолжается.\"",
+  "ReplacementChunks": "[{\"AllowMultiple\":false,\"EndLine\":317,\"ReplacementContent\":\"         ...
+--- STEP 2036 ---
+Tool: multi_replace_file_content
+{
+  "Description": "\"Добавлено полноэкранное уведомление о сдаче шпиона\"",
+  "Instruction": "\"Заменить SnackBar на полноэкранное уведомление (как в голосованиях) при сдаче шпиона, добавить звук проигрыша шпиона.\"",
+  "ReplacementChunks": "[{\"AllowMultiple\":false,\"EndLine\":64,\"ReplacementCon...
+--- STEP 2045 ---
+Tool: multi_replace_file_content
+{
+  "Description": "\"Исправлена ошибка с названием метода звука проигрыша шпиона\"",
+  "Instruction": "\"Заменить playLose на playLocalsWin в GameRoundScreen\"",
+  "ReplacementChunks": "[{\"AllowMultiple\":false,\"EndLine\":259,\"ReplacementContent\":\"                    SoundService.instance.play...
+--- STEP 2051 ---
+Tool: multi_replace_file_content
+{
+  "Description": "\"Восстановлена переменная _isTimeUp и добавлены полноэкранные уведомления для успешных и ошибочных обвинений\"",
+  "Instruction": "\"Вернуть _isTimeUp в GameRoundScreen, заменить SnackBar на полноэкранное уведомление при выбывании, добавить уведомление при успешном обвинении\"",...
+--- STEP 2079 ---
+Tool: multi_replace_file_content
+{
+  "Description": "\"Добавлена переменная _isPaused для предотвращения запуска таймеров во время паузы\"",
+  "Instruction": "\"Добавить _isPaused, устанавливать его в true при паузе и проверять в _startTimers\"",
+  "ReplacementChunks": "[{\"AllowMultiple\":false,\"EndLine\":60,\"ReplacementContent\...
+--- STEP 2094 ---
+Tool: multi_replace_file_content
+{
+  "Description": "\"Передача флага skipRoleGuess при успешном досрочном обвинении\"",
+  "Instruction": "\"Передать skipRoleGuess: true в SpyLastWordScreen при досрочной поимке шпиона в GameRoundScreen\"",
+  "ReplacementChunks": "[{\"AllowMultiple\":false,\"EndLine\":317,\"ReplacementContent\":\"  ...
+--- STEP 2129 ---
+Tool: multi_replace_file_content
+{
+  "Description": "\"Добавлен премиальный блок перехода и песочница анимаций в экран раунда\"",
+  "Instruction": "\"Импортировать flutter_animate, заменить стрелочки на премиальные анимации, добавить кнопку переключения анимаций\"",
+  "ReplacementChunks": "[{\"AllowMultiple\":false,\"EndLine\":14,\...
+--- STEP 2207 ---
+Tool: multi_replace_file_content
+{
+  "Description": "\"Замена обычного блока с именами на анимированный премиальный блок\"",
+  "Instruction": "\"Заменить Container с Icons.arrow_downward на _buildPremiumTransitionBody()\"",
+  "ReplacementChunks": "[{\"AllowMultiple\":false,\"EndLine\":1066,\"ReplacementContent\":\"                c...
+--- STEP 2235 ---
+Tool: multi_replace_file_content
+{
+  "Description": "\"Удаление старой анимации вращения экрана, чтобы работал премиальный блок перехода\"",
+  "Instruction": "\"Заменить Expanded с AnimatedSwitcher на просто Expanded с _buildRoundContent\"",
+  "ReplacementChunks": "[{\"AllowMultiple\":false,\"EndLine\":950,\"ReplacementContent\":\"...

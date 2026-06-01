@@ -31,6 +31,14 @@ class GameSession {
   /// Key = round number, Value = boolean (true if spy won).
   final Map<int, bool> spyWonHistory = {};
 
+  /// Set of player indices eliminated in the current round.
+  /// Cleared at the beginning of each round.
+  final Set<int> eliminatedPlayers = {};
+
+  /// Map of false accusations. Key: Target (Жертва), Value: Accuser (Обвинитель).
+  /// Used for consolation role guessing if civilians win.
+  final Map<int, int> falseAccusations = {};
+
   /// Returns the secret location for the current round.
   String get currentSecretLocation => secretLocationsQueue[currentRound - 1];
 
@@ -159,5 +167,18 @@ class GameSession {
       player.photoBytes = null;
     }
     roundFinalCards.clear();
+  }
+
+  void resetRoundState() {
+    eliminatedPlayers.clear();
+    falseAccusations.clear();
+  }
+
+  bool isActivePlayer(int index) {
+    return !eliminatedPlayers.contains(index);
+  }
+
+  int get activePlayersCount {
+    return players.length - eliminatedPlayers.length;
   }
 }
