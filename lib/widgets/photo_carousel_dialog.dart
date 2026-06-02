@@ -8,6 +8,7 @@ import '../utils/app_styles.dart';
 import '../data/locations_data.dart';
 import '../utils/sound_service.dart';
 import '../utils/context_extensions.dart';
+import '../utils/endgame_image_helper.dart';
 
 class PhotoCarouselDialog extends StatefulWidget {
   final List<RoundHistory> rounds;
@@ -221,12 +222,18 @@ class _PhotoCarouselDialogState extends State<PhotoCarouselDialog> {
       ),
       
       // 3. Результат игры
-      _buildImageSlide(
-        currentRound.resultImagePath,
-        currentRound.resultImageBytes,
-        currentRound.spyWon
-            ? 'assets/images/card_after_round_defolt_spy_win.jpeg'
-            : 'assets/images/card_after_round_defolt_spy_lose.jpeg',
+      Image(
+        image: EndgameImageHelper.getEndGameImage(
+          memoryBytes: currentRound.resultImageBytes,
+          localPath: (currentRound.resultImagePath != null && _historyDirPath != null)
+              ? '$_historyDirPath/${currentRound.resultImagePath}'
+              : null,
+          location: currentRound.locationName ?? '',
+          spyWon: currentRound.spyWon,
+        ),
+        fit: BoxFit.contain,
+        width: double.infinity,
+        height: double.infinity,
       ),
     ];
 

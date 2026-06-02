@@ -158,35 +158,51 @@ class _GameCardState extends State<GameCard> with TickerProviderStateMixin {
                     ),
                   ),
                 ),
-              // Content
-              // Content
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Padding(
-                  padding: EdgeInsets.only(bottom: 40.0, left: 20, right: 20),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        AppStrings.tapCardToView,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: AppStyles.cardBg,
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                          height: 1.5,
-                        ),
+              // Content — прибит к нижним ~30% карточки
+              Positioned(
+                left: 0,
+                right: 0,
+                bottom: 0,
+                height: null, // auto height
+                child: FractionallySizedBox(
+                  alignment: Alignment.bottomCenter,
+                  widthFactor: 1.0,
+                  child: Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 28.0, left: 16, right: 16),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                            decoration: BoxDecoration(
+                              color: Colors.black.withValues(alpha: 0.56),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Text(
+                              AppStrings.tapCardToView,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 15,
+                                fontWeight: FontWeight.w700,
+                                height: 1.25,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          FadeTransition(
+                            opacity: _iconBlinkAnimation,
+                            child: Icon(
+                              Icons.touch_app,
+                              size: 44,
+                              color: Colors.white.withValues(alpha: 0.9),
+                            ),
+                          ),
+                        ],
                       ),
-                      SizedBox(height: 10),
-                      FadeTransition(
-                        opacity: _iconBlinkAnimation,
-                        child: Icon(
-                          Icons.touch_app,
-                          size: 60,
-                          color: AppStyles.cardBg,
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
                 ),
               ),

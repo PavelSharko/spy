@@ -81,17 +81,20 @@ class _GameHistoryScreenState extends State<GameHistoryScreen> {
                     child: Stack(
                       alignment: Alignment.center,
                       children: [
-                        FittedBox(
-                          fit: BoxFit.scaleDown,
-                          child: Text(
-                            'ИСТОРИЯ ИГР',
-                            style: GoogleFonts.russoOne(
-                              fontSize: 28,
-                              fontWeight: FontWeight.w900,
-                              color: AppStyles.accent,
-                              letterSpacing: 3,
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 48.0),
+                          child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              'ИСТОРИЯ ИГР',
+                              style: GoogleFonts.russoOne(
+                                fontSize: 28,
+                                fontWeight: FontWeight.w900,
+                                color: AppStyles.accent,
+                                letterSpacing: 3,
+                              ),
+                              textAlign: TextAlign.center,
                             ),
-                            textAlign: TextAlign.center,
                           ),
                         ),
                         if (!_isLoading && _history.isNotEmpty)
@@ -191,8 +194,8 @@ class _GameHistoryScreenState extends State<GameHistoryScreen> {
                                             const SizedBox(height: 12),
                                             Text(
                                               'Победитель: $winner',
-                                              style: const TextStyle(
-                                                color: Colors.white,
+                                              style: TextStyle(
+                                                color: AppStyles.accent,
                                                 fontSize: 18,
                                                 fontWeight: FontWeight.bold,
                                               ),
@@ -200,8 +203,8 @@ class _GameHistoryScreenState extends State<GameHistoryScreen> {
                                             const SizedBox(height: 8),
                                             Text(
                                               'Игроки: ${game.playerNames.join(", ")}',
-                                              style: const TextStyle(
-                                                color: Colors.white70,
+                                              style: TextStyle(
+                                                color: AppStyles.accent.withValues(alpha: 0.7),
                                                 fontSize: 14,
                                               ),
                                             ),

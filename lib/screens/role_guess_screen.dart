@@ -275,7 +275,6 @@ class _RoleGuessScreenState extends State<RoleGuessScreen>
               ),
             ),
           ),
-          const ExitGameButton(),
         ],
       ),
     );
@@ -453,7 +452,7 @@ class _RoleGuessScreenState extends State<RoleGuessScreen>
                     role,
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontSize: 16, // Task 13: Reduce font size
+                      fontSize: 14,
                       fontWeight: FontWeight.bold,
                       color: selected
                           ? AppStyles.darkAccent
@@ -481,55 +480,51 @@ class _RoleGuessScreenState extends State<RoleGuessScreen>
     return Column(
       key: key,
       children: [
-        SizedBox(height: 30),
+        SizedBox(height: 75),
 
         // "TARGET был РОЛЬ"
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 20),
-          child: RichText(
-            textAlign: TextAlign.center,
-            text: TextSpan(
-              style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
-              children: [
-                TextSpan(
-                  text: '${_target.name}\n',
-                  style: TextStyle(
-                    color: AppStyles.accent,
-                    shadows: [
-                      Shadow(
-                        color: Colors.black45,
-                        blurRadius: 4,
-                        offset: Offset(1, 1),
-                      ),
-                    ],
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 24),
+            decoration: BoxDecoration(
+              color: AppStyles.cardBg.withOpacity(0.8), // полупрозрачная карточка
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: AppStyles.darkAccent.withOpacity(0.3)),
+            ),
+            child: RichText(
+              textAlign: TextAlign.center,
+              text: TextSpan(
+                style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+                children: [
+                  TextSpan(
+                    text: '${_target.name}\n',
+                    style: TextStyle(
+                      color: AppStyles.accent,
+                      shadows: [
+                        Shadow(color: Colors.black45, blurRadius: 4, offset: Offset(1, 1)),
+                      ],
+                    ),
                   ),
-                ),
-                TextSpan(
-                  text: 'был\n',
-                  style: TextStyle(
-                    color: AppStyles.textSecondary,
-                    fontSize: 24,
+                  TextSpan(
+                    text: 'был\n',
+                    style: TextStyle(color: AppStyles.textSecondary, fontSize: 24),
                   ),
-                ),
-                TextSpan(
-                  text: (_target.role ?? '—').toUpperCase(),
-                  style: TextStyle(
-                    color:
-                        (_target.role == 'Шпионить' || _target.role == 'Шпион')
-                        ? AppStyles.danger
-                        : AppStyles.accent,
-                    fontSize: 34,
-                    fontWeight: FontWeight.w900,
-                    shadows: [
-                      Shadow(
-                        color: Colors.black45,
-                        blurRadius: 4,
-                        offset: Offset(1, 1),
-                      ),
-                    ],
+                  TextSpan(
+                    text: (_target.role ?? '—').toUpperCase(),
+                    style: TextStyle(
+                      color: (_target.role == 'Шпионить' || _target.role == 'Шпион')
+                          ? AppStyles.danger
+                          : AppStyles.accent,
+                      fontSize: 34,
+                      fontWeight: FontWeight.w900,
+                      shadows: [
+                        Shadow(color: Colors.black45, blurRadius: 4, offset: Offset(1, 1)),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

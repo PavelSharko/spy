@@ -46,6 +46,10 @@ class _RoundScoreScreenState extends State<RoundScoreScreen> {
     // Create a copy to sort without mutating the original list order (though mutating is fine too)
     _sortedPlayers = List.from(widget.session.players);
     _sortedPlayers.sort((a, b) => b.totalScore.compareTo(a.totalScore));
+
+    if (_isLastRound) {
+      SoundService.instance.playGameEndAirhorn();
+    }
   }
 
   void _onNextAction() {

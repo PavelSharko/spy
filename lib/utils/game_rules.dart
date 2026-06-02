@@ -5,12 +5,18 @@ class GameRules {
   /// Points deducted from a player who fails to answer in time.
   static const double penaltyOvertime = -0.1;
 
+  /// Points deducted from a player when they view a hint.
+  static const double penaltyHint = -0.1;
+
   // ── Spy scoring ──────────────────────────────────────────────────────────
   /// Spy guesses the location correctly during the round (mid-game secret guess).
   static const double spyWinsGuessCorrect = 4.0;
 
   /// Spy was NOT found by vote → spy's team wins.
   static const double spyNotFound = 2.0;
+
+  /// Spy incorrectly guesses location early -> heavy penalty.
+  static const double spyEarlyGuessIncorrectPenalty = -3.0;
 
   /// Spy WAS found by vote but correctly guesses the location afterwards.
   static const double spyGuessedAfterFound = 1.0;

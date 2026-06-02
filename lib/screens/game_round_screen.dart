@@ -51,11 +51,14 @@ class _GameRoundScreenState extends State<GameRoundScreen>
 
   late int _currentAskerIndex;
   late int _currentTargetIndex;
+  late List<int> _roundOrder;
 
   bool _isLastQuestion = false;
   bool _showLastQuestionText = false;
   bool _isTimeUp = false;
   bool _isDisposed = false;
+
+  DateTime _lastNextPressTime = DateTime.fromMillisecondsSinceEpoch(0);
 
   bool _showSpySurrenderNotification = false;
   bool _showEliminatedNotification = false;
@@ -93,9 +96,18 @@ class _GameRoundScreenState extends State<GameRoundScreen>
     _mainTimerRemaining = widget.session.gameTime * 60;
 
     // Setup initial players
-    _currentAskerIndex = Random().nextInt(widget.session.players.length);
-    _currentTargetIndex =
-        (_currentAskerIndex + 1) % widget.session.players.length;
+    _roundOrder = List.generate(widget.session.players.length, (i) => i)..shuffle();
+    int startPos = 0;
+    while (!widget.session.isActivePlayer(_roundOrder[startPos])) {
+      startPos = (startPos + 1) % _roundOrder.length;
+    }
+    _currentAskerIndex = _roundOrder[startPos];
+    
+    int targetPos = (startPos + 1) % _roundOrder.length;
+    while (!widget.session.isActivePlayer(_roundOrder[targetPos])) {
+      targetPos = (targetPos + 1) % _roundOrder.length;
+    }
+    _currentTargetIndex = _roundOrder[targetPos];
 
     _startTimers();
   }
@@ -170,6 +182,12 @@ class _GameRoundScreenState extends State<GameRoundScreen>
   }
 
   void _onNextPressed() {
+    final now = DateTime.now();
+    if (now.difference(_lastNextPressTime).inSeconds < 3) {
+      return; // Защита от двойного клика (кулдаун 3 сек)
+    }
+    _lastNextPressTime = now;
+
     SoundService.instance.playClick();
     if (_isLastQuestion) {
       _navigateToVoting();
@@ -266,7 +284,7 @@ class _GameRoundScreenState extends State<GameRoundScreen>
                   // Если кнопку нажал сам шпион
                   if (_currentAskerIndex == widget.session.currentSpyIndex) {
                     widget.session.addScoreToCivilians(2);
-                    widget.session.addScoreToSpy(-2);
+                    widget.session.addScoreToSpy(-3);
                     _mainTimer?.cancel();
                     _questionTimer?.cancel();
                     storageService.resetPrivateHints(widget.session.currentSecretLocation);
@@ -447,14 +465,17 @@ class _GameRoundScreenState extends State<GameRoundScreen>
     });
 
     int nextAsker = _currentTargetIndex;
-    while (!widget.session.isActivePlayer(nextAsker)) {
-      nextAsker = (nextAsker + 1) % widget.session.players.length;
+    int nextAskerPos = _roundOrder.indexOf(nextAsker);
+    while (!widget.session.isActivePlayer(_roundOrder[nextAskerPos])) {
+      nextAskerPos = (nextAskerPos + 1) % _roundOrder.length;
     }
+    nextAsker = _roundOrder[nextAskerPos];
 
-    int nextTarget = (nextAsker + 1) % widget.session.players.length;
-    while (!widget.session.isActivePlayer(nextTarget)) {
-      nextTarget = (nextTarget + 1) % widget.session.players.length;
+    int nextTargetPos = (nextAskerPos + 1) % _roundOrder.length;
+    while (!widget.session.isActivePlayer(_roundOrder[nextTargetPos])) {
+      nextTargetPos = (nextTargetPos + 1) % _roundOrder.length;
     }
+    int nextTarget = _roundOrder[nextTargetPos];
 
     String topName = widget.session.players[nextAsker].name;
     String bottomName = widget.session.players[nextTarget].name;
@@ -733,7 +754,7 @@ class _GameRoundScreenState extends State<GameRoundScreen>
                         ),
                         const SizedBox(height: 15),
                         Text(
-                          'Вы обвинили мирного жителя!\nВы выбываете из текущего раунда.',
+                          'Вы обвинили местного жителя!\nВы выбываете из текущего раунда.',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 18,
@@ -808,7 +829,7 @@ class _GameRoundScreenState extends State<GameRoundScreen>
                         ),
                         const SizedBox(height: 15),
                         Text(
-                          'Отличная интуиция!\nМирные побеждают.',
+                          'Отличная интуиция!\nМестные побеждают.',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 18,
@@ -1263,14 +1284,16 @@ class _GameRoundScreenState extends State<GameRoundScreen>
                 border: Border.all(color: Colors.white24),
                 borderRadius: BorderRadius.circular(5),
               ),
-              alignment: Alignment.center,
-              child: const Text(
-                'Рекламный баннер (320x50)',
-                style: TextStyle(
-                  color: Colors.white54,
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 1,
+              child: Opacity(
+                opacity: 0.3,
+                child: Image.asset(
+                  'assets/images/banner.png',
+                  width: 320,
+                  height: 50,
+                  fit: BoxFit.cover,
+                  // Делаем баннер черно-белым/серым, чтобы еще меньше отвлекал
+                  color: Colors.grey,
+                  colorBlendMode: BlendMode.saturation,
                 ),
               ),
             ),

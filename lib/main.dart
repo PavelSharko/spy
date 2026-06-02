@@ -41,6 +41,7 @@ class MyApp extends StatelessWidget {
           ),
           elevatedButtonTheme: ElevatedButtonThemeData(
             style: ElevatedButton.styleFrom(
+              enableFeedback: false, // <-- Отключаем системный клик Android
               backgroundColor: AppStyles.primaryAccent,
               foregroundColor: AppStyles.primaryBg,
               padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
@@ -49,6 +50,15 @@ class MyApp extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
+          ),
+          textButtonTheme: TextButtonThemeData(
+            style: TextButton.styleFrom(enableFeedback: false),
+          ),
+          outlinedButtonTheme: OutlinedButtonThemeData(
+            style: OutlinedButton.styleFrom(enableFeedback: false),
+          ),
+          iconButtonTheme: IconButtonThemeData(
+            style: IconButton.styleFrom(enableFeedback: false),
           ),
         ),
         home: const MainMenuScreen(),

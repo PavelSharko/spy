@@ -8,6 +8,9 @@ import '../utils/app_styles.dart';
 import '../utils/app_settings.dart';
 import '../utils/sound_service.dart';
 import 'spy_last_word_screen.dart';
+import '../models/game_history_entry.dart';
+import '../services/game_history_service.dart';
+import '../utils/endgame_image_helper.dart';
 import '../widgets/exit_game_button.dart';
 import '../utils/context_extensions.dart';
 
@@ -97,7 +100,7 @@ class _VotingResultScreenState extends State<VotingResultScreen> {
         : 'ШПИОН НЕ НАЙДЕН!';
 
     final String subtitleText = widget.isSpyFound
-        ? 'мирные получают по 1 очку\nно шпион вправе попробовать угадать локацию'
+        ? 'местные получают по 1 очку\nно шпион вправе попробовать угадать локацию'
         : 'шпион получает 2 очка\nи возможность угадать локацию!';
 
     final Color accentColor = widget.isSpyFound ? Colors.greenAccent : Colors.redAccent;
@@ -236,24 +239,16 @@ class _VotingResultScreenState extends State<VotingResultScreen> {
   }
 
   Widget _buildCardContent() {
-    if (_cardBytes != null && AppSettings.instance.uniqueCardsEnabled) {
-      return Image.memory(
-        _cardBytes!,
-        fit: BoxFit.cover,
-        width: double.infinity,
-        height: double.infinity,
-      );
-    }
+    final bytesToUse = AppSettings.instance.uniqueCardsEnabled ? _cardBytes : null;
 
-    // Default fallback image depending on spy win/lose state.
-    // isSpyFound == true means Spy Lost.
-    // isSpyFound == false means Spy Won.
-    final String defaultImagePath = widget.isSpyFound
-        ? 'assets/images/card_after_round_defolt_spy_lose.jpeg'
-        : 'assets/images/card_after_round_defolt_spy_win.jpeg';
+    final imageProvider = EndgameImageHelper.getEndGameImage(
+      memoryBytes: bytesToUse,
+      location: widget.session.currentSecretLocation,
+      spyWon: !widget.isSpyFound,
+    );
 
-    return Image.asset(
-      defaultImagePath,
+    return Image(
+      image: imageProvider,
       fit: BoxFit.cover,
       width: double.infinity,
       height: double.infinity,

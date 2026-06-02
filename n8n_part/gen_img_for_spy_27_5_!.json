@@ -9,10 +9,10 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.5,
       "position": [
-        576,
-        400
+        544,
+        512
       ],
-      "id": "d9dc9fe1-0a2f-45d5-a96c-95f47bb9e722",
+      "id": "43d81fdc-f3bb-4a0b-9006-ee7008c0bfbe",
       "name": "Respond to Webhook"
     },
     {
@@ -20,10 +20,10 @@
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
       "position": [
-        -1248,
-        128
+        -1280,
+        240
       ],
-      "id": "211797eb-d54d-441e-82ca-42bdfeedbcd9",
+      "id": "2b290753-04a3-4a57-899f-a8b985078547",
       "name": "When clicking ‘Execute workflow’"
     },
     {
@@ -33,10 +33,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -976,
-        128
+        -1008,
+        240
       ],
-      "id": "7751ee88-79f1-4430-8c8e-c51d08415e18",
+      "id": "1722327a-aa56-43b8-8741-ae858adb894a",
       "name": "Code in JavaScript"
     },
     {
@@ -95,10 +95,10 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.4,
       "position": [
-        -816,
-        384
+        -848,
+        496
       ],
-      "id": "1448dff6-3078-4be1-81bf-31a2bc8beaf5",
+      "id": "99de9386-00cb-4afc-8c35-7c893e6e09a0",
       "name": "Switch"
     },
     {
@@ -115,10 +115,10 @@
       "type": "@n8n/n8n-nodes-langchain.googleGemini",
       "typeVersion": 1.1,
       "position": [
-        32,
-        80
+        -96,
+        128
       ],
-      "id": "12095cbf-17a6-4ec7-8cc5-a2d4f9113831",
+      "id": "5a1e20e5-1cfb-477e-af32-744ee2d2360e",
       "name": "Generate an image Default",
       "retryOnFail": true,
       "credentials": {
@@ -155,10 +155,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        288,
-        448
+        256,
+        560
       ],
-      "id": "16a4c17d-0e4a-4366-9321-d4cc2adc6265",
+      "id": "b688a360-376b-410f-b2d6-369477ae5930",
       "name": "If1"
     },
     {
@@ -168,10 +168,10 @@
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        288,
-        880
+        464,
+        816
       ],
-      "id": "5675b694-43e6-433e-b312-90847bfd65ce",
+      "id": "8aa31bae-aa76-46e7-ab99-bad014983afe",
       "name": "Wait",
       "webhookId": "6314c663-7f72-4f4f-bca7-a0b2ae00bd2c"
     },
@@ -188,10 +188,10 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 1,
       "position": [
-        -1232,
-        528
+        -1312,
+        640
       ],
-      "id": "3833b832-018b-42e0-acab-34a260c3fe0d",
+      "id": "fa4f9521-9700-48e5-a42d-b490de4787d7",
       "webhookId": "b52ca74a-a0c3-4039-9ff8-e6168256c2b6"
     },
     {
@@ -207,10 +207,10 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2.1,
       "position": [
-        -1232,
-        384
+        -1312,
+        496
       ],
-      "id": "e0c8b1ec-34e8-4bdc-973e-dd27046cc8ba",
+      "id": "db08c512-6c76-44c3-b255-abc75da15d79",
       "name": "MainWebhook",
       "webhookId": "bceebbf7-bcd6-4f22-867f-d51b3305032d",
       "credentials": {
@@ -237,10 +237,10 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        -496,
-        192
+        -528,
+        304
       ],
-      "id": "f5bf2135-6ec7-4626-834e-33d5ad306853",
+      "id": "89b829aa-2d7b-45f8-a0af-1d56d4af96da",
       "name": "CardPrompt"
     },
     {
@@ -250,10 +250,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -160,
-        16
+        -272,
+        128
       ],
-      "id": "77dac443-616b-4939-b81e-7dfb1797d975",
+      "id": "4a203ba7-a539-49d6-bd75-1c3690a617d6",
       "name": "TimeBeforeRequest"
     },
     {
@@ -263,10 +263,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        192,
-        96
+        112,
+        128
       ],
-      "id": "36992a59-f154-438e-abf6-09181d4737c0",
+      "id": "1f496ab8-f7c2-445a-918c-d6de18d090fb",
       "name": "TimeAfterRequest"
     },
     {
@@ -284,10 +284,10 @@
       "type": "@n8n/n8n-nodes-langchain.googleGemini",
       "typeVersion": 1.1,
       "position": [
-        -80,
-        672
+        -64,
+        784
       ],
-      "id": "b29da0df-c269-40cf-b057-9b7cc6c81ba2",
+      "id": "9ff23ef5-41cd-4196-a53d-86ff8c6d08ec",
       "name": "генерация без лиц",
       "retryOnFail": true,
       "credentials": {
@@ -325,10 +325,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        -256,
-        544
+        -288,
+        656
       ],
-      "id": "b31ac2dc-6942-40cf-bfd8-80228c2db6eb",
+      "id": "7ee05871-fc4a-4c5e-8dea-450f4c2e3055",
       "name": "If"
     },
     {
@@ -337,11 +337,11 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        -336,
-        1264
+        -368,
+        1376
       ],
       "typeVersion": 1,
-      "id": "3971e059-4b4c-480c-86ba-e055dd71c6b4",
+      "id": "21a9f09e-423d-40d3-90de-1ca92b7da306",
       "name": "Sticky Note"
     },
     {
@@ -351,10 +351,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -608,
-        496
+        -640,
+        608
       ],
-      "id": "08d27c69-8306-425c-a704-7929dea877b0",
+      "id": "8e052937-aa0a-4246-931b-9234e81b3b7b",
       "name": "дополняем код"
     },
     {
@@ -395,10 +395,10 @@
       "type": "@n8n/n8n-nodes-langchain.googleGemini",
       "typeVersion": 1.1,
       "position": [
-        -32,
-        352
+        -64,
+        544
       ],
-      "id": "718c2698-b738-419c-8cf6-67c7813fda50",
+      "id": "ccff38ba-5dcf-498a-b43c-5ef3f328ce9f",
       "name": "генерация с лицами1",
       "retryOnFail": true,
       "credentials": {
@@ -415,54 +415,41 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -336,
-        272
+        -368,
+        384
       ],
-      "id": "b543be62-6217-4035-9dac-1ccbb29d1bc4",
+      "id": "c8e1bd88-1e2a-48c2-bb17-d0f776e4e018",
       "name": "Sticky Note1"
     },
     {
       "parameters": {
-        "dataTableId": {
+        "operation": "append",
+        "documentId": {
           "__rl": true,
-          "value": "sdb2AUviI26ExlEF",
+          "value": "1oYDR1BACnJTY3JHRykw_Z2pwARob7lzYtcB-r0xEUx8",
           "mode": "list",
-          "cachedResultName": "Spy_Table",
-          "cachedResultUrl": "/projects/hW1scIIJe31DdFQs/datatables/sdb2AUviI26ExlEF"
+          "cachedResultName": "logs_spy_game_gen_img",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1oYDR1BACnJTY3JHRykw_Z2pwARob7lzYtcB-r0xEUx8/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Лист1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1oYDR1BACnJTY3JHRykw_Z2pwARob7lzYtcB-r0xEUx8/edit#gid=0"
         },
         "columns": {
           "mappingMode": "defineBelow",
           "value": {
-            "location": "={{ $json.body.location }}",
-            "roles": "={{\n  Array.isArray($json.body.roles)\n    ? $json.body.roles.join(', ')\n    : Object.entries($json.body)\n        .filter(([key]) => key.startsWith('roles['))\n        .map(([, value]) => value)\n        .join(', ')\n}}",
             "type_query": "={{ $json.body.type_query }}",
+            "location": "={{ $json.body.location }}",
             "generation_style": "={{ $json.body.generation_style }}",
-            "need_add_faces": "={{ $json.body.need_add_faces }}",
+            "need_add_faces": "need_add_faces",
             "webhook_Url": "={{ $json.webhookUrl }}",
             "spy_is_win": "={{ $json.body.spy_is_win }}"
           },
           "matchingColumns": [],
           "schema": [
-            {
-              "id": "location",
-              "displayName": "location",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "readOnly": false,
-              "removed": false
-            },
-            {
-              "id": "roles",
-              "displayName": "roles",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "readOnly": false,
-              "removed": false
-            },
             {
               "id": "type_query",
               "displayName": "type_query",
@@ -470,7 +457,16 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "readOnly": false,
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "location",
+              "displayName": "location",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
               "removed": false
             },
             {
@@ -480,8 +476,7 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "readOnly": false,
-              "removed": false
+              "canBeUsedToMatch": true
             },
             {
               "id": "need_add_faces",
@@ -490,8 +485,7 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "readOnly": false,
-              "removed": false
+              "canBeUsedToMatch": true
             },
             {
               "id": "webhook_Url",
@@ -500,8 +494,7 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "readOnly": false,
-              "removed": false
+              "canBeUsedToMatch": true
             },
             {
               "id": "spy_is_win",
@@ -509,9 +502,8 @@
               "required": false,
               "defaultMatch": false,
               "display": true,
-              "type": "boolean",
-              "readOnly": false,
-              "removed": false
+              "type": "string",
+              "canBeUsedToMatch": true
             }
           ],
           "attemptToConvertTypes": false,
@@ -519,40 +511,18 @@
         },
         "options": {}
       },
-      "type": "n8n-nodes-base.dataTable",
-      "typeVersion": 1.1,
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
       "position": [
-        -1024,
-        288
+        -1072,
+        384
       ],
-      "id": "feddd46c-eb97-422f-a352-21c00478a52c",
-      "name": "Insert row"
-    },
-    {
-      "parameters": {
-        "resource": "image",
-        "modelId": {
-          "__rl": true,
-          "value": "models/gemini-2.5-flash-image",
-          "mode": "list",
-          "cachedResultName": "models/gemini-2.5-flash-image (Nano Banana)"
-        },
-        "prompt": "={{ $json.Prompt }}",
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.googleGemini",
-      "typeVersion": 1.1,
-      "position": [
-        32,
-        -112
-      ],
-      "id": "4b296677-5f1f-4425-b3a7-6cd0b225531e",
-      "name": "Generate an image Default1",
-      "retryOnFail": true,
+      "id": "25dce6c5-1bf4-4610-bd6c-984af19f4598",
+      "name": "Append row in sheet",
       "credentials": {
-        "googlePalmApi": {
-          "id": "nWpOT1KxAeSVchXv",
-          "name": "spy-game-sasha"
+        "googleSheetsOAuth2Api": {
+          "id": "133IkQNsSJuk2K45",
+          "name": "Google Sheets account"
         }
       }
     }
@@ -654,12 +624,12 @@
       "main": [
         [
           {
-            "node": "Insert row",
+            "node": "Switch",
             "type": "main",
             "index": 0
           },
           {
-            "node": "Switch",
+            "node": "Append row in sheet",
             "type": "main",
             "index": 0
           }
@@ -682,11 +652,6 @@
         [
           {
             "node": "Generate an image Default",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "Generate an image Default1",
             "type": "main",
             "index": 0
           }
@@ -754,11 +719,6 @@
           }
         ]
       ]
-    },
-    "Insert row": {
-      "main": [
-        []
-      ]
     }
   },
   "active": true,
@@ -767,11 +727,11 @@
     "binaryMode": "separate",
     "availableInMCP": false
   },
-  "versionId": "c58f5d75-b581-4dc3-9ac9-57dc0d629efd",
+  "versionId": "7252f10e-8324-4af0-b119-274f2638227b",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "71e606e6da71045116fe5b96a7d07008e047120bd7ee3480143e173146f122b9"
   },
-  "id": "3Vyq4wWOLvVZ2ACs",
+  "id": "nO6RMzbC2mt8bPxy",
   "tags": []
 }

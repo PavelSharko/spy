@@ -15,13 +15,13 @@ class GameSounds {
   static const String cardFlip = 'audio/whoosh.wav';
 
   // Played when the spy wins (hyena-sound-short.wav)
-  static const String spyWin = 'audio/hyena_spy_win.wav';
+  static const String spyWin = 'audio/fahhhhhhhhhhhhhh.mp3';
 
   // Played when the locals win (dokumentalnyiy--realnaya-pobeda.wav)
   static const String localsWin = 'audio/pobeda_locals_win.wav';
 
-  // Played on error/validation triggers (error_pavian.wav)
-  static const String errorPavian = 'audio/error_pavian.wav';
+  // Played on error/validation triggers
+  static const String errorPavian = 'audio/movie_1.mp3';
 
   // Played when clicking Start round in preparation (sword_start.wav)
   static const String swordStart = 'audio/sword_start.wav';
@@ -32,9 +32,15 @@ class GameSounds {
   // Played when camera snap is taken (camera_flash.wav)
   static const String cameraFlash = 'audio/camera_flash.wav';
 
-  // Played when guessing role correctly (ding.wav)
-  static const String ding = 'audio/ding.wav';
+  // Played when guessing role correctly
+  static const String ding = 'audio/yippeeeeeeeeeeeeee.mp3';
 
-  // Played when guessing role wrong (bop.wav)
-  static const String bop = 'audio/bop.wav';
+  // Played when guessing role wrong
+  static const String bop = 'audio/fart-with-reverb.mp3';
+
+  // Played at the end of the entire game
+  static const String gameEndAirhorn = 'audio/mlg-airhorn.mp3';
+
+  // Played when clicking ПОГНАЛИ!
+  static const String pognoliVzhukh = 'audio/vzhukh.mp3';
 }

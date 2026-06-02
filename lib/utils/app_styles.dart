@@ -76,5 +76,5 @@ class AppStyles {
   static const double cardBackBgImageOpacity = 0.99;
 
   /// Непрозрачность белого оверлея поверх картинки на рубашке карты (0.0 - 1.0).
-  static const double cardBackWhiteOverlayOpacity = 0.55;
+  static const double cardBackWhiteOverlayOpacity = 0.1;
 }

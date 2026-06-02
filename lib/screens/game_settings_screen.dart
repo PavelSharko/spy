@@ -161,7 +161,7 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
   }
 
   void _onPlayPressed() {
-    SoundService.instance.playClick();
+    SoundService.instance.playPognoli();
     final String? validationError = _firstValidationError();
     if (validationError != null) {
       SoundService.instance.playErrorPavian();

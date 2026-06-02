@@ -22,6 +22,8 @@ class SoundService {
   final AudioPlayer _cameraFlashPlayer = AudioPlayer();
   final AudioPlayer _dingPlayer = AudioPlayer();
   final AudioPlayer _bopPlayer = AudioPlayer();
+  final AudioPlayer _airhornPlayer = AudioPlayer();
+  final AudioPlayer _vzhukhPlayer = AudioPlayer();
 
   Future<void> playClick() async {
     if (!AppSettings.instance.soundEnabled) return;
@@ -119,6 +121,24 @@ class SoundService {
     await _bopPlayer.play(AssetSource(GameSounds.bop));
   }
 
+  Future<void> playGameEndAirhorn() async {
+    if (!AppSettings.instance.soundEnabled) return;
+    await _airhornPlayer.stop();
+    await _airhornPlayer.setVolume(0.8);
+    await _airhornPlayer.play(AssetSource(GameSounds.gameEndAirhorn));
+  }
+
+  Future<void> playPognoli() async {
+    if (!AppSettings.instance.soundEnabled) return;
+    try {
+      await _vzhukhPlayer.stop();
+      await _vzhukhPlayer.setVolume(0.8);
+      await _vzhukhPlayer.play(AssetSource(GameSounds.pognoliVzhukh));
+    } catch (_) {
+      // Web may throw on stop() before first play — safe to ignore
+    }
+  }
+
   void dispose() {
     _clickPlayer.dispose();
     _whooshPlayer.dispose();
@@ -133,5 +153,7 @@ class SoundService {
     _cameraFlashPlayer.dispose();
     _dingPlayer.dispose();
     _bopPlayer.dispose();
+    _airhornPlayer.dispose();
+    _vzhukhPlayer.dispose();
   }
 }

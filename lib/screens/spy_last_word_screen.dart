@@ -43,11 +43,11 @@ class _SpyLastWordScreenState extends State<SpyLastWordScreen> {
     if (widget.isEarlyGuess) {
       if (_didGuessRight == true) {
         SoundService.instance.playSpyWin();
-        widget.session.addScoreToSpy(3);
+        widget.session.addScoreToSpy(GameRules.spyWinsGuessCorrect);
       } else {
         SoundService.instance.playLocalsWin();
         widget.session.addScoreToCivilians(2);
-        widget.session.addScoreToSpy(-2);
+        widget.session.addScoreToSpy(GameRules.spyEarlyGuessIncorrectPenalty);
       }
     } else {
       if (_didGuessRight == true) {
