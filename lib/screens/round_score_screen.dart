@@ -206,6 +206,7 @@ class _RoundScoreScreenState extends State<RoundScoreScreen> {
                                   resultImageBytes: resultBytes,
                                   playerScores: widget.session.roundScoresHistory[r] ?? {},
                                   spyWon: spyWon,
+                                  earlyEndReason: widget.session.earlyEndReasons[r],
                                 ));
                               }
                               

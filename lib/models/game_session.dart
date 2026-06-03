@@ -30,6 +30,9 @@ class GameSession {
   /// History of whether the spy won each round.
   /// Key = round number, Value = boolean (true if spy won).
   final Map<int, bool> spyWonHistory = {};
+  
+  /// Tracks if a round ended early and why (e.g. 'Шпион добровольно сдался', 'Досрочное правильное обвинение')
+  final Map<int, String> earlyEndReasons = {};
 
   /// Set of player indices eliminated in the current round.
   /// Cleared at the beginning of each round.
@@ -166,7 +169,9 @@ class GameSession {
     for (final player in players) {
       player.photoBytes = null;
     }
+    locationImages.clear();
     roundFinalCards.clear();
+    earlyEndReasons.clear();
   }
 
   void resetRoundState() {

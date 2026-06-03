@@ -10,6 +10,7 @@ class RoundHistory {
   final Uint8List? resultImageBytes;
   final Map<String, double> playerScores;
   final bool spyWon;
+  final String? earlyEndReason;
 
   RoundHistory({
     required this.roundNumber,
@@ -20,6 +21,7 @@ class RoundHistory {
     this.resultImageBytes,
     required this.playerScores,
     required this.spyWon,
+    this.earlyEndReason,
   });
 
   Map<String, dynamic> toJson() => {
@@ -29,6 +31,7 @@ class RoundHistory {
         'resultImagePath': resultImagePath,
         'playerScores': playerScores,
         'spyWon': spyWon,
+        'earlyEndReason': earlyEndReason,
       };
 
   factory RoundHistory.fromJson(Map<String, dynamic> json) {
@@ -42,6 +45,7 @@ class RoundHistory {
       resultImagePath: json['resultImagePath'] as String?,
       playerScores: scores,
       spyWon: json['spyWon'] as bool? ?? false,
+      earlyEndReason: json['earlyEndReason'] as String?,
     );
   }
 }

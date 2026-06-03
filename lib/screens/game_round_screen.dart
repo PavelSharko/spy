@@ -285,6 +285,7 @@ class _GameRoundScreenState extends State<GameRoundScreen>
                   if (_currentAskerIndex == widget.session.currentSpyIndex) {
                     widget.session.addScoreToCivilians(2);
                     widget.session.addScoreToSpy(-3);
+                    widget.session.earlyEndReasons[widget.session.currentRound] = 'Шпион добровольно сдался';
                     _mainTimer?.cancel();
                     _questionTimer?.cancel();
                     storageService.resetPrivateHints(widget.session.currentSecretLocation);
@@ -328,6 +329,7 @@ class _GameRoundScreenState extends State<GameRoundScreen>
                     widget.session.addScoreToSpy(-2);
                     widget.session.addScoreToCivilians(1);
                     widget.session.players[_currentAskerIndex].addScore(1); // Доп бонус обвинителю (+2 в сумме)
+                    widget.session.earlyEndReasons[widget.session.currentRound] = 'Кровавый суд (Шпион пойман)';
                     
                     storageService.resetPrivateHints(widget.session.currentSecretLocation);
                     
@@ -365,6 +367,7 @@ class _GameRoundScreenState extends State<GameRoundScreen>
                     if (widget.session.activePlayersCount < 3) {
                       // Раунд сразу заканчивается - шпиону +2
                       widget.session.addScoreToSpy(2);
+                      widget.session.earlyEndReasons[widget.session.currentRound] = 'Осталось мало местных (Шпион победил)';
                       
                       // Победа шпиона
                       storageService.resetPrivateHints(widget.session.currentSecretLocation);

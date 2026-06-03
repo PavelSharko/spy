@@ -115,16 +115,10 @@ flutter:
   # see https://flutter.dev/to/font-from-package
 
 flutter_launcher_icons:
-  # iOS: black background + icon
   ios: true
   image_path_ios: "assets/images/app_icon_ios.png"
-  # Android legacy (pre-API 26): use iOS version as fallback
-  android: "launcher_icon"
-  image_path_android: "assets/images/app_icon_ios.png"
-  # Android adaptive icon (API 26+): foreground with transparent bg
-  # Background is set via XML (transparent), foreground is our icon
-  adaptive_icon_background: "#000000"
-  adaptive_icon_foreground: "assets/images/app_icon_foreground.png"
+  android: true
+  image_path_android: "assets/images/app_icon_android.png"
   web:
     generate: true
     image_path: "assets/images/app_icon_ios.png"

@@ -70,6 +70,7 @@ class GameHistoryService {
           resultImagePath: resultPath,
           playerScores: session.roundScoresHistory[r] ?? {},
           spyWon: spyWon,
+          earlyEndReason: session.earlyEndReasons[r],
         ));
       }
 
