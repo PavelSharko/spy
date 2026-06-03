@@ -5,6 +5,7 @@ import '../utils/app_styles.dart';
 import '../utils/sound_service.dart';
 import 'voting_result_screen.dart';
 import '../widgets/exit_game_button.dart';
+import '../widgets/epic_voter_card.dart';
 import '../utils/context_extensions.dart';
 
 class VotingScreen extends StatefulWidget {
@@ -22,6 +23,8 @@ class _VotingScreenState extends State<VotingScreen> {
   int _currentVoterIndexInQueue = 0;
 
   int? _selectedCandidateIndex;
+  
+  final GlobalKey<EpicVoterCardState> _voterCardKey = GlobalKey<EpicVoterCardState>();
 
   // If there is a tie, this list will contain the indices of the tied players
   List<int> _tieCandidates = [];
@@ -52,20 +55,38 @@ class _VotingScreenState extends State<VotingScreen> {
     _selectedCandidateIndex = null;
   }
 
-  void _onConfirmVote() {
+  void _onConfirmVote() async {
     if (_selectedCandidateIndex == null) return;
     SoundService.instance.playClick();
 
+    final candidate = _selectedCandidateIndex!;
+    
     setState(() {
-      _votes[_selectedCandidateIndex!]++;
-
-      _currentVoterIndexInQueue++;
-      _selectedCandidateIndex = null;
-
-      if (_currentVoterIndexInQueue >= _votingQueue.length) {
-        _tallyVotes();
-      }
+      _selectedCandidateIndex = null; // Сбрасываем выбор сразу
     });
+
+    if (_currentVoterIndexInQueue + 1 >= _votingQueue.length) {
+      // Это был последний голосующий
+      setState(() {
+        _votes[candidate]++;
+        _currentVoterIndexInQueue++;
+        _tallyVotes();
+      });
+    } else {
+      // Переход к следующему голосующему с анимацией
+      int nextVoter = _votingQueue[_currentVoterIndexInQueue + 1];
+      String nextName = widget.session.players[nextVoter].name;
+      
+      _voterCardKey.currentState?.flipToNewVoter(nextName);
+      
+      await Future.delayed(const Duration(milliseconds: 600));
+      if (!mounted) return;
+      
+      setState(() {
+        _votes[candidate]++;
+        _currentVoterIndexInQueue++;
+      });
+    }
   }
 
   void _tallyVotes() {
@@ -234,48 +255,10 @@ class _VotingScreenState extends State<VotingScreen> {
 
                         SizedBox(height: 30),
 
-                        // Current Voter
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 20,
-                            vertical: 15,
-                          ),
-                          decoration: BoxDecoration(
-                            color: AppStyles.cardBg,
-                            borderRadius: BorderRadius.circular(15),
-                            boxShadow: [
-                              BoxShadow(
-                                color: AppStyles.darkAccent.withValues(
-                                  alpha: 0.1,
-                                ),
-                                blurRadius: 10,
-                                offset: const Offset(0, 5),
-                              ),
-                            ],
-                          ),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                AppStrings.votingPlayerPrefix.trim(),
-                                style: TextStyle(
-                                  fontSize: 25,
-                                  fontWeight: FontWeight.w800,
-                                  color: AppStyles.textBright,
-                                ),
-                              ),
-                              SizedBox(height: 5),
-                              Text(
-                                widget.session.players[currentVoter].name,
-                                style: TextStyle(
-                                  fontSize: 26,
-                                  fontWeight: FontWeight.w900,
-                                  color: AppStyles.textBright,
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                            ],
-                          ),
+                        // Current Voter (Animated)
+                        EpicVoterCard(
+                          key: _voterCardKey,
+                          voterName: widget.session.players[currentVoter].name,
                         ),
 
                         SizedBox(height: 40),
