@@ -119,19 +119,22 @@ class EpicVoterCardState extends State<EpicVoterCard>
             ..rotateZ(tiltZ) // Рандомный перекос
             ..rotateX(angleX), // Основное сальто
           child: Container(
-            width: double.infinity,
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
             decoration: BoxDecoration(
               color: AppStyles.cardBg, // Используем цвет из темы
               borderRadius: BorderRadius.circular(15),
-              border: Border.all(
-                color: glowColor.withOpacity(0.3 + (0.7 * glowIntensity)),
-                width: 1.5 + (1.5 * glowIntensity),
-              ),
+              border: glowIntensity > 0 
+                ? Border.all(
+                    color: glowColor.withOpacity(0.3 + (0.7 * glowIntensity)),
+                    width: 1.5 + (1.5 * glowIntensity),
+                  ) 
+                : null,
               boxShadow: [
                 BoxShadow(
-                  color: glowColor.withOpacity(0.5 * glowIntensity),
-                  blurRadius: 10 + shadowSpread,
+                  color: glowIntensity > 0 
+                      ? glowColor.withOpacity(0.5 * glowIntensity)
+                      : AppStyles.darkAccent.withOpacity(0.1),
+                  blurRadius: glowIntensity > 0 ? (10 + shadowSpread) : 10,
                   spreadRadius: shadowSpread,
                   offset: Offset(0, 5 + shadowSpread), // Тень падает вниз
                 ),
