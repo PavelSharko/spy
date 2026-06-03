@@ -64,6 +64,7 @@ class AiGenerationService {
       'type_query': 'gen_card_for_location',
       'generation_style': _effectiveStyle(settings.cardStyle),
       'faces_for_role': settings.playerFacesEnabled,
+      'need_add_faces': settings.playerFacesEnabled,
     });
 
     debugPrint('[AiGenerationService] Fetching image for: $locationText');
@@ -146,6 +147,7 @@ class AiGenerationService {
       'type_query': 'gen_card_for_finish_round',
       'generation_style': _effectiveStyle(settings.cardStyle),
       'faces_for_role': settings.playerFacesEnabled,
+      'need_add_faces': settings.playerFacesEnabled,
       'spy_is_win': spyIsWin,
     };
 

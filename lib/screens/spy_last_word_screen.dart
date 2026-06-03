@@ -7,6 +7,7 @@ import '../utils/game_rules.dart';
 import '../utils/sound_service.dart';
 import 'round_score_screen.dart';
 import 'role_guess_screen.dart';
+import 'voting_result_screen.dart';
 import '../widgets/exit_game_button.dart';
 import '../utils/context_extensions.dart';
 
@@ -60,7 +61,22 @@ class _SpyLastWordScreenState extends State<SpyLastWordScreen> {
       }
     }
 
-    if (widget.isSpyFound && !widget.isEarlyGuess && !widget.skipRoleGuess) {
+    if (widget.isEarlyGuess) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => VotingResultScreen(
+            session: widget.session,
+            isSpyFound: _didGuessRight != true,
+            customTitle: _didGuessRight == true ? 'ШПИОН УГАДАЛ!' : 'ШПИОН ОШИБСЯ!',
+            customSubtitle: _didGuessRight == true
+                ? 'Шпион пошёл ва-банк и угадал локацию!'
+                : 'Шпион пошёл ва-банк и ошибся!',
+            goToScoreDirectly: true,
+          ),
+        ),
+      );
+    } else if (widget.isSpyFound && !widget.skipRoleGuess) {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(

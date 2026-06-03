@@ -3,7 +3,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
 
     <application
-        android:label="spy_game"
+        android:label="Infiltrator"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

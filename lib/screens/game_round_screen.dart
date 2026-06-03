@@ -17,6 +17,7 @@ import 'voting_screen.dart';
 import 'accuse_spy_screen.dart';
 import 'round_score_screen.dart';
 import 'spy_last_word_screen.dart';
+import 'voting_result_screen.dart';
 import '../widgets/exit_game_button.dart';
 import '../widgets/epic_player_card.dart';
 import '../utils/context_extensions.dart';
@@ -344,10 +345,10 @@ class _GameRoundScreenState extends State<GameRoundScreen>
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => SpyLastWordScreen(
+                            builder: (context) => VotingResultScreen(
                               session: widget.session,
                               isSpyFound: true,
-                              isEarlyGuess: false,
+                              customTitle: 'ШПИОН ПОЙМАН!',
                               skipRoleGuess: true,
                             ),
                           ),
@@ -374,10 +375,11 @@ class _GameRoundScreenState extends State<GameRoundScreen>
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => SpyLastWordScreen(
+                          builder: (context) => VotingResultScreen(
                             session: widget.session,
                             isSpyFound: false,
-                            isEarlyGuess: false,
+                            customTitle: 'ШПИОН НЕ НАЙДЕН!',
+                            customSubtitle: 'Осталось слишком мало местных жителей.',
                           ),
                         ),
                       );
@@ -648,7 +650,13 @@ class _GameRoundScreenState extends State<GameRoundScreen>
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => RoundScoreScreen(session: widget.session),
+                  builder: (context) => VotingResultScreen(
+                    session: widget.session,
+                    isSpyFound: true,
+                    customTitle: 'ШПИОН СДАЛСЯ!',
+                    customSubtitle: 'Шпион рассекретил себя без права угадать локацию.',
+                    goToScoreDirectly: true,
+                  ),
                 ),
               );
             }
@@ -786,10 +794,11 @@ class _GameRoundScreenState extends State<GameRoundScreen>
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => SpyLastWordScreen(
+                  builder: (context) => VotingResultScreen(
                     session: widget.session,
                     isSpyFound: true,
-                    isEarlyGuess: false,
+                    customTitle: 'ШПИОН ПОЙМАН!',
+                    skipRoleGuess: true,
                   ),
                 ),
               );

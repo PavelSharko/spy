@@ -8,6 +8,7 @@ import '../utils/app_styles.dart';
 import '../utils/app_settings.dart';
 import '../utils/sound_service.dart';
 import 'spy_last_word_screen.dart';
+import 'round_score_screen.dart';
 import '../models/game_history_entry.dart';
 import '../services/game_history_service.dart';
 import '../utils/endgame_image_helper.dart';
@@ -17,11 +18,19 @@ import '../utils/context_extensions.dart';
 class VotingResultScreen extends StatefulWidget {
   final GameSession session;
   final bool isSpyFound;
+  final String? customTitle;
+  final String? customSubtitle;
+  final bool goToScoreDirectly;
+  final bool skipRoleGuess;
 
   const VotingResultScreen({
     super.key,
     required this.session,
     required this.isSpyFound,
+    this.customTitle,
+    this.customSubtitle,
+    this.goToScoreDirectly = false,
+    this.skipRoleGuess = false,
   });
 
   @override
@@ -78,15 +87,25 @@ class _VotingResultScreenState extends State<VotingResultScreen> {
 
   void _onNext(BuildContext context) {
     SoundService.instance.playClick();
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => SpyLastWordScreen(
-          session: widget.session,
-          isSpyFound: widget.isSpyFound,
+    if (widget.goToScoreDirectly) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => RoundScoreScreen(session: widget.session),
         ),
-      ),
-    );
+      );
+    } else {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => SpyLastWordScreen(
+            session: widget.session,
+            isSpyFound: widget.isSpyFound,
+            skipRoleGuess: widget.skipRoleGuess,
+          ),
+        ),
+      );
+    }
   }
 
   @override
@@ -95,13 +114,13 @@ class _VotingResultScreenState extends State<VotingResultScreen> {
     final double screenWidth = screenSize.width;
     final double screenHeight = screenSize.height;
 
-    final String titleText = widget.isSpyFound
+    final String titleText = widget.customTitle ?? (widget.isSpyFound
         ? 'ШПИОН НАЙДЕН!'
-        : 'ШПИОН НЕ НАЙДЕН!';
+        : 'ШПИОН НЕ НАЙДЕН!');
 
-    final String subtitleText = widget.isSpyFound
+    final String subtitleText = widget.customSubtitle ?? (widget.isSpyFound
         ? 'местные получают по 1 очку\nно шпион вправе попробовать угадать локацию'
-        : 'шпион получает 2 очка\nи возможность угадать локацию!';
+        : 'шпион получает 2 очка\nи возможность угадать локацию!');
 
     final Color accentColor = widget.isSpyFound ? Colors.greenAccent : Colors.redAccent;
     final Color containerColor = widget.isSpyFound ? Colors.green : Colors.red;
@@ -169,23 +188,27 @@ class _VotingResultScreenState extends State<VotingResultScreen> {
                       // Spacer above Card to push it down
                       const Spacer(),
 
-                      // 2. Card / Image Area (Centered dynamically)
-                      Container(
+                      // 2. Card / Image Area (Centered dynamically with 3:4 aspect ratio)
+                      SizedBox(
                         height: (screenHeight * 0.40).clamp(240.0, 420.0),
-                        width: (screenWidth * 0.70).clamp(200.0, 360.0),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.3),
-                              blurRadius: 15,
-                              offset: const Offset(0, 8),
+                        child: AspectRatio(
+                          aspectRatio: 3 / 4,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withValues(alpha: 0.3),
+                                  blurRadius: 15,
+                                  offset: const Offset(0, 8),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child: _buildCardContent(),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(20),
+                              child: _buildCardContent(),
+                            ),
+                          ),
                         ),
                       ),
 
@@ -232,7 +255,6 @@ class _VotingResultScreenState extends State<VotingResultScreen> {
               ),
             ),
           ),
-          const ExitGameButton(),
         ],
       ),
     );
