@@ -174,6 +174,15 @@ class _GameCardState extends State<GameCard> with TickerProviderStateMixin {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
+                          FadeTransition(
+                            opacity: _iconBlinkAnimation,
+                            child: Icon(
+                              Icons.touch_app,
+                              size: 44,
+                              color: Colors.white.withValues(alpha: 0.9),
+                            ),
+                          ),
+                          const SizedBox(height: 8),
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                             decoration: BoxDecoration(
@@ -185,19 +194,10 @@ class _GameCardState extends State<GameCard> with TickerProviderStateMixin {
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 15,
-                                fontWeight: FontWeight.w700,
+                                fontSize: 12,
+                                fontWeight: FontWeight.normal,
                                 height: 1.25,
                               ),
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          FadeTransition(
-                            opacity: _iconBlinkAnimation,
-                            child: Icon(
-                              Icons.touch_app,
-                              size: 44,
-                              color: Colors.white.withValues(alpha: 0.9),
                             ),
                           ),
                         ],
