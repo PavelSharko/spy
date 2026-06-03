@@ -179,7 +179,7 @@ class _GameCardState extends State<GameCard> with TickerProviderStateMixin {
                             child: Icon(
                               Icons.touch_app,
                               size: 44,
-                              color: Colors.white.withValues(alpha: 0.9),
+                              color: AppStyles.accent,
                             ),
                           ),
                           const SizedBox(height: 8),
@@ -193,7 +193,7 @@ class _GameCardState extends State<GameCard> with TickerProviderStateMixin {
                               AppStrings.tapCardToView,
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                color: Colors.white,
+                                color: AppStyles.accent,
                                 fontSize: 12,
                                 fontWeight: FontWeight.normal,
                                 height: 1.25,
